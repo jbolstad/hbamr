@@ -3,5 +3,3 @@
 .Rhistory
 R/stanmodels.R
 src/
-man/
-!man/LC1980.Rd
