@@ -50,7 +50,7 @@ plot_over_self <- function(objects, data, par = "chi", estimate = "median", name
       pd <- vector()
       for (m in 1:length(objects)) {
         if (is.null(names)) { name <- objects[[m]]@model_name } else { name <- names[m] }
-        pd <- rbind(pd, bind_cols(get_pd(objects[[m]], data, par, estimate), model = rep(name, dat$N)))
+        pd <- rbind(pd, bind_cols(get_pd(objects[[m]], data, par, estimate), model = rep(name, data$N)))
       }
         if (is.null(names)) {
           pd$model <- factor(pd$model, levels = unique(pd$model), labels = unique(pd$model)) } else {
