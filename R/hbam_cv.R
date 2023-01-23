@@ -13,7 +13,7 @@
 #' @param data A list of data produced by `prep_data` followed by `prep_data_cv`.
 #' @param K An integer above 2, specifying the number of folds to use in the analysis. Defaults to 10.
 #' @param chains A positive integer specifying the number of Markov chains to use for each model fit. Defaults to 2.
-#' @param cores The number of cores to use when executing the Markov chains in parallel. Defaults to `min(parallel::detectCores(logical = FALSE), chains, 6)`. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously to save time.
+#' @param cores The number of cores to use when executing the Markov chains in parallel. Defaults to `parallel::detectCores(logical = FALSE)`. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously to save time.
 #' @param seed An integer passed on to `set.seed` before creating the folds to increase reproducibility. Defaults to 1 and only applies when the argument `prep_data` is `TRUE`.
 #' @param ... Arguments passed to `rstan::sampling`.
 #' @return A data frame containing the estimated ELPD and its standard error.
@@ -29,9 +29,9 @@
 hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                     allow_miss = 0, req_valid = NA, req_unique = 2,
                     prefs = NULL, prep_data = TRUE, data = NULL, K = 10,
-                    chains = 2, cores = min(parallel::detectCores(logical = FALSE), 6),
-                    warmup = 1000, iter = 3000,
-                    thin = max(1, round(((iter - warmup) * chains) / 4000)),
+                    chains = 2, cores = parallel::detectCores(logical = FALSE),
+                    warmup = 1000, iter = 4000,
+                    thin = 1,
                     control = list(adapt_delta = .6), seed = 1){
 
   logColMeansExp <- function(x) {
@@ -57,7 +57,7 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                             init_l <- list(hbamr:::inits[[model]](chain_id = i, dat = dat_l[[k]]))
                             # Obtain chain:
                             s <- rstan::sampling(hbamr:::stanmodels[[model_cv]], data = dat_l[[k]], init = init_l,
-                                                 chains = 1, cores = 1, thin = thin, control = control, chain_id = i)
+                                                 chains = 1, cores = 1, warmup = warmup, iter = iter, thin = thin, control = control, chain_id = i)
                             # Calculate expected value of log-likelihood for each held-out observation:
                             log_lik <- loo::extract_log_lik(s)
                             draws <- dim(log_lik)[1]
