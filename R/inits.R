@@ -36,7 +36,6 @@ inits_HBAM <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + rno
 
 inits_HBAM_NE <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
                                  theta_lr = dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B / 10, 0), runif(1, 0, dat$B / 10)),
-                                 sigma_chi = rinvchisq(1, 500, dat$B / 2),
                                  sigma_alpha = rinvchisq(1, 100, dat$B / 5),
                                  alpha_raw = matrix(rnorm(2 * dat$N, 0, .5), ncol = 2),
                                  sigma_beta = runif(1, .1, .2),
@@ -81,8 +80,6 @@ inits_HBAM_HM <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + 
 
 inits_HBAM_MINI <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
                                 theta_lr = dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B / 10, 0), runif(1, 0, dat$B / 10)),
-                                sigma_chi = rinvchisq(1, 500, dat$B / 2),
-                                mu_chi = rnorm(1, 0, .1),
                                 sigma_alpha = rinvchisq(1, 100, dat$B / 5),
                                 alpha_raw = matrix(rnorm(2 * dat$N, 0, .5), ncol = 2),
                                 sigma_beta = runif(1, .1, .2),

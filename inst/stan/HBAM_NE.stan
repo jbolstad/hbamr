@@ -12,7 +12,6 @@ data {
 }
 
 transformed data {
-  real<lower = 0> sigma_chi_prior_rate = (5 - 1) / (B / 2.0);
   real<lower = 0> sigma_alpha_prior_rate = (2 - 1) / (B / 5.0);
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
 }
@@ -24,7 +23,6 @@ parameters {
   real theta_raw[J];                      // remaining stimuli
   real<lower = 0> sigma_alpha;            // sd of alpha
   real<lower = 0, upper = 2> sigma_beta;  // sd of log(beta)
-  real<lower = 0> sigma_chi;              // sd of chi0
   real<lower = 3, upper = 30> nu;         // concentration of etas
   real<lower = 0> tau;                    // scale of errors
   vector<lower = 0>[N] eta;               // mean ind. error variance x J^2
@@ -71,9 +69,8 @@ model {
   beta_raw[, 1] ~ normal(0, 1);
   beta_raw[, 2] ~ normal(0, 1);
   sigma_beta ~ gamma(3, 10);
-  chi0[, 1] ~ normal(0, sigma_chi);
-  chi0[, 2] ~ normal(0, sigma_chi);
-  sigma_chi ~ gamma(5, sigma_chi_prior_rate);
+  chi0[, 1] ~ normal(0, B / 2.0);
+  chi0[, 2] ~ normal(0, B / 2.0);
   eta ~ scaled_inv_chi_square(nu, eta_scale);
   nu ~ gamma(25, 2.5);
   tau ~ gamma(2, tau_prior_rate);
