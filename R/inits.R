@@ -110,8 +110,8 @@ inits_HBAM_R <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + r
                                    rho = c(rdirichlet(1, rep(50, dat$J))))}
 
 # Collecting all inits-functions:
-inits <- list(BAM = inits_BAM, HBAM_0 = inits_HBAM_0,
-              HBAM = inits_HBAM, HBAM_2 = inits_HBAM_2, HBAM_r = inits_HBAM_r, HBAM_hm = inits_HBAM_hm)
+inits <- list(HBAM = inits_HBAM, HBAM_2 = inits_HBAM_2, HBAM_NE = inits_HBAM_NE, HBAM_HM = inits_HBAM_HM,
+              HBAM_MINI = inits_HBAM_MINI, HBAM_R = inits_HBAM_R, HBAM_0 = inits_HBAM_0, BAM = inits_BAM)
 
 rinvchisq <- function(n, df, scale = 1/df) {
   return((df * scale) / rchisq(n, df = df))
