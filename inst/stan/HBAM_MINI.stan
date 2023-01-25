@@ -67,6 +67,7 @@ model {
   sigma_beta ~ gamma(3, 10);
   chi0[, 1] ~ normal(0, sigma_chi);
   chi0[, 2] ~ normal(0, sigma_chi);
+  sigma_chi ~ gamma(5, sigma_chi_prior_rate);
   tau ~ gamma(2, tau_prior_rate);
   lambda ~ beta(alpha_lambda, beta_lambda);
   psi ~ beta(8.5, 1.5);
