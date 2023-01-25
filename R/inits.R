@@ -7,7 +7,7 @@ inits_BAM <- function(chain_id = 1, dat) {list (theta = dat$mean_spos + rnorm(da
                                rho = c(rdirichlet(1, rep(50, dat$J))))}
 
 inits_HBAM_0 <- function(chain_id = 1, dat) {list (theta = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
-                                sigma_chi = rinvchisq(1, 200, dat$B / 2),
+                                sigma_chi = rinvchisq(1, 500, dat$B / 2),
                                 chi = rnorm(dat$N, 0, dat$B / 4),
                                 sigma_alpha = rinvchisq(1, 100, dat$B / 5),
                                 alpha_raw = rnorm(dat$N, 0, .5),
@@ -20,7 +20,7 @@ inits_HBAM_0 <- function(chain_id = 1, dat) {list (theta = dat$mean_spos + rnorm
 
 inits_HBAM <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
                                  theta_lr = dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B / 10, 0), runif(1, 0, dat$B / 10)),
-                                 sigma_chi = rinvchisq(1, 200, dat$B),
+                                 sigma_chi = rinvchisq(1, 500, dat$B / 2),
                                  chi0 = matrix(rnorm(dat$N * 2, 0, dat$B / 4), ncol = 2),
                                  sigma_alpha = rinvchisq(1, 100, dat$B / 5),
                                  alpha_raw = matrix(rnorm(2 * dat$N, 0, .5), ncol = 2),
@@ -36,7 +36,7 @@ inits_HBAM <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + rno
 
 inits_HBAM_NE <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
                                  theta_lr = dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B / 10, 0), runif(1, 0, dat$B / 10)),
-                                 sigma_chi = rinvchisq(1, 200, dat$B),
+                                 sigma_chi = rinvchisq(1, 500, dat$B / 2),
                                  sigma_alpha = rinvchisq(1, 100, dat$B / 5),
                                  alpha_raw = matrix(rnorm(2 * dat$N, 0, .5), ncol = 2),
                                  sigma_beta = runif(1, .1, .2),
@@ -51,7 +51,7 @@ inits_HBAM_NE <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + 
 
 inits_HBAM_2 <- function(chain_id = 1, dat) {list(theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B/5) * 0.25),
                                 theta_lr = dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B/10, 0), runif(1, 0, dat$B/10)),
-                                sigma_chi = rinvchisq(1, 200, dat$B),
+                                sigma_chi = rinvchisq(1, 500, dat$B / 2),
                                 chi0 = matrix(rnorm(dat$N * 2, 0, dat$B/4), ncol = 2),
                                 sigma_alpha = rinvchisq(1, 100, dat$B/5),
                                 alpha_raw = matrix(rnorm(2 * dat$N, 0, 0.5), ncol = 2),
@@ -68,7 +68,7 @@ inits_HBAM_2 <- function(chain_id = 1, dat) {list(theta_raw = dat$mean_spos + rn
 
 inits_HBAM_HM <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
                                 theta_lr = dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B / 10, 0), runif(1, 0, dat$B / 10)),
-                                sigma_chi = rinvchisq(1, 200, dat$B),
+                                sigma_chi = rinvchisq(1, 500, dat$B / 2),
                                 chi0 = matrix(rnorm(dat$N * 2, 0, dat$B / 4), ncol = 2),
                                 sigma_alpha = rinvchisq(1, 100, dat$B / 5),
                                 alpha_raw = matrix(rnorm(2 * dat$N, 0, .5), ncol = 2),
@@ -81,7 +81,8 @@ inits_HBAM_HM <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + 
 
 inits_HBAM_MINI <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
                                 theta_lr = dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B / 10, 0), runif(1, 0, dat$B / 10)),
-                                sigma_chi = rinvchisq(1, 200, dat$B),
+                                sigma_chi = rinvchisq(1, 500, dat$B / 2),
+                                mu_chi = rnorm(1, 0, .1),
                                 sigma_alpha = rinvchisq(1, 100, dat$B / 5),
                                 alpha_raw = matrix(rnorm(2 * dat$N, 0, .5), ncol = 2),
                                 sigma_beta = runif(1, .1, .2),
@@ -93,7 +94,7 @@ inits_HBAM_MINI <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos 
 
 inits_HBAM_R <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
                                    theta_lr = dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B / 10, 0), runif(1, 0, dat$B / 10)),
-                                   sigma_chi = rinvchisq(1, 200, dat$B / 2),
+                                   sigma_chi = rinvchisq(1, 500, dat$B / 2),
                                    sigma_alpha = rinvchisq(2, 100, dat$B / 5),
                                    alpha_raw = matrix(rnorm(2 * dat$N, 0, .5), ncol = 2),
                                    sigma_beta = runif(2, .1, .2),
@@ -111,7 +112,7 @@ inits_HBAM_R <- function(chain_id = 1, dat) {list (theta_raw = dat$mean_spos + r
 
 # Collecting all inits-functions:
 inits <- list(HBAM = inits_HBAM, HBAM_2 = inits_HBAM_2, HBAM_NE = inits_HBAM_NE, HBAM_HM = inits_HBAM_HM,
-              HBAM_MINI = inits_HBAM_MINI, HBAM_R = inits_HBAM_R, HBAM_0 = inits_HBAM_0, BAM = inits_BAM)
+              HBAM_MINI = inits_HBAM_MINI, HBAM_0 = inits_HBAM_0, HBAM_R = inits_HBAM_R, BAM = inits_BAM)
 
 rinvchisq <- function(n, df, scale = 1/df) {
   return((df * scale) / rchisq(n, df = df))
