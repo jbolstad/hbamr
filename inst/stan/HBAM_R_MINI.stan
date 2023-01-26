@@ -10,6 +10,8 @@ data {
   int<lower = -B, upper = B> Y[N_obs];    // reported stimuli positions
   real<lower = 0, upper = 1> U[N_obs];    // reported voter preferences
   int<lower = -B, upper = B> V[N];        // reported voter positions
+  int<lower=0, upper=1> CV;               // indicator of cross-validation
+  int<lower=0, upper=1> holdout[N_obs];   // holdout for cross-validation
 }
 
 transformed data {
@@ -95,7 +97,13 @@ model {
   psi ~ beta(8.5, 1.5);
   delta - 2 ~ gamma(2, .1);
 
-  target += sum(log_lik);
+  if(CV == 0)
+    target += sum(log_lik);
+  else
+    for (n in 1:N_obs) {
+      if(holdout[n] == 0)
+        target += log_lik[n];
+    }
 }
 
 generated quantities {

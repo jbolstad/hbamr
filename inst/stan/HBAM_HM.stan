@@ -9,6 +9,8 @@ data {
   int<lower = 1, upper = J> R;            // right pole
   int<lower = -B, upper = B> Y[N_obs];    // reported stimuli positions
   vector<lower = -B, upper = B>[N] V;     // reported self-placements
+  int<lower=0, upper=1> CV;               // indicator of cross-validation
+  int<lower=0, upper=1> holdout[N_obs];   // holdout for cross-validation
 }
 
 transformed data {
@@ -78,7 +80,13 @@ model {
   delta - 2 ~ gamma(2, .1);
 
   target += sum(log_lik_V);
-  target += sum(log_lik);
+  if(CV == 0)
+    target += sum(log_lik);
+  else
+    for (n in 1:N_obs) {
+      if(holdout[n] == 0)
+        target += log_lik[n];
+    }
 }
 
 generated quantities {

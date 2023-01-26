@@ -26,6 +26,9 @@ prep_data_cv <- function(data, K = 10, seed = 1) {
   for(i in 1:data$N_obs) holdout_k[i, hh[i]] <- 1
   holdout_k <- split(holdout_k, rep(1:ncol(holdout_k), each = nrow(holdout_k)))
   data_l <- rep(list(data), K)
-  for(i in 1:K) data_l[[i]]$holdout <- holdout_k[[i]]
+  for(i in 1:K) {
+    data_l[[i]]$holdout <- holdout_k[[i]]
+    data_l[[i]]$CV <- 1
+  }
   return(data_l)
 }
