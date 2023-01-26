@@ -27,7 +27,8 @@ inits_HBAM <- function(chain_id = 1, dat) {
 
 inits_HBAM_0 <- function(chain_id = 1, dat) {
   list (
-    theta = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
+    theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
+    theta_lr = dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B / 10, 0), runif(1, 0, dat$B / 10)),
     sigma_chi = rinvchisq(1, 500, dat$B / 2),
     chi = rnorm(dat$N, 0, dat$B / 4),
     sigma_alpha = rinvchisq(1, 100, dat$B / 5),
@@ -43,7 +44,7 @@ inits_HBAM_0 <- function(chain_id = 1, dat) {
 
 inits_BAM <- function(chain_id = 1, dat) {
   list (
-    theta = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
+    theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
     beta = rnorm(dat$N, 1, .5),
     thetal = -1.05, thetar = 1.05,
     nu = 3 + rinvchisq(1, 100, 7),

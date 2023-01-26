@@ -5,6 +5,8 @@ data {
   int<lower = 1> ii[N_obs];               // index i in matrix
   int<lower = 1> jj[N_obs];               // index j in matrix
   int<lower = 1> B;                       // length of scale -1 / 2
+  int<lower = 1, upper = J> L;            // left pole
+  int<lower = 1, upper = J> R;            // right pole
   int<lower = -B, upper = B> Y[N_obs];    // reported stimuli positions
   vector<lower = -B, upper = B>[N] V;     // reported self-placements
   int<lower=0, upper=1> CV;               // indicator of cross-validation
@@ -20,7 +22,8 @@ transformed data {
 parameters {
   vector[N] alpha_raw;                    // shift parameter, raw
   vector[N] beta_raw;                     // stretch parameter, raw
-  real theta[J];                          // latent stimuli position
+  ordered[2] theta_lr;                    // left and right pole
+  real theta_raw[J];                      // remaining stimuli
   real<lower = 0> sigma_alpha;            // sd of alpha
   real<lower = 0, upper = 2> sigma_beta;  // sd of log(beta)
   real<lower = 0> sigma_chi;              // sd of chi0
@@ -34,10 +37,14 @@ parameters {
 transformed parameters {
   vector[N] alpha;                        // shift parameter
   vector[N] beta;                         // stretch parameter
+  real theta[J];                          // latent stimuli position
   vector[N_obs] log_lik;                  // pointwise log-likelihood for Y
   vector[N] log_lik_V;                    // pointwise log-likelihood for V
   real<lower = 0> eta_scale = tau * J;
   real<lower=0> min_rho = min(rho);
+  theta = theta_raw;
+  theta[L] = theta_lr[1];                 // safeguard to ensure identification
+  theta[R] = theta_lr[2];
   alpha = alpha_raw * sigma_alpha;        // non-centered specifications
   beta = exp(beta_raw * sigma_beta);
 
@@ -51,7 +58,8 @@ transformed parameters {
 }
 
 model {
-  theta ~ normal(0, B * 2);
+  theta_raw ~ normal(0, B);
+  theta_lr ~ normal(0, B);
   alpha_raw ~ normal(0, 1);
   sigma_alpha ~ gamma(2, sigma_alpha_prior_rate);
   beta_raw ~ normal(0, 1);

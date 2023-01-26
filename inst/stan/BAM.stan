@@ -22,7 +22,7 @@ parameters {
   vector[N] beta;                         // stretch parameter
   real<lower = -1.1, upper = -.9> thetal; // left pole stimuli
   real<lower = .9, upper = 1.1> thetar;   // right pole stimuli
-  real thetam[J];                         // remaining stimuli
+  real theta_raw[J];                      // remaining stimuli
   real<lower = 3, upper = 30> nu;         // concentration of etas
   real<lower = 0> tau;                    // scale of errors
   vector<lower = 0>[N] eta;               // mean ind. error variance x J^2
@@ -33,7 +33,7 @@ transformed parameters {
   real theta[J];                          // latent stimuli position
   vector[N_obs] log_lik;                  // pointwise log-likelihood
   real<lower = 0> eta_scale = tau * J;
-  theta = thetam;
+  theta = theta_raw;
   theta[L] = thetal;
   theta[R] = thetar;
   for (n in 1:N_obs) {
@@ -45,7 +45,7 @@ transformed parameters {
 model {
   alpha ~ uniform(-100, 100);
   beta ~ uniform(-100, 100);
-  thetam ~ normal(0, 1);
+  theta_raw ~ normal(0, 1);
   thetal ~ normal(0, 1);
   thetar ~ normal(0, 1);
   eta ~ scaled_inv_chi_square(nu, eta_scale);

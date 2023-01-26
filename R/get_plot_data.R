@@ -13,13 +13,8 @@ get_plot_data <- function(object, n_draws = 25) {
   s_draws <- as.data.frame(rstan::extract(object, pars = "theta")$theta)
 
   # Use stimuli-names if available:
-  if (object@model_name == "HBAM" | object@model_name == "HBAM_R" ) {
-    if (!is.null(names(attr(object@sim$samples[[1]], "args")$init_list$theta_raw))) {
-      colnames(s_draws) <- names(attr(object@sim$samples[[1]], "args")$init_list$theta_raw) }
-  } else {
-    if (!is.null(names(attr(object@sim$samples[[1]], "args")$init_list$theta))) {
-      colnames(s_draws) <- names(attr(object@sim$samples[[1]], "args")$init_list$theta) }
-  }
+  if (!is.null(names(attr(object@sim$samples[[1]], "args")$init_list$theta_raw))) {
+    colnames(s_draws) <- names(attr(object@sim$samples[[1]], "args")$init_list$theta_raw) }
   s_draws <- pivot_longer(s_draws, everything())
 
   label <- s_draws %>%
