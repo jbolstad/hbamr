@@ -4,9 +4,12 @@ An R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM) scalin
 
 ### Installing and loading the package
 
-The **hbamr** package requires a working installation of **rstan**. Instructions for installing **rstan** are available [here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). (As explained in these instructions, you need to configure your R installation to be able to compile C++ code and you can drastically improve the estimation speed of the models by optimizing compiler usage.)
+The **hbamr** package requires a working installation of **rstan**. Instructions for installing **rstan** are available [here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). (As explained in these instructions, you need to configure your R installation to be able to compile C++ code and you can significantly improve the estimation speed of the models by following the advice on optimizing compiler usage.)
 
-Users of the **hbamr** package should install the latest version from github -- it is not available on CRAN. Those who do not have the **devtools** package installed, should first install this package by running `install.packages("devtools")`. **hbamr** can then be installed by running `devtools::install_github("jbolstad/hbamr")`. Once this has been done, the package can be loaded by running `library("hbamr")`.
+Users of the **hbamr** package should install the latest version from github -- it is not available on CRAN. Those who do not have the **devtools** package installed, should first install this package. The following two lines will if necessary first install **devtools** and then install **hbamr**. All models will be compiled upon installation, which means the process can take a few minutes.
+
+    if (!require("devtools")) install.packages("devtools")
+    devtools::install_github("jbolstad/hbamr")
 
 ### References
 
