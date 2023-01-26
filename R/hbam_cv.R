@@ -46,7 +46,6 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
     dat_l <- data
   }
 
-  model_cv <- paste(model, "CV", sep = "_")
   n_fold <- length(dat_l)
   # Run all chains in parallel and store only the log-likelihoods for held-out data to save memory:
   pointwise_ll_list <-
@@ -56,7 +55,7 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                             # Generate inits
                             init_l <- list(hbamr:::inits[[model]](chain_id = i, dat = dat_l[[k]]))
                             # Obtain chain:
-                            s <- rstan::sampling(hbamr:::stanmodels[[model_cv]], data = dat_l[[k]], init = init_l,
+                            s <- rstan::sampling(hbamr:::stanmodels[[model]], data = dat_l[[k]], init = init_l,
                                                  chains = 1, cores = 1, warmup = warmup, iter = iter, thin = thin, control = control, chain_id = i)
                             # Calculate expected value of log-likelihood for each held-out observation:
                             log_lik <- loo::extract_log_lik(s)
