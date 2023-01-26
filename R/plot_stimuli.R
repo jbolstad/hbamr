@@ -13,8 +13,9 @@ plot_stimuli <- function(object, rev_color = FALSE, alpha = .55) {
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     "You will need to install the package ggplot2 to use this function."
   } else {
+    require("ggplot2", quietly = TRUE)
     pd <- get_plot_data(object)
-    pal <- brewer.pal(n = 11, name = "RdBu")
+    pal <- RColorBrewer::brewer.pal(n = 11, name = "RdBu")
     if (rev_color == F) { pal <- rev(pal) }
     # Placing stimuli in 11 equally spaced categories for fill-color:
     cuts = (-5:6 - .5) * max(abs(pd$s_label$x)) * 2 / 10

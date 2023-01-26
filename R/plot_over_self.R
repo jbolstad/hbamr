@@ -38,6 +38,7 @@ plot_over_self <- function(objects, data, par = "chi", estimate = "median", name
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     "You will need to install the package ggplot2 to use this function."
   } else {
+    require("ggplot2", quietly = TRUE)
     if(is.null(parlabel)) { parlabel <- par}
     if(length(objects) == 1) {
       pd <- get_pd(objects, data, par, estimate)
@@ -50,14 +51,14 @@ plot_over_self <- function(objects, data, par = "chi", estimate = "median", name
       pd <- vector()
       for (m in 1:length(objects)) {
         if (is.null(names)) { name <- objects[[m]]@model_name } else { name <- names[m] }
-        pd <- rbind(pd, bind_cols(get_pd(objects[[m]], data, par, estimate), model = rep(name, data$N)))
+        pd <- rbind(pd, dplyr::bind_cols(get_pd(objects[[m]], data, par, estimate), model = rep(name, data$N)))
       }
         if (is.null(names)) {
           pd$model <- factor(pd$model, levels = unique(pd$model), labels = unique(pd$model)) } else {
           pd$model <- factor(pd$model, levels = names, labels = names) }
-        p <- ggplot(pd, aes(V, parameter)) + geom_boxplot(fill = fill, color= color, width = width, alpha = alpha, outlier.size = outlier.size) +
+        p <- ggplot(pd, aes(V, parameter)) + geom_boxplot(fill = fill, color = color, width = width, alpha = alpha, outlier.size = outlier.size) +
           xlab("Self-placement") + ylab(par) +
-          facet_wrap(~model, scale="free") + ylab(parlabel)
+          facet_wrap(~model, scale = "free") + ylab(parlabel)
         md <- ggplot_build(p)$data[[1]]
         md$model <- factor(md$PANEL, levels = as.numeric(unique(pd$model)), labels = levels(pd$model))
         p <- p + geom_segment(data = md, aes(x = xmin, xend = xmax,
@@ -82,7 +83,7 @@ get_pd <- function(object, data, par, estimate){
       par <- "sqrt(eta) / J"
     }
   }
-  if (estimate == "median") { pd <- bind_cols(parameter = param$`50%`, V = as.ordered(data$V)) }
-  if (estimate == "mean") { pd <- bind_cols(parameter = param$mean, V = as.ordered(data$V)) }
+  if (estimate == "median") { pd <- dplyr::bind_cols(parameter = param$`50%`, V = as.ordered(data$V)) }
+  if (estimate == "mean") { pd <- dplyr::bind_cols(parameter = param$mean, V = as.ordered(data$V)) }
   return(pd)
 }

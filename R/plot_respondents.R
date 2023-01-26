@@ -17,6 +17,7 @@ plot_respondents <- function(object, inc_stimuli = TRUE, n_draws = 25, color = "
   if (!requireNamespace("ggplot2", quietly = TRUE)) {
     "You will need to install the package ggplot2 to use this function."
   } else {
+    require("ggplot2", quietly = TRUE)
     pd <- get_plot_data(object, n_draws = n_draws)
     suppressWarnings(
     if (inc_stimuli == T) {
