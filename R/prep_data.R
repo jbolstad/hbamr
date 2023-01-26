@@ -87,6 +87,6 @@ prep_data <- function(self, stimuli,
 
   return(list(J = ncol(stimuli), N = nrow(stimuli), B = B, N_obs = length(stimuli_vec),
               V = self, Y = stimuli_vec, U = prefs_vec, L = which.min(mean_spos), R = which.max(mean_spos),
-              ii = ii, jj = jj, mean_spos = mean_spos, keep = keep, names = names(stimuli),
+              ii = ii, jj = jj, mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
               CV = 0, holdout = rep(0, length(stimuli_vec))))
 }
