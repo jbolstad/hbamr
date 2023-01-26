@@ -79,7 +79,10 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
     pointwise_ll[dat_l[[k]]$holdout == 1] <- logColMeansExp(pointwise_ll_mat)[dat_l[[k]]$holdout == 1]
   }
 
-  return(data.frame(
+  out <- data.frame(
     ELPD = round(sum(pointwise_ll, na.rm = T), digits = 1),
-    SE = round(as.numeric(sqrt(length(pointwise_ll) * var(pointwise_ll))), digits = 1)))
+    SE = round(as.numeric(sqrt(length(pointwise_ll) * var(pointwise_ll))), digits = 1))
+  rownames(out) <- model
+
+  return(out)
 }
