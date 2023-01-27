@@ -71,8 +71,6 @@ model {
   beta_raw[, 1] ~ normal(0, 1);
   beta_raw[, 2] ~ normal(0, 1);
   sigma_beta ~ gamma(3, 10);
-  chi0[, 1] ~ normal(0, B / 2.0);
-  chi0[, 2] ~ normal(0, B / 2.0);
   eta ~ scaled_inv_chi_square(nu, eta_scale);
   nu ~ gamma(25, 2.5);
   tau ~ gamma(2, tau_prior_rate);
