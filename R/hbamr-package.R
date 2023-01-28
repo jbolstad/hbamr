@@ -18,8 +18,7 @@
 #' @importFrom pbmcapply pbmclapply
 #'
 #' @references
-#' Bølstad, Jørgen (2023). Hierarchical Bayesian Aldrich-McKelvey Scaling. <i>Political Analysis</i>.
-#'
-#' Stan Development Team (2023). RStan: the R interface to Stan. R package version 2.21.8. https://mc-stan.org
+#' - Bølstad, Jørgen (2023). Hierarchical Bayesian Aldrich-McKelvey Scaling. <i>Political Analysis</i>.
+#' - Stan Development Team (2023). RStan: the R interface to Stan. R package version 2.21.8. https://mc-stan.org
 #'
 NULL

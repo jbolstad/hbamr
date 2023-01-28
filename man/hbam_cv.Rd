@@ -16,10 +16,10 @@ hbam_cv(
   data = NULL,
   K = 10,
   chains = 2,
-  cores = min(parallel::detectCores(logical = FALSE), 6),
+  cores = parallel::detectCores(logical = FALSE),
   warmup = 1000,
-  iter = 3000,
-  thin = max(1, round(((iter - warmup) * chains)/4000)),
+  iter = 4000,
+  thin = 1,
   control = list(adapt_delta = 0.6),
   seed = 1
 )
@@ -45,7 +45,7 @@ hbam_cv(
 
 \item{chains}{A positive integer specifying the number of Markov chains to use for each model fit. Defaults to 2.}
 
-\item{cores}{The number of cores to use when executing the Markov chains in parallel. Defaults to \code{min(parallel::detectCores(logical = FALSE), chains, 6)}. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously to save time.}
+\item{cores}{The number of cores to use when executing the Markov chains in parallel. Defaults to \code{parallel::detectCores(logical = FALSE)}. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously to save time.}
 
 \item{seed}{An integer passed on to \code{set.seed} before creating the folds to increase reproducibility. Defaults to 1 and only applies when the argument \code{prep_data} is \code{TRUE}.}
 
