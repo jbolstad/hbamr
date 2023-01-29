@@ -22,6 +22,7 @@ Depends:
     R (>= 3.4.0)
 Imports: 
     dplyr,
+    ggplot2,
     loo,
     matrixStats,
     methods,
@@ -35,8 +36,7 @@ Imports:
     rstantools (>= 2.2.0),
     tidyr
 Suggests: 
-    data.table,
-    ggplot2
+    data.table
 LinkingTo: 
     BH (>= 1.66.0),
     Rcpp (>= 0.12.0),

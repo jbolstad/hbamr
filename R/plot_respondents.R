@@ -14,21 +14,16 @@
 #'
 
 plot_respondents <- function(object, inc_stimuli = TRUE, n_draws = 25, color = "#053061", fill = "#2166AC", alpha_color = 0.4, alpha_fill = 0.03) {
-  if (!requireNamespace("ggplot2", quietly = TRUE)) {
-    "You will need to install the package ggplot2 to use this function."
+  pd <- get_plot_data(object, n_draws = n_draws)
+  suppressWarnings(
+  if (inc_stimuli == T) {
+    p <- ggplot() + geom_density(data = pd$chi_draws, aes(chi, by = draw_no), color = alpha(color, alpha_color), fill = alpha(fill, alpha_fill)) +
+      geom_text(data = pd$s_label, aes(x = x, y = 0, label = name), hjust = 0, nudge_y = .008, check_overlap = TRUE, angle = 90) +
+      geom_point(data = pd$s_label, aes(x = x, y = 0), color = color) +
+      labs(x = "Ideological scale", y = "Density")
   } else {
-    require("ggplot2", quietly = TRUE)
-    pd <- get_plot_data(object, n_draws = n_draws)
-    suppressWarnings(
-    if (inc_stimuli == T) {
-      p <- ggplot() + geom_density(data = pd$chi_draws, aes(chi, by = draw_no), color = alpha(color, alpha_color), fill = alpha(fill, alpha_fill)) +
-        geom_text(data = pd$s_label, aes(x = x, y = 0, label = name), hjust = 0, nudge_y = .008, check_overlap = TRUE, angle = 90) +
-        geom_point(data = pd$s_label, aes(x = x, y = 0), color = color) +
-        labs(x = "Ideological scale", y = "Density")
-    } else {
-      p <- ggplot() + geom_density(data = pd$chi_draws, aes(chi, by = draw_no), color = alpha(color, alpha_color), fill = alpha(fill, alpha_fill)) +
-        labs(x = "Ideological scale", y = "Density")
-    })
-    return(p)
-  }
+    p <- ggplot() + geom_density(data = pd$chi_draws, aes(chi, by = draw_no), color = alpha(color, alpha_color), fill = alpha(fill, alpha_fill)) +
+      labs(x = "Ideological scale", y = "Density")
+  })
+  return(p)
 }
