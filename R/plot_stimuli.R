@@ -10,6 +10,7 @@
 #'
 
 plot_stimuli <- function(object, rev_color = FALSE, alpha = .55) {
+  require("ggplot2")
   pd <- get_plot_data(object)
   pal <- RColorBrewer::brewer.pal(n = 11, name = "RdBu")
   if (rev_color == F) { pal <- rev(pal) }

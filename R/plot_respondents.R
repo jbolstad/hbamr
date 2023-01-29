@@ -14,6 +14,7 @@
 #'
 
 plot_respondents <- function(object, inc_stimuli = TRUE, n_draws = 25, color = "#053061", fill = "#2166AC", alpha_color = 0.4, alpha_fill = 0.03) {
+  require("ggplot2")
   pd <- get_plot_data(object, n_draws = n_draws)
   suppressWarnings(
   if (inc_stimuli == T) {

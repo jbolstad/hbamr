@@ -35,6 +35,7 @@
 plot_over_self <- function(objects, data, par = "chi", estimate = "median", names = NULL, parlabel = NULL,
                            fill = "#2166AC", color = "#053061", width = .7, alpha = .5, outlier.size = 0.3,
                            median_color = "black", median_linewidth = .7) {
+  require("ggplot2")
   if(is.null(parlabel)) { parlabel <- par}
   if(length(objects) == 1) {
     pd <- get_pd(objects, data, par, estimate)
