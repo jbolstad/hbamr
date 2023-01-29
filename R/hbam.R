@@ -17,6 +17,7 @@
 #' @param warmup A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than `iter`.
 #' @param iter A positive integer specifying the number of iterations for each chain (including warmup).
 #' @param thin A positive integer specifying the period for saving samples.
+#' @param seed A positive integer specifying an optional seed for reproducibility. If this argument is not supplied, a random seed will be generated and the function will produce slightly different results on each run.
 #' @param ... Arguments passed to `rstan::sampling`.
 #' @details This package provides several alternative models, which can be specified using the names below. Users who are unsure which model to use are adviced to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI may provide a useful alternative.
 #'
@@ -65,10 +66,12 @@
 hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, req_valid = NA,
                  req_unique = 2, prefs = NULL, prep_data = TRUE, data = NULL,
                  chains = 4, cores = parallel::detectCores(logical = FALSE),
-                 warmup = 1000, iter = 4000, thin = 3, control = list(adapt_delta = .6), ...) {
+                 warmup = 1000, iter = 4000, thin = 3, control = list(adapt_delta = .6),
+                 seed = sample.int(.Machine$integer.max, 1), ...) {
   if (prep_data == TRUE) { dat <- hbamr::prep_data(self, stimuli, prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique) } else { dat <- data }
+  set.seed(seed)
   init_ll <- lapply(1:chains, function(id) hbamr:::inits[[model]](id, dat))
   out <- rstan::sampling(hbamr:::stanmodels[[model]], data = dat, init = init_ll,
-                         chains = chains, cores = cores, warmup = warmup, iter = iter, thin = thin, control = control, ...)
+                         chains = chains, cores = cores, warmup = warmup, iter = iter, thin = thin, control = control, seed = seed, ...)
   return(out)
 }

@@ -47,7 +47,7 @@ hbam_cv(
 
 \item{cores}{The number of cores to use when executing the Markov chains in parallel. Defaults to \code{parallel::detectCores(logical = FALSE)}. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously to save time.}
 
-\item{seed}{An integer passed on to \code{set.seed} before creating the folds to increase reproducibility. Defaults to 1 and only applies when the argument \code{prep_data} is \code{TRUE}.}
+\item{seed}{An integer passed on to \code{set.seed} before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument \code{prep_data} is \code{TRUE}. The supplied \code{seed} argument is also used to generate seeds for the sampling algorithm.}
 
 \item{...}{Arguments passed to \code{rstan::sampling}.}
 }

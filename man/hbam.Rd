@@ -20,6 +20,7 @@ hbam(
   iter = 4000,
   thin = 3,
   control = list(adapt_delta = 0.6),
+  seed = sample.int(.Machine$integer.max, 1),
   ...
 )
 }
@@ -51,6 +52,8 @@ hbam(
 \item{iter}{A positive integer specifying the number of iterations for each chain (including warmup).}
 
 \item{thin}{A positive integer specifying the period for saving samples.}
+
+\item{seed}{A positive integer specifying an optional seed for reproducibility. If this argument is not supplied, a random seed will be generated and the function will produce slightly different results on each run.}
 
 \item{...}{Arguments passed to \code{rstan::sampling}.}
 }
