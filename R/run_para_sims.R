@@ -13,7 +13,7 @@ run_para_sims <- function(nreps = 1, J_vals = 4, psi_vals = .89, tau_vals = .65,
   res_list <-
     pbmcapply::pbmclapply(1:nrow(vecs), mc.cores = parallel::detectCores(logical = FALSE),
              function(i){
-               results <- try(hbam:::run_sim(tau = vecs$tau[i], J = vecs$J[i], psi = vecs$psi[i],
+               results <- try(hbamr:::run_sim(tau = vecs$tau[i], J = vecs$J[i], psi = vecs$psi[i],
                                   chains = 1, it = it, warm = warm, draws = draws,
                                   seed = vecs$seed[i], ...))
                if(inherits(results, "try-error")) {
