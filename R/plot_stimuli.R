@@ -20,7 +20,7 @@ plot_stimuli <- function(object, rev_color = FALSE, alpha = .55) {
 
   p <- ggplot(pd$s_draws, aes(value, fill = name)) + geom_density(color = "gray50", alpha = alpha) +
     geom_text(data = pd$s_label, aes(x = x, y = 0, label = name), hjust = 0, nudge_x = -.007,
-              nudge_y = .3, check_overlap = TRUE, angle = 90) +
+              nudge_y = .025 * max(pd$s_label$mode_y), check_overlap = TRUE, angle = 90) +
     labs(x = "Ideological scale", y = "Posterior density") +
     theme(legend.position = "none") + scale_fill_manual(values = pal[cats])
   return(p)
