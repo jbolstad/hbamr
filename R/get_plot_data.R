@@ -18,8 +18,8 @@ get_plot_data <- function(object, n_draws = 25) {
   s_draws <- pivot_longer(s_draws, everything())
 
   label <- s_draws %>%
-    group_by(name) %>%
-    summarize(x = mean(value), mode_x = get_post_mode_x(value), mode_y = get_post_mode_y(value))
+    dplyr::group_by(.data$name) %>%
+    dplyr::summarize(x = mean(.data$value), mode_x = get_post_mode_x(.data$value), mode_y = get_post_mode_y(.data$value))
   # label$y_adj <- label$y + mean(label$y) * .07
   return(list(s_label = label, s_draws = s_draws, chi_draws = chi_draws))
 }

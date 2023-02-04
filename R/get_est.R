@@ -26,7 +26,7 @@
 #' }
 
 get_est <- function (object, par = "theta", probs = c(0.025, 0.50, 0.975), simplify = TRUE, ...) {
-  out <- as_tibble(rstan::summary(object, par, probs = probs, ...)[[1]])
+  out <- dplyr::as_tibble(rstan::summary(object, par, probs = probs, ...)[[1]])
   if (simplify == TRUE) { out <- out[, -c(2, 3)] }
   return(out)
 }
