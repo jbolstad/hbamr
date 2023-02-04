@@ -47,9 +47,15 @@ hbam_cv(
 
 \item{cores}{The number of cores to use when executing the Markov chains in parallel. Defaults to \code{parallel::detectCores(logical = FALSE)}. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously to save time.}
 
-\item{seed}{An integer passed on to \code{set.seed} before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument \code{prep_data} is \code{TRUE}. The supplied \code{seed} argument is also used to generate seeds for the sampling algorithm.}
+\item{warmup}{A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than \code{iter}.}
 
-\item{...}{Arguments passed to \code{rstan::sampling}.}
+\item{iter}{A positive integer specifying the number of iterations for each chain (including warmup).}
+
+\item{thin}{A positive integer specifying the period for saving samples.}
+
+\item{control}{A named list of parameters to control the sampler's behavior. See the details in the documentation for the control argument in the \code{stan} function in the \code{rstan} package.}
+
+\item{seed}{An integer passed on to \code{set.seed} before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument \code{prep_data} is \code{TRUE}. The supplied \code{seed} argument is also used to generate seeds for the sampling algorithm.}
 }
 \value{
 A data frame containing the estimated ELPD and its standard error.

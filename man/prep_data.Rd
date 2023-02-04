@@ -19,6 +19,8 @@ prep_data(
 
 \item{stimuli}{An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA.}
 
+\item{prefs}{An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the \code{"HBAM_R"} and \code{"HBAM_R_MINI"} models and will be ignored when fitting other models.}
+
 \item{allow_miss}{Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the \code{prep_data} function. Defaults to 2.}
 
 \item{req_valid}{Integer specifying how many valid observations to require for a respondent to be included in the analysis. The default is \code{req_valid = J - allow_miss}, but if specified, \code{req_valid} takes precedence.}

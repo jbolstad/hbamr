@@ -5,7 +5,7 @@
 \title{Plot individual parameter estimates over self-placements}
 \usage{
 plot_over_self(
-  objects,
+  object,
   data,
   par = "chi",
   estimate = "median",
@@ -21,6 +21,8 @@ plot_over_self(
 )
 }
 \arguments{
+\item{object}{An object of class \code{stanfit} produced by \code{hbam}, or a \code{list} of such objects, which will produce a faceted plot.}
+
 \item{data}{The list of data that was used to produce the \code{stanfit} object(s).}
 
 \item{par}{Character: Name of the parameter to be plotted. One of the following: \code{"alpha"}, \code{"beta"}, \code{"abs_beta"}, \code{"lambda"}, \code{"chi"}, and \code{"eta"}. Defaults to \code{"chi"}.}
@@ -44,8 +46,6 @@ plot_over_self(
 \item{median_color}{Color of solid line representing the median.}
 
 \item{median_linewidth}{Thickness of solid line representing the median.}
-
-\item{object}{An object of class \code{stanfit} produced by \code{hbam}, or a \code{list} of such objects, which will produce a faceted plot.}
 }
 \value{
 A \code{ggplot} object.

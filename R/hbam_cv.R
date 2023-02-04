@@ -14,8 +14,11 @@
 #' @param K An integer above 2, specifying the number of folds to use in the analysis. Defaults to 10.
 #' @param chains A positive integer specifying the number of Markov chains to use for each model fit. Defaults to 2.
 #' @param cores The number of cores to use when executing the Markov chains in parallel. Defaults to `parallel::detectCores(logical = FALSE)`. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously to save time.
+#' @param warmup A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than `iter`.
+#' @param iter A positive integer specifying the number of iterations for each chain (including warmup).
+#' @param thin A positive integer specifying the period for saving samples.
+#' @param control A named list of parameters to control the sampler's behavior. See the details in the documentation for the control argument in the `stan` function in the `rstan` package.
 #' @param seed An integer passed on to `set.seed` before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument `prep_data` is `TRUE`. The supplied `seed` argument is also used to generate seeds for the sampling algorithm.
-#' @param ... Arguments passed to `rstan::sampling`.
 #' @return A data frame containing the estimated ELPD and its standard error.
 #' @examples
 #' \dontrun{
