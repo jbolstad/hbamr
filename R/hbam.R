@@ -79,8 +79,8 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
                  seed = sample.int(.Machine$integer.max, 1), ...) {
   if (prep_data == TRUE) { dat <- hbamr::prep_data(self, stimuli, prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique) } else { dat <- data }
   set.seed(seed)
-  init_ll <- lapply(1:chains, function(id) hbamr:::inits[[model]](id, dat))
-  out <- rstan::sampling(hbamr:::stanmodels[[model]], data = dat, init = init_ll,
+  init_ll <- lapply(1:chains, function(id) inits[[model]](id, dat))
+  out <- rstan::sampling(stanmodels[[model]], data = dat, init = init_ll,
                          chains = chains, cores = cores, warmup = warmup, iter = iter, thin = thin, control = control, seed = seed, ...)
   return(out)
 }

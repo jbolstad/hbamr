@@ -3,7 +3,7 @@ run_sim <- function(N = 500, J = 4, nu = 8.4, tau = .57, psi = .89,
                     chains = 4, it = 2000, warm = 1000, draws = 1000, seed = 1, ...) {
 
   ptm.it <- proc.time()
-  dat <- hbamr:::create_data(N = N, J = J, nu = nu, tau = tau, psi = psi, seed = seed, ...)
+  dat <- create_data(N = N, J = J, nu = nu, tau = tau, psi = psi, seed = seed, ...)
   thin <- round((it - warm) / (draws / chains))
 
   ptm <- proc.time()
@@ -39,14 +39,14 @@ run_sim <- function(N = 500, J = 4, nu = 8.4, tau = .57, psi = .89,
   mod3_median_psi <- rstan::summary(mod3_fit, pars = "psi")[[1]][6]
   mod3_mean_kappa <- mean(rstan::summary(mod3_fit, pars = "kappa")[[1]][, 1])
 
-  mod1_extr <- hbamr:::extreme_CIs(mod1_fit)
-  mod1_cov <- hbamr:::CI_coverage(mod1_fit, dat)
+  mod1_extr <- extreme_CIs(mod1_fit)
+  mod1_cov <- CI_coverage(mod1_fit, dat)
 
-  mod2_extr <- hbamr:::extreme_CIs(mod2_fit)
-  mod2_cov <- hbamr:::CI_coverage(mod2_fit, dat)
+  mod2_extr <- extreme_CIs(mod2_fit)
+  mod2_cov <- CI_coverage(mod2_fit, dat)
 
-  mod3_extr <- hbamr:::extreme_CIs(mod3_fit)
-  mod3_cov <- hbamr:::CI_coverage(mod3_fit, dat)
+  mod3_extr <- extreme_CIs(mod3_fit)
+  mod3_cov <- CI_coverage(mod3_fit, dat)
 
   results <- data.frame(N, J, nu, tau, psi, cor(dat$mean_spos, dat$true_theta),
     cor(mod1_theta, dat$true_theta), cor(mod2_theta, dat$true_theta), cor(mod3_theta, dat$true_theta),

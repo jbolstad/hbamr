@@ -58,9 +58,9 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                             k <- ceiling(i / chains) # Fold number
                             # Generate inits
                             set.seed(seed + i)
-                            init_l <- list(hbamr:::inits[[model]](chain_id = i, dat = dat_l[[k]]))
+                            init_l <- list(inits[[model]](chain_id = i, dat = dat_l[[k]]))
                             # Obtain chain:
-                            s <- rstan::sampling(hbamr:::stanmodels[[model]], data = dat_l[[k]], init = init_l,
+                            s <- rstan::sampling(stanmodels[[model]], data = dat_l[[k]], init = init_l,
                                                  chains = 1, cores = 1, warmup = warmup, iter = iter, thin = thin, control = control, chain_id = i, seed = seed + i)
                             # Calculate expected value of log-likelihood for each held-out observation:
                             log_lik <- loo::extract_log_lik(s)
