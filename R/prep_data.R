@@ -11,14 +11,22 @@
 #' @param B Integer specifying the upper bound of the survey scale after centering. If not supplied, this information will be inferred from the data.
 #' @return A list of data to be used by `hbam`. The returned list includes the logical vector `keep`, which identifies the rows in the original data that have been kept for further analysis. The stimuli data are stored in a vector as a long-form sparse matrix. If the stimuli data include column-names, these will be preserved for later use.
 #' @examples
+#' # Loading and re-coding ANES 1980 data:
 #' data(LC1980)
 #' dat <- LC1980
 #' dat[dat == 0 | dat == 8 | dat == 9] <- NA
 #' self <- dat[, 1]
 #' stimuli <- dat[, -1]
+#'
+#' # Prepare data for model fitting, using defaults:
 #' dat <- prep_data(self, stimuli)
 #'
+#' # Prepare data for model fitting, using using alternative settings:
 #' dat2 <- prep_data(self, stimuli, allow_miss = 0, req_unique = 3)
+#'
+#' # Select data that will be included in the analysis:
+#' self2 <- self[dat2$keep]
+#' stimuli2 <- stimuli[dat2$keep, ]
 
 prep_data <- function(self, stimuli,
                       prefs = NULL,

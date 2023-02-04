@@ -17,6 +17,7 @@
 #' @param warmup A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than `iter`.
 #' @param iter A positive integer specifying the number of iterations for each chain (including warmup).
 #' @param thin A positive integer specifying the period for saving samples.
+#' @param control A named list of parameters to control the sampler's behavior. See the details in the documentation for the control argument in the `stan` function in the `rstan` package.
 #' @param seed A positive integer specifying an optional seed for reproducibility. If this argument is not supplied, a random seed will be generated and the function will produce slightly different results on each run.
 #' @param ... Arguments passed to `rstan::sampling`.
 #' @details This package provides several alternative models, which can be specified using the names below. Users who are unsure which model to use are adviced to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI may provide a useful alternative.
@@ -48,20 +49,28 @@
 #' - Hare, Christopher et al. (2015). Using Bayesian Aldrich-McKelvey Scaling to Study Citizens' Ideological Preferences and Perceptions. <i>American Journal of Political Science</i> 59(3): 759–774.
 #'
 #' @examples
-#'
-#' # Loading and recoding data
+#' # Loading and re-coding ANES 1980 data:
 #' data(LC1980)
 #' dat <- LC1980
 #' dat[dat == 0 | dat == 8 | dat == 9] <- NA
+#'
+#' # Making a small subset of the data for illustration:
+#' self <- dat[1:50, 1]
+#' stimuli <- dat[1:50, -1]
+#'
+#' # Fitting the HBAM_MINI model:
+#' fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI", warmup = 500, iter = 1000, chains = 2, thin = 1)
+#'
+#' \dontrun{
+#' # Fitting the standard HBAM model to the complete ANES 1980 data:
 #' self <- dat[, 1]
 #' stimuli <- dat[, -1]
-#'
-#' # Fitting the standard HBAM model, using default settings:
 #' fit_hbam <- hbam(self, stimuli)
 #'
-#' # Preparing data in advance, using defaults:
+#' # Preparing the data before fitting, using defaults:
 #' dat <- prep_data(self, stimuli)
 #' fit_hbam <- hbam(data = dat, prep_data = FALSE)
+#' }
 
 hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, req_valid = NA,
                  req_unique = 2, prefs = NULL, prep_data = TRUE, data = NULL,

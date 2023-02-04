@@ -18,13 +18,17 @@
 #' @param ... Arguments passed to `rstan::sampling`.
 #' @return A data frame containing the estimated ELPD and its standard error.
 #' @examples
+#' \dontrun{
+#' # Loading and re-coding ANES 1980 data:
 #' data(LC1980)
 #' dat <- LC1980
 #' dat[dat == 0 | dat == 8 | dat == 9] <- NA
 #' self <- dat[, 1]
 #' stimuli <- dat[, -1]
-#' cv_hbam <- hbam_cv(self, stimuli, model = "HBAM")
 #'
+#' # Performing 10-fold cross-validation for the HBAM model:
+#' cv_hbam <- hbam_cv(self, stimuli, model = "HBAM")
+#' }
 
 hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                     allow_miss = 0, req_valid = NA, req_unique = 2,

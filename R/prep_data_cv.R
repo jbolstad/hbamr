@@ -8,16 +8,22 @@
 #' @param seed An integer passed on to `set.seed` before creating the folds to increase reproducibility. Defaults to 1.
 #' @return A list of K data objects where each version includes a different vector identifying holdout-data.
 #' @examples
+#' # Loading and re-coding ANES 1980 data:
 #' data(LC1980)
 #' dat <- LC1980
 #' dat[dat == 0 | dat == 8 | dat == 9] <- NA
 #' self <- dat[, 1]
 #' stimuli <- dat[, -1]
 #' dat <- prep_data(self, stimuli)
+#'
+#' # Prepare data for cross-validation:
 #' dat_cv <- prep_data_cv(dat, K = 10)
+#'
+#' \dontrun{
+#' # Perform cross-validation:
 #' elpd_hbam <- hbam_cv(model = "HBAM", data = dat_cv, prep_data = FALSE)
 #' elpd_hbam
-#'
+#' }
 
 prep_data_cv <- function(data, K = 10, seed = 1) {
   set.seed(seed)

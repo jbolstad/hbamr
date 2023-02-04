@@ -18,24 +18,25 @@
 #' @param median_linewidth Thickness of solid line representing the median.
 #' @return A `ggplot` object.
 #' @examples
-#' # Loading and recoding data
+#' \dontrun{
+#' # Loading and re-coding ANES 1980 data:
 #' data(LC1980)
 #' dat <- LC1980
 #' dat[dat == 0 | dat == 8 | dat == 9] <- NA
 #' self <- dat[, 1]
 #' stimuli <- dat[, -1]
 #'
-#' # Preparing data and fitting model:
+#' # Preparing the data and fitting the standard model:
 #' dat <- prep_data(self, stimuli)
 #' fit_hbam <- hbam(data = dat, prep_data = FALSE)
 #'
-#' # Plot estimated respondent positions over self-placements:
+#' # Plotting estimated respondent positions over self-placements:
 #' plot_over_self(fit_hbam, dat, "chi")
+#' }
 
 plot_over_self <- function(objects, data, par = "chi", estimate = "median", names = NULL, parlabel = NULL,
                            fill = "#2166AC", color = "#053061", width = .7, alpha = .5, outlier.size = 0.3,
                            median_color = "black", median_linewidth = .7) {
-  require("ggplot2")
   if(is.null(parlabel)) { parlabel <- par}
   if(length(objects) == 1) {
     pd <- get_pd(objects, data, par, estimate)
