@@ -11,6 +11,7 @@
 #' @param req_unique Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is `req_unique = 2`. This argument will not be used if the data have been prepared in advance via the `prep_data` function.
 #' @param prep_data Logical: Should the data be prepared before fitting the model? (Or have the data been prepared in advance by first running the `prep_data` and `prep_data_cv` functions)? If so, set `prep_data = FALSE`.) Defaults to `prep_data = TRUE`.
 #' @param data A list of data produced by `prep_data` followed by `prep_data_cv`.
+#' @param prefs An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the `"HBAM_R"` and `"HBAM_R_MINI"` models and will be ignored when fitting other models.
 #' @param K An integer above 2, specifying the number of folds to use in the analysis. Defaults to 10.
 #' @param chains A positive integer specifying the number of Markov chains to use for each model fit. Defaults to 2.
 #' @param cores The number of cores to use when executing the Markov chains in parallel. Defaults to `parallel::detectCores(logical = FALSE)`. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously to save time.

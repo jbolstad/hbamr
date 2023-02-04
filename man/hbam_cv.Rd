@@ -37,6 +37,8 @@ hbam_cv(
 
 \item{req_unique}{Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is \code{req_unique = 2}. This argument will not be used if the data have been prepared in advance via the \code{prep_data} function.}
 
+\item{prefs}{An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the \code{"HBAM_R"} and \code{"HBAM_R_MINI"} models and will be ignored when fitting other models.}
+
 \item{prep_data}{Logical: Should the data be prepared before fitting the model? (Or have the data been prepared in advance by first running the \code{prep_data} and \code{prep_data_cv} functions)? If so, set \code{prep_data = FALSE}.) Defaults to \code{prep_data = TRUE}.}
 
 \item{data}{A list of data produced by \code{prep_data} followed by \code{prep_data_cv}.}
