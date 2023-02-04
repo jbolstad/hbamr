@@ -11,10 +11,11 @@
 #' @aliases hbamr
 #' @useDynLib hbamr, .registration = TRUE
 #' @import methods stats
-#' @import Rcpp ggplot2 RColorBrewer parallel tidyr loo dplyr
+#' @import Rcpp ggplot2 RColorBrewer parallel tidyr loo
 #' @importFrom rstan sampling sflist2stanfit
 #' @importFrom matrixStats colLogSumExps
 #' @importFrom plyr llply
+#' @importFrom dplyr bind_cols
 #' @importFrom pbmcapply pbmclapply
 #'
 #' @references
