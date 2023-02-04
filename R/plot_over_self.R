@@ -56,7 +56,7 @@ plot_over_self <- function(objects, data, par = "chi", estimate = "median", name
         pd$model <- factor(pd$model, levels = names, labels = names) }
       p <- ggplot(pd, aes(V, parameter)) + geom_boxplot(fill = fill, color = color, width = width, alpha = alpha, outlier.size = outlier.size) +
         xlab("Self-placement") + ylab(par) +
-        facet_wrap(~model, scale = "free") + ylab(parlabel)
+        facet_wrap(~model, scales = "free") + ylab(parlabel)
       md <- ggplot_build(p)$data[[1]]
       md$model <- factor(md$PANEL, levels = as.numeric(unique(pd$model)), labels = levels(pd$model))
       p <- p + geom_segment(data = md, aes(x = xmin, xend = xmax,
