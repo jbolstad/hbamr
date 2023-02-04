@@ -58,11 +58,15 @@ A data frame containing the estimated ELPD and its standard error.
 This function performs a K-fold cross-validation of an HBAM-type model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
 }
 \examples{
+\dontrun{
+# Loading and re-coding ANES 1980 data:
 data(LC1980)
 dat <- LC1980
 dat[dat == 0 | dat == 8 | dat == 9] <- NA
 self <- dat[, 1]
 stimuli <- dat[, -1]
-cv_hbam <- hbam_cv(self, stimuli, model = "HBAM")
 
+# Performing 10-fold cross-validation for the HBAM model:
+cv_hbam <- hbam_cv(self, stimuli, model = "HBAM")
+}
 }

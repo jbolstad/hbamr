@@ -53,6 +53,8 @@ hbam(
 
 \item{thin}{A positive integer specifying the period for saving samples.}
 
+\item{control}{A named list of parameters to control the sampler's behavior. See the details in the documentation for the control argument in the \code{stan} function in the \code{rstan} package.}
+
 \item{seed}{A positive integer specifying an optional seed for reproducibility. If this argument is not supplied, a random seed will be generated and the function will produce slightly different results on each run.}
 
 \item{...}{Arguments passed to \code{rstan::sampling}.}
@@ -87,20 +89,28 @@ This package provides several alternative models, which can be specified using t
 Some of these models can also be used in situations where self-placements are not available and the only goal is to estimate stimulus positions. This can be achieved by supplying a vector of zeros (or random data) instead of real self-placements: \code{self = rep(0, nrow(stimuli))}. The HBAM_NE and HBAM_MINI models are then the relevant alternatives, as the other HBAM variants will include superfluous parameters (and will not sample properly with zero variance in the supplied self-placement data).
 }
 \examples{
-
-# Loading and recoding data
+# Loading and re-coding ANES 1980 data:
 data(LC1980)
 dat <- LC1980
 dat[dat == 0 | dat == 8 | dat == 9] <- NA
+
+# Making a small subset of the data for illustration:
+self <- dat[1:50, 1]
+stimuli <- dat[1:50, -1]
+
+# Fitting the HBAM_MINI model:
+fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI", warmup = 500, iter = 1000, chains = 2, thin = 1)
+
+\dontrun{
+# Fitting the standard HBAM model to the complete ANES 1980 data:
 self <- dat[, 1]
 stimuli <- dat[, -1]
-
-# Fitting the standard HBAM model, using default settings:
 fit_hbam <- hbam(self, stimuli)
 
-# Preparing data in advance, using defaults:
+# Preparing the data before fitting, using defaults:
 dat <- prep_data(self, stimuli)
 fit_hbam <- hbam(data = dat, prep_data = FALSE)
+}
 }
 \references{
 \itemize{

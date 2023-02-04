@@ -54,17 +54,19 @@ A \code{ggplot} object.
 Create a boxplot of individual parameter estimates from an HBAM model over self-placements
 }
 \examples{
-# Loading and recoding data
+\dontrun{
+# Loading and re-coding ANES 1980 data:
 data(LC1980)
 dat <- LC1980
 dat[dat == 0 | dat == 8 | dat == 9] <- NA
 self <- dat[, 1]
 stimuli <- dat[, -1]
 
-# Preparing data and fitting model:
+# Preparing the data and fitting the standard model:
 dat <- prep_data(self, stimuli)
 fit_hbam <- hbam(data = dat, prep_data = FALSE)
 
-# Plot estimated respondent positions over self-placements:
+# Plotting estimated respondent positions over self-placements:
 plot_over_self(fit_hbam, dat, "chi")
+}
 }

@@ -34,12 +34,20 @@ A list of data to be used by \code{hbam}. The returned list includes the logical
 This function prepares data to fit a hierarchical Bayesian Aldrich-McKelvey (HBAM) model. It can be run ahead of fitting the models, or it can be run implicitly as part of a single function call to fit the models using \code{hbam}. It applies a set of inclusion criteria, performs any necessary data transformation, and returns a list of data suited for sampling in \code{rstan}. The data provided to \code{prep_data} can be centered, but they do not have to be: The function will detect un-centered data and attempt to center these automatically, assuming that the highest and lowest observed values in the data mark the extremes of the scale.
 }
 \examples{
+# Loading and re-coding ANES 1980 data:
 data(LC1980)
 dat <- LC1980
 dat[dat == 0 | dat == 8 | dat == 9] <- NA
 self <- dat[, 1]
 stimuli <- dat[, -1]
+
+# Prepare data for model fitting, using defaults:
 dat <- prep_data(self, stimuli)
 
+# Prepare data for model fitting, using using alternative settings:
 dat2 <- prep_data(self, stimuli, allow_miss = 0, req_unique = 3)
+
+# Select data that will be included in the analysis:
+self2 <- self[dat2$keep]
+stimuli2 <- stimuli[dat2$keep, ]
 }
