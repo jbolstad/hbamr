@@ -10,8 +10,8 @@
 #' @name hbamr-package
 #' @aliases hbamr
 #' @useDynLib hbamr, .registration = TRUE
-#' @import methods
-#' @import Rcpp RColorBrewer parallel tidyr loo dplyr
+#' @import methods stats
+#' @import Rcpp ggplot2 RColorBrewer parallel tidyr loo dplyr
 #' @importFrom rstan sampling sflist2stanfit
 #' @importFrom matrixStats colLogSumExps
 #' @importFrom plyr llply
