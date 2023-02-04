@@ -34,12 +34,12 @@
 #' plot_over_self(fit_hbam, dat, "chi")
 #' }
 
-plot_over_self <- function(objects, data, par = "chi", estimate = "median", names = NULL, parlabel = NULL,
+plot_over_self <- function(object, data, par = "chi", estimate = "median", names = NULL, parlabel = NULL,
                            fill = "#2166AC", color = "#053061", width = .7, alpha = .5, outlier.size = 0.3,
                            median_color = "black", median_linewidth = .7) {
   if(is.null(parlabel)) { parlabel <- par}
-  if(length(objects) == 1) {
-    pd <- get_pd(objects, data, par, estimate)
+  if(length(object) == 1) {
+    pd <- get_pd(object, data, par, estimate)
     p <- ggplot(pd, aes(V, parameter)) + geom_boxplot(fill = fill, color = color, width = width, alpha = alpha, outlier.size = outlier.size) +
       xlab("Self-placement") + ylab(par)
     md <- ggplot_build(p)$data[[1]]
@@ -47,9 +47,9 @@ plot_over_self <- function(objects, data, par = "chi", estimate = "median", name
                                    y = middle, yend = middle), colour = median_color, linewidth = median_linewidth)
   } else {
     pd <- vector()
-    for (m in 1:length(objects)) {
-      if (is.null(names)) { name <- objects[[m]]@model_name } else { name <- names[m] }
-      pd <- rbind(pd, dplyr::bind_cols(get_pd(objects[[m]], data, par, estimate), model = rep(name, data$N)))
+    for (m in 1:length(object)) {
+      if (is.null(names)) { name <- object[[m]]@model_name } else { name <- names[m] }
+      pd <- rbind(pd, dplyr::bind_cols(get_pd(object[[m]], data, par, estimate), model = rep(name, data$N)))
     }
       if (is.null(names)) {
         pd$model <- factor(pd$model, levels = unique(pd$model), labels = unique(pd$model)) } else {
