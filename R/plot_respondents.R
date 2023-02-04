@@ -17,13 +17,13 @@ plot_respondents <- function(object, inc_stimuli = TRUE, n_draws = 25, color = "
   pd <- get_plot_data(object, n_draws = n_draws)
   suppressWarnings(
   if (inc_stimuli == T) {
-    p <- ggplot() + geom_density(data = pd$chi_draws, aes(chi, by = draw_no), color = alpha(color, alpha_color), fill = alpha(fill, alpha_fill)) +
-      geom_text(data = pd$s_label, aes(x = x, y = 0, label = name), hjust = 0, nudge_y = .008, check_overlap = TRUE, angle = 90) +
-      geom_point(data = pd$s_label, aes(x = x, y = 0), color = color) +
-      labs(x = "Ideological scale", y = "Density")
+    p <- ggplot2::ggplot() + ggplot2::geom_density(data = pd$chi_draws, ggplot2::aes(.data$chi, by = .data$draw_no), color = ggplot2::alpha(color, alpha_color), fill = ggplot2::alpha(fill, alpha_fill)) +
+      ggplot2::geom_text(data = pd$s_label, aes(x = x, y = 0, label = name), hjust = 0, nudge_y = .008, check_overlap = TRUE, angle = 90) +
+      ggplot2::geom_point(data = pd$s_label, aes(x = x, y = 0), color = color) +
+      ggplot2::labs(x = "Ideological scale", y = "Density")
   } else {
-    p <- ggplot() + geom_density(data = pd$chi_draws, aes(chi, by = draw_no), color = alpha(color, alpha_color), fill = alpha(fill, alpha_fill)) +
-      labs(x = "Ideological scale", y = "Density")
+    p <- ggplot2::ggplot() + ggplot2::geom_density(data = pd$chi_draws, ggplot2::aes(.data$chi, by = .data$draw_no), color = ggplot2::alpha(color, alpha_color), fill = ggplot2::alpha(fill, alpha_fill)) +
+      ggplot2::labs(x = "Ideological scale", y = "Density")
   })
   return(p)
 }

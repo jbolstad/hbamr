@@ -17,6 +17,7 @@
 #' @importFrom plyr llply
 #' @importFrom dplyr bind_cols
 #' @importFrom pbmcapply pbmclapply
+#' @importFrom rlang .data
 #'
 #' @references
 #' - Bølstad, Jørgen (2023). Hierarchical Bayesian Aldrich-McKelvey Scaling. <i>Political Analysis</i>.

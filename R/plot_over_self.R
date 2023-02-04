@@ -40,11 +40,11 @@ plot_over_self <- function(object, data, par = "chi", estimate = "median", names
   if(is.null(parlabel)) { parlabel <- par}
   if(length(object) == 1) {
     pd <- get_pd(object, data, par, estimate)
-    p <- ggplot(pd, aes(V, parameter)) + geom_boxplot(fill = fill, color = color, width = width, alpha = alpha, outlier.size = outlier.size) +
+    p <- ggplot2::ggplot(pd, ggplot2::aes(.data$V, .data$parameter)) + ggplot2::geom_boxplot(fill = fill, color = color, width = width, alpha = alpha, outlier.size = outlier.size) +
       xlab("Self-placement") + ylab(par)
-    md <- ggplot_build(p)$data[[1]]
-    p <- p + geom_segment(data = md, aes(x = xmin, xend = xmax,
-                                   y = middle, yend = middle), colour = median_color, linewidth = median_linewidth)
+    md <- ggplot2::ggplot_build(p)$data[[1]]
+    p <- p + ggplot2::geom_segment(data = md, aes(x = .data$xmin, xend = .data$xmax,
+                                   y = .data$middle, yend = .data$middle), colour = median_color, linewidth = median_linewidth)
   } else {
     pd <- vector()
     for (m in 1:length(object)) {
@@ -54,13 +54,13 @@ plot_over_self <- function(object, data, par = "chi", estimate = "median", names
       if (is.null(names)) {
         pd$model <- factor(pd$model, levels = unique(pd$model), labels = unique(pd$model)) } else {
         pd$model <- factor(pd$model, levels = names, labels = names) }
-      p <- ggplot(pd, aes(V, parameter)) + geom_boxplot(fill = fill, color = color, width = width, alpha = alpha, outlier.size = outlier.size) +
-        xlab("Self-placement") + ylab(par) +
-        facet_wrap(~model, scales = "free") + ylab(parlabel)
-      md <- ggplot_build(p)$data[[1]]
+      p <- ggplot2::ggplot(pd, ggplot2::aes(.data$V, .data$parameter)) + ggplot2::geom_boxplot(fill = fill, color = color, width = width, alpha = alpha, outlier.size = outlier.size) +
+        ggplot2::xlab("Self-placement") + ggplot2::ylab(par) +
+        ggplot2::facet_wrap(~model, scales = "free") + ggplot2::ylab(parlabel)
+      md <- ggplot2::ggplot_build(p)$data[[1]]
       md$model <- factor(md$PANEL, levels = as.numeric(unique(pd$model)), labels = levels(pd$model))
-      p <- p + geom_segment(data = md, aes(x = xmin, xend = xmax,
-                                            y = middle, yend = middle), colour = median_color, linewidth = median_linewidth)
+      p <- p + ggplot2::geom_segment(data = md, aes(x = .data$xmin, xend = .data$xmax,
+                                            y = .data$middle, yend = .data$middle), colour = median_color, linewidth = median_linewidth)
   }
   return(p)
 }
