@@ -11,7 +11,7 @@
 #'
 #' @keywords datasets
 #'
-#' @source American National Election Studies: \href{https://www.electionstudies.org/}{www.electionstudies.org/}.
+#' @source American National Election Studies: \href{https://electionstudies.org/}{www.electionstudies.org/}.
 #'
 #' This dataset was originally part of the `basicspace` package under the same name ("LC1980").
 #'
