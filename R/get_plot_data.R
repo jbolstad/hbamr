@@ -9,7 +9,8 @@
 
 get_plot_data <- function(object, n_draws = 25, seed = 1) {
   set.seed(seed)
-  chi_draws <- as.data.frame((rstan::extract(object, pars = "chi")$chi)[1:n_draws, ])
+  chi_draws <- as.data.frame((rstan::extract(object, pars = "chi")$chi))
+  chi_draws <- chi_draws[sample(nrow(chi_draws), n_draws), ]
   chi_draws$draw_no <- rownames(chi_draws)
   chi_draws <- pivot_longer(chi_draws, starts_with("V"), values_to = "chi")
   s_draws <- as.data.frame(rstan::extract(object, pars = "theta")$theta)
