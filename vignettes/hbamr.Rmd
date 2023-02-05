@@ -13,6 +13,7 @@ vignette: >
 knitr::opts_chunk$set(collapse = TRUE)
 
 load("data.Rda")
+library("dplyr")
 ```
 
 ```{=html}
