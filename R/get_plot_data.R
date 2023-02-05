@@ -7,7 +7,7 @@
 #' @return A list of three `tibble`s: The first element contains the posterior mean stimulus positions, as well as the x- and y-values of the posterior modes (which can be useful for labeling the distributions). The second element contains the posterior draws for the stimulus positions (which can be used to calculate marginal posterior densities). The third element contains the selected number of posterior draws for each respondent (which form the key ingredient for `plot_respondents`).
 #'
 
-get_plot_data <- function(object, n_draws = 25, seed = 1) {
+get_plot_data <- function(object, n_draws = 15, seed = 1) {
   set.seed(seed)
   chi_draws <- as.data.frame((rstan::extract(object, pars = "chi")$chi))
   chi_draws <- chi_draws[sample(nrow(chi_draws), n_draws), ]
