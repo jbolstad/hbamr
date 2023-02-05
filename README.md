@@ -2,15 +2,6 @@
 
 An R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling using Hamiltonian Monte Carlo simulations via Stan. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using positional survey data (Aldrich & McKelvey 1977). The hierarchical versions of the AM model included in this package outperform other versions by a considerable margin both in terms of yielding meaningful posterior distributions for respondent positions and in terms of recovering true respondent positions in simulations (Bølstad 2023). The package contains functions for preparing data, fitting models, extracting estimates, plotting key results, and comparing models using cross-validation.
 
-### Installing and loading the package
-
-The **hbamr** package requires a working installation of **rstan**. Instructions for installing **rstan** are available [here](https://github.com/stan-dev/rstan/wiki/RStan-Getting-Started). (As explained in these instructions, you need to configure your R installation to be able to compile C++ code and you can significantly improve the estimation speed of the models by following the advice on optimizing compiler usage.)
-
-Users of the **hbamr** package should install the latest version from github -- it is not available on CRAN. Those who do not have the **devtools** package installed, should first install this package. The following two lines will if necessary first install **devtools** and then install **hbamr**. All models will be compiled upon installation, which means the process can take a few minutes.
-
-    if (!require("devtools")) install.packages("devtools")
-    devtools::install_github("jbolstad/hbamr")
-
 ### References
 
 -   Aldrich, John H, and Richard D McKelvey. 1977. "A Method of Scaling with Applications to the 1968 and 1972 Presidential Elections." *American Political Science Review* 71(1): 111--130.
