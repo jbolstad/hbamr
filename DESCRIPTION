@@ -4,9 +4,8 @@ Version: 1.0.0.0000
 Authors@R: 
     person("Jørgen", "Bølstad", , "jorgen.bolstad@stv.uio.no", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7623-5741"))
-Description: A package for performing hierarchical Bayesian
-    Aldrich-McKelvey (HBAM) scaling using Hamiltonian Monte Carlo
-    simulations via Stan. Aldrich-McKelvey (AM) scaling is a method for
+Description: Fit hierarchical Bayesian Aldrich-McKelvey (HBAM) models using 
+    a form of Hamiltonian Monte Carlo via Stan. Aldrich-McKelvey (AM) scaling is a method for
     estimating the ideological positions of survey respondents and
     political actors on a common scale using positional survey data. The
     hierarchical versions of the AM model included in this package

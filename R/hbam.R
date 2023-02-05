@@ -59,7 +59,8 @@
 #' stimuli <- dat[1:50, -1]
 #'
 #' # Fitting the HBAM_MINI model:
-#' fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI", warmup = 500, iter = 1000, chains = 2, thin = 1)
+#' fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI",
+#'                  warmup = 350, iter = 500, chains = 2, thin = 1)
 #'
 #' \dontrun{
 #' # Fitting the standard HBAM model to the complete ANES 1980 data:
