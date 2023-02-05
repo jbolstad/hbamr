@@ -1,6 +1,6 @@
-#' Perform K-fold cross-validation of an HBAM-type model
+#' Perform K-fold cross-validation for an HBAM-type model
 #'
-#' This function performs a K-fold cross-validation of an HBAM-type model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
+#' This function performs a K-fold cross-validation for an HBAM-type model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
 #'
 #' @export
 #' @param self A numerical vector of N ideological self-placements. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the `prep_data` function.

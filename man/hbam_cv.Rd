@@ -2,7 +2,7 @@
 % Please edit documentation in R/hbam_cv.R
 \name{hbam_cv}
 \alias{hbam_cv}
-\title{Perform K-fold cross-validation of an HBAM-type model}
+\title{Perform K-fold cross-validation for an HBAM-type model}
 \usage{
 hbam_cv(
   self = NULL,
@@ -63,7 +63,7 @@ hbam_cv(
 A data frame containing the estimated ELPD and its standard error.
 }
 \description{
-This function performs a K-fold cross-validation of an HBAM-type model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
+This function performs a K-fold cross-validation for an HBAM-type model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
 }
 \examples{
 \dontrun{
