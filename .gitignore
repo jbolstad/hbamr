@@ -4,3 +4,5 @@
 R/stanmodels.R
 src/
 inst/doc
+/doc/
+/Meta/
