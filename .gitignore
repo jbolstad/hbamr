@@ -3,3 +3,4 @@
 .Rhistory
 R/stanmodels.R
 src/
+inst/doc

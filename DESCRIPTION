@@ -38,7 +38,9 @@ Imports:
     stats,
     tidyr
 Suggests: 
-    data.table
+    data.table,
+    knitr,
+    rmarkdown
 LinkingTo: 
     BH (>= 1.66.0),
     Rcpp (>= 0.12.0),
@@ -52,3 +54,4 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 SystemRequirements: GNU make
+VignetteBuilder: knitr
