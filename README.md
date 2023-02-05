@@ -58,4 +58,4 @@ plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "abs_beta")
 -   Aldrich, John H, and Richard D McKelvey. 1977. "A Method of Scaling with Applications to the 1968 and 1972 Presidential Elections." *American Political Science Review* 71(1): 111--130.
 -   Bølstad, Jørgen. 2020. "Capturing Rationalization Bias and Differential Item Functioning: A Unified Bayesian Scaling Approach." *Political Analysis* 28(3): 340--355.
 -   Bølstad, Jørgen. 2023. "Hierarchical Bayesian Aldrich-McKelvey Scaling." *Political Analysis*.
--   Hare, Christopher et al. 2015. "Using Bayesian Aldrich-McKelvey scaling to study citizens' ideological preferences and perceptions." *American Journal of Political Science* 59(3): 759--774.
+-   Hare, Christopher et al. 2015. "Using Bayesian Aldrich-McKelvey Scaling to Study Citizens' Ideological Preferences and Perceptions." *American Journal of Political Science* 59(3): 759--774.
