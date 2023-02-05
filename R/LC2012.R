@@ -10,7 +10,7 @@
 #'
 #' @keywords datasets
 #'
-#' @source American National Election Studies. \href{http://www.electionstudies.org/}{www.electionstudies.org/}
+#' @source American National Election Studies: \href{https://www.electionstudies.org/}{www.electionstudies.org/}.
 #'
 #' @examples
 #' data(LC2012)
