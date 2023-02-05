@@ -4,12 +4,14 @@
 \alias{get_plot_data}
 \title{Extract data for plotting results from an HBAM model}
 \usage{
-get_plot_data(object, n_draws = 25)
+get_plot_data(object, n_draws = 25, seed = 1)
 }
 \arguments{
 \item{object}{An instance of class \code{stanfit}.}
 
 \item{n_draws}{Integer specifying the number of posterior draws to use when illustrating the uncertainty of the population distribution.}
+
+\item{seed}{A positive integer specifying an optional seed for reproducibility. The seed is used to select respondent position draws for illustrating uncertainty.}
 }
 \value{
 A list of three \code{tibble}s: The first element contains the posterior mean stimulus positions, as well as the x- and y-values of the posterior modes (which can be useful for labeling the distributions). The second element contains the posterior draws for the stimulus positions (which can be used to calculate marginal posterior densities). The third element contains the selected number of posterior draws for each respondent (which form the key ingredient for \code{plot_respondents}).

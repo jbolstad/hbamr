@@ -11,7 +11,8 @@ plot_respondents(
   color = "#053061",
   fill = "#2166AC",
   alpha_color = 0.4,
-  alpha_fill = 0.03
+  alpha_fill = 0.03,
+  seed = 1
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ plot_respondents(
 \item{alpha_color}{Number in [0,1]: Inverse level of transparency for line color.}
 
 \item{alpha_fill}{Number in [0,1]: Inverse level of transparency for fill color.}
+
+\item{seed}{A positive integer specifying an optional seed for reproducibility. The seed is used to select respondent position draws for illustrating uncertainty.}
 }
 \value{
 A \code{ggplot} object.
