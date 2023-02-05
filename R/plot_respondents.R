@@ -5,7 +5,7 @@
 #' @export
 #' @param object An instance of class `stanfit` produced by `hbam`.
 #' @param inc_stimuli Logical: Should estimated stimulus positions also be shown?
-#' @param n_draws Integer specifying the number of posterior draws to use when illustrating the uncertainty of the population distribution. Defaults to 25.
+#' @param n_draws Integer specifying the number of posterior draws to use when illustrating the uncertainty of the population distribution. Defaults to 15.
 #' @param color Color of lines illustrating uncertainty.
 #' @param fill Fill color for density plots.
 #' @param alpha_color Number in \[0,1\]: Inverse level of transparency for line color.
@@ -14,7 +14,7 @@
 #' @return A `ggplot` object.
 #'
 
-plot_respondents <- function(object, inc_stimuli = TRUE, n_draws = 25, color = "#053061", fill = "#2166AC", alpha_color = 0.4, alpha_fill = 0.03, seed = 1) {
+plot_respondents <- function(object, inc_stimuli = TRUE, n_draws = 15, color = "#053061", fill = "#2166AC", alpha_color = .6, alpha_fill = .7 / n_draws, seed = 1) {
   pd <- get_plot_data(object, n_draws = n_draws, seed = seed)
   suppressWarnings(
   if (inc_stimuli == T) {

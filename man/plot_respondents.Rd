@@ -7,11 +7,11 @@
 plot_respondents(
   object,
   inc_stimuli = TRUE,
-  n_draws = 25,
+  n_draws = 15,
   color = "#053061",
   fill = "#2166AC",
-  alpha_color = 0.4,
-  alpha_fill = 0.03,
+  alpha_color = 0.6,
+  alpha_fill = 0.7/n_draws,
   seed = 1
 )
 }
@@ -20,7 +20,7 @@ plot_respondents(
 
 \item{inc_stimuli}{Logical: Should estimated stimulus positions also be shown?}
 
-\item{n_draws}{Integer specifying the number of posterior draws to use when illustrating the uncertainty of the population distribution. Defaults to 25.}
+\item{n_draws}{Integer specifying the number of posterior draws to use when illustrating the uncertainty of the population distribution. Defaults to 15.}
 
 \item{color}{Color of lines illustrating uncertainty.}
 
