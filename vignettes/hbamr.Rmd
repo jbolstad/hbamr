@@ -11,6 +11,8 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
+
+load("data.Rda")
 ```
 
 ```{=html}
@@ -29,7 +31,7 @@ The dataset contains respondents' placements of themselves and six stimuli on 7-
 
 We load the data and re-code missing values as follows:
 
-```{r load_data, echo = TRUE, include = TRUE}
+```{r load_data, echo = TRUE, eval = FALSE, include = TRUE}
 library("hbamr")
 data(LC1980)
 LC1980[LC1980 == 0 | LC1980 == 8 | LC1980 == 9] <- NA 
@@ -42,7 +44,7 @@ head(stimuli)
 ```
 
 ```{r, echo = FALSE}
-head(stimuli) 
+head_stimuli 
 ```
 
 ## Preparing the Data
@@ -110,7 +112,7 @@ dat <- prep_data(self, stimuli, allow_miss = 0)
 fit_hbam <- hbam(data = dat, prep_data = FALSE)
 ```
 
-```{r prep_data3, include = FALSE}
+```{r prep_data3, include = FALSE, eval = FALSE}
 dat <- prep_data(self, stimuli, allow_miss = 0) 
 ```
 
@@ -228,7 +230,6 @@ get_est(fit_hbam, "theta")
 ```
 
 ```{r, echo = FALSE}
-load("get_est.Rda")
 est_theta
 ```
 
