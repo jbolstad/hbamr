@@ -12,7 +12,7 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
 
-load("data.Rda")
+load("data.rda")
 library("dplyr")
 ```
 
@@ -269,7 +269,7 @@ The **hbamr** package therefore includes model codes and functions to perform *K
 To perform 10-fold cross-validation for a selection of models, we could run:
 
 ```{r, include = FALSE}
-load("elpds.Rda")
+load("elpds.rda")
 ```
 
 ```{r run_cv_new, eval = FALSE}
