@@ -60,7 +60,10 @@
 #'
 #' # Fitting the HBAM_MINI model:
 #' fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI",
-#'                  warmup = 350, iter = 500, chains = 2, thin = 1)
+#'                  warmup = 300, iter = 500, chains = 2, thin = 1)
+#'
+#' # Plot distribution of estimated respondent positions:
+#' plot_respondents(fit_hbam)
 #'
 #' \dontrun{
 #' # Fitting the standard HBAM model to the complete ANES 1980 data:
