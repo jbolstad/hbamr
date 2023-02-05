@@ -4,7 +4,7 @@
 \alias{get_plot_data}
 \title{Extract data for plotting results from an HBAM model}
 \usage{
-get_plot_data(object, n_draws = 25, seed = 1)
+get_plot_data(object, n_draws = 15, seed = 1)
 }
 \arguments{
 \item{object}{An instance of class \code{stanfit}.}
