@@ -1,10 +1,10 @@
 ---
-title: "hbamr: Hierarchical Bayesian Aldrich-McKelvey Scaling in R"
+title: "Hierarchical Bayesian Aldrich-McKelvey Scaling in R via Stan"
 output: rmarkdown::html_vignette
 bibliography: hbam_refs.bib 
 csl: american-journal-of-political-science.csl
 vignette: >
-  %\VignetteIndexEntry{hbamr: Hierarchical Bayesian Aldrich-McKelvey Scaling in R}
+  %\VignetteIndexEntry{Hierarchical Bayesian Aldrich-McKelvey Scaling in R via Stan}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
