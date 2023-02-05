@@ -8,7 +8,7 @@
 An object of class \code{data.frame} with 5914 rows and 6 columns.
 }
 \source{
-American National Election Studies: \href{https://www.electionstudies.org/}{www.electionstudies.org/}.
+American National Election Studies: \href{https://electionstudies.org/}{www.electionstudies.org/}.
 }
 \usage{
 data(LC2012)
