@@ -18,6 +18,8 @@
 #' @importFrom dplyr bind_cols
 #' @importFrom pbmcapply pbmclapply
 #' @importFrom rlang .data
+#' @importFrom RcppParallel RcppParallelLibs
+#' @importFrom rstantools rstan_config
 #'
 #' @references
 #' - Bølstad, Jørgen (forthcoming). Hierarchical Bayesian Aldrich-McKelvey Scaling. <i>Political Analysis</i>.
