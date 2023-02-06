@@ -30,11 +30,12 @@ fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI")
 ```
 
 Plot estimated stimuli positions:
+
 ```{r}
 plot_stimuli(fit_hbam)
 ```
 
-<img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_stim.svg?raw=true" width="850px">
+<img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_stim.svg?raw=true" width="850px"/>
 
 Plot distribution of estimated respondent positions:
 
@@ -42,7 +43,7 @@ Plot distribution of estimated respondent positions:
 plot_respondents(fit_hbam)
 ```
 
-<img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_resp.svg?raw=true" width="850px">
+<img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_resp.svg?raw=true" width="850px"/>
 
 Plot estimated scale stretching by self-placement:
 
@@ -51,11 +52,11 @@ dat <- prep_data(self, stimuli)
 plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "abs_beta")
 ```
 
-<img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_abs_beta.svg?raw=true" width="850px">
+<img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_abs_beta.svg?raw=true" width="850px"/>
 
 ### References
 
--   Aldrich, John H, and Richard D McKelvey. 1977. "A Method of Scaling with Applications to the 1968 and 1972 Presidential Elections." *American Political Science Review* 71(1): 111--130.
--   Bølstad, Jørgen. 2020. "Capturing Rationalization Bias and Differential Item Functioning: A Unified Bayesian Scaling Approach." *Political Analysis* 28(3): 340--355.
+-   Aldrich, John H, and Richard D McKelvey. 1977. "A Method of Scaling with Applications to the 1968 and 1972 Presidential Elections." *American Political Science Review* 71(1): 111-130.
+-   Bølstad, Jørgen. 2020. "Capturing Rationalization Bias and Differential Item Functioning: A Unified Bayesian Scaling Approach." *Political Analysis* 28(3): 340-355.
 -   Bølstad, Jørgen. 2023. "Hierarchical Bayesian Aldrich-McKelvey Scaling." *Political Analysis*.
--   Hare, Christopher et al. 2015. "Using Bayesian Aldrich-McKelvey Scaling to Study Citizens' Ideological Preferences and Perceptions." *American Journal of Political Science* 59(3): 759--774.
+-   Hare, Christopher et al. 2015. "Using Bayesian Aldrich-McKelvey Scaling to Study Citizens' Ideological Preferences and Perceptions." *American Journal of Political Science* 59(3): 759-774.
