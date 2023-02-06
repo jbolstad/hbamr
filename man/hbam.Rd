@@ -94,16 +94,13 @@ data(LC1980)
 dat <- LC1980
 dat[dat == 0 | dat == 8 | dat == 9] <- NA
 
-# Making a small subset of the data for illustration:
-self <- dat[1:50, 1]
-stimuli <- dat[1:50, -1]
+# Making a very small subset of the data for illustration:
+self <- dat[1:35, 1]
+stimuli <- dat[1:35, -1]
 
-# Fitting the HBAM_MINI model:
-fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI",
-                 warmup = 300, iter = 500, chains = 2, thin = 1)
-
-# Plot distribution of estimated respondent positions:
-plot_respondents(fit_hbam)
+# Fitting the HBAM_MINI model with extremely few iterations:
+fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI",allow_miss = 0, seed = 1,
+                 warmup = 250, iter = 400, chains = 2, thin = 1)
 
 \dontrun{
 # Fitting the standard HBAM model to the complete ANES 1980 data:
