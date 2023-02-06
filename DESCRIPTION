@@ -1,10 +1,10 @@
 Package: hbamr
-Title: Hierarchical Bayesian Aldrich-McKelvey Scaling via Stan
+Title: Hierarchical Bayesian Aldrich-McKelvey Scaling via 'Stan'
 Version: 1.0.0
 Authors@R: 
     person("Jørgen", "Bølstad", , "jorgen.bolstad@stv.uio.no", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7623-5741"))
-Description: Fit hierarchical Bayesian Aldrich-McKelvey (HBAM) models using a form of Hamiltonian Monte Carlo via Stan. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using positional survey data. The hierarchical versions of the AM model included in this package outperform other versions by a considerable margin both in terms of yielding meaningful posterior distributions for respondent positions and in terms of recovering true respondent positions in simulations. The package contains functions for preparing data, fitting models, extracting estimates, plotting key results, and comparing models using cross-validation. The models implemented in this package are described in: Bølstad (forthcoming) "Hierarchical Bayesian Aldrich-McKelvey Scaling", Political Analysis.
+Description: Fit hierarchical Bayesian Aldrich-McKelvey (HBAM) models using a form of Hamiltonian Monte Carlo via 'Stan'. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using positional survey data. The hierarchical versions of the AM model included in this package outperform other versions by a considerable margin both in terms of yielding meaningful posterior distributions for respondent positions and in terms of recovering true respondent positions in simulations. The package contains functions for preparing data, fitting models, extracting estimates, plotting key results, and comparing models using cross-validation. The models in this package are described in: Bølstad (forthcoming) "Hierarchical Bayesian Aldrich-McKelvey Scaling", Political Analysis.
 License: GPL (>= 3)
 URL: https://github.com/jbolstad/hbamr/
 Depends: 
