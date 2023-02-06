@@ -99,7 +99,7 @@ self <- dat[1:35, 1]
 stimuli <- dat[1:35, -1]
 
 # Fitting the HBAM_MINI model with extremely few iterations:
-fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI",allow_miss = 0, seed = 1,
+fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI", allow_miss = 0, seed = 1,
                  warmup = 250, iter = 400, chains = 2, thin = 1)
 
 \dontrun{
