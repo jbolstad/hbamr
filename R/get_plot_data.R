@@ -1,4 +1,4 @@
-#' Extract data for plotting results from an HBAM model
+#' Extract data for plotting results from an HBAM model.
 #'
 #' @export
 #' @param object An instance of class `stanfit`.

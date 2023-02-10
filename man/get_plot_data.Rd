@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_plot_data.R
 \name{get_plot_data}
 \alias{get_plot_data}
-\title{Extract data for plotting results from an HBAM model}
+\title{Extract data for plotting results from an HBAM model.}
 \usage{
 get_plot_data(object, n_draws = 15, seed = 1)
 }
@@ -17,5 +17,5 @@ get_plot_data(object, n_draws = 15, seed = 1)
 A list of three \code{tibble}s: The first element contains the posterior mean stimulus positions, as well as the x- and y-values of the posterior modes (which can be useful for labeling the distributions). The second element contains the posterior draws for the stimulus positions (which can be used to calculate marginal posterior densities). The third element contains the selected number of posterior draws for each respondent (which form the key ingredient for \code{plot_respondents}).
 }
 \description{
-Extract data for plotting results from an HBAM model
+Extract data for plotting results from an HBAM model.
 }
