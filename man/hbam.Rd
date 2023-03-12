@@ -94,21 +94,21 @@ data(LC1980)
 dat <- LC1980
 dat[dat == 0 | dat == 8 | dat == 9] <- NA
 
-# Making a very small subset of the data for illustration:
-self <- dat[1:35, 1]
-stimuli <- dat[1:35, -1]
-
-# Fitting the HBAM_MINI model with extremely few iterations:
-fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI", allow_miss = 0, seed = 1,
-                 warmup = 250, iter = 400, chains = 2, thin = 1)
+# Making a small subset of the data for illustration:
+self <- dat[1:100, 1]
+stimuli <- dat[1:100, -1]
 
 \dontrun{
+# Fitting the HBAM_MINI model, obtaining 1000 draws:
+fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI", allow_miss = 0, seed = 1,
+                 warmup = 500, iter = 1000, chains = 2, thin = 1)
+
 # Fitting the standard HBAM model to the complete ANES 1980 data:
 self <- dat[, 1]
 stimuli <- dat[, -1]
 fit_hbam <- hbam(self, stimuli)
 
-# Preparing the data before fitting, using defaults:
+# Preparing the data before fitting, using default settings:
 dat <- prep_data(self, stimuli)
 fit_hbam <- hbam(data = dat, prep_data = FALSE)
 }
