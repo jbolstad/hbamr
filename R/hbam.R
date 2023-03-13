@@ -49,6 +49,7 @@
 #' - Hare, Christopher et al. (2015). Using Bayesian Aldrich-McKelvey Scaling to Study Citizens' Ideological Preferences and Perceptions. <i>American Journal of Political Science</i> 59(3): 759–774.
 #'
 #' @examples
+#' \donttest{
 #' # Loading and re-coding ANES 1980 data:
 #' data(LC1980)
 #' dat <- LC1980
@@ -58,19 +59,17 @@
 #' self <- dat[1:100, 1]
 #' stimuli <- dat[1:100, -1]
 #'
-#' \dontrun{
 #' # Fitting the HBAM_MINI model, obtaining 1000 draws:
-#' fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI", allow_miss = 0, seed = 1,
+#' fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI",
 #'                  warmup = 500, iter = 1000, chains = 2, thin = 1)
 #'
-#' # Fitting the standard HBAM model to the complete ANES 1980 data:
-#' self <- dat[, 1]
-#' stimuli <- dat[, -1]
-#' fit_hbam <- hbam(self, stimuli)
+#' # Preparing the data before fitting, requiring complete responses:
+#' dat <- prep_data(self, stimuli, allow_miss = 0)
+#' fit_hbam_mini <- hbam(data = dat, prep_data = FALSE, model = "HBAM_MINI",
+#'                  warmup = 500, iter = 1000, chains = 2, thin = 1)
 #'
-#' # Preparing the data before fitting, using default settings:
-#' dat <- prep_data(self, stimuli)
-#' fit_hbam <- hbam(data = dat, prep_data = FALSE)
+#' # Obtaining posterior summaries for the latent stimulus positions:
+#' theta_est <- get_est(fit_hbam_mini, par = "theta")
 #' }
 
 hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, req_valid = NA,

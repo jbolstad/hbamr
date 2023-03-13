@@ -31,9 +31,4 @@ dat <- prep_data(self, stimuli)
 # Prepare data for cross-validation:
 dat_cv <- prep_data_cv(dat, K = 10)
 
-\dontrun{
-# Perform cross-validation:
-elpd_hbam <- hbam_cv(model = "HBAM", data = dat_cv, prep_data = FALSE)
-elpd_hbam
-}
 }

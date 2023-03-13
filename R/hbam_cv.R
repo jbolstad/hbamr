@@ -22,16 +22,20 @@
 #' @param seed An integer passed on to `set.seed` before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument `prep_data` is `TRUE`. The supplied `seed` argument is also used to generate seeds for the sampling algorithm.
 #' @return A data frame containing the estimated ELPD and its standard error.
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Loading and re-coding ANES 1980 data:
 #' data(LC1980)
 #' dat <- LC1980
 #' dat[dat == 0 | dat == 8 | dat == 9] <- NA
-#' self <- dat[, 1]
-#' stimuli <- dat[, -1]
 #'
-#' # Performing 10-fold cross-validation for the HBAM model:
-#' cv_hbam <- hbam_cv(self, stimuli, model = "HBAM")
+#' # Making a small subset of the data for illustration:
+#' self <- dat[1:50, 1]
+#' stimuli <- dat[1:50, -1]
+#'
+#' # Performing 10-fold cross-validation for the HBAM_MINI model:
+#'   # NOTE: You normally want to use ALL cores for this, not just 2.
+#' cv_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI",
+#'                         cores = 2, warmup = 500, iter = 1000)
 #' }
 
 hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",

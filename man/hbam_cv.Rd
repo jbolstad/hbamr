@@ -66,15 +66,19 @@ A data frame containing the estimated ELPD and its standard error.
 This function performs a K-fold cross-validation for an HBAM-type model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
 }
 \examples{
-\dontrun{
+\donttest{
 # Loading and re-coding ANES 1980 data:
 data(LC1980)
 dat <- LC1980
 dat[dat == 0 | dat == 8 | dat == 9] <- NA
-self <- dat[, 1]
-stimuli <- dat[, -1]
 
-# Performing 10-fold cross-validation for the HBAM model:
-cv_hbam <- hbam_cv(self, stimuli, model = "HBAM")
+# Making a small subset of the data for illustration:
+self <- dat[1:50, 1]
+stimuli <- dat[1:50, -1]
+
+# Performing 10-fold cross-validation for the HBAM_MINI model:
+  # NOTE: You normally want to use ALL cores for this, not just 2.
+cv_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI",
+                        cores = 2, warmup = 500, iter = 1000)
 }
 }

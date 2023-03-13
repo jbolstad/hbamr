@@ -89,6 +89,7 @@ This package provides several alternative models, which can be specified using t
 Some of these models can also be used in situations where self-placements are not available and the only goal is to estimate stimulus positions. This can be achieved by supplying a vector of zeros (or random data) instead of real self-placements: \code{self = rep(0, nrow(stimuli))}. The HBAM_NE and HBAM_MINI models are then the relevant alternatives, as the other HBAM variants will include superfluous parameters (and will not sample properly with zero variance in the supplied self-placement data).
 }
 \examples{
+\donttest{
 # Loading and re-coding ANES 1980 data:
 data(LC1980)
 dat <- LC1980
@@ -98,19 +99,17 @@ dat[dat == 0 | dat == 8 | dat == 9] <- NA
 self <- dat[1:100, 1]
 stimuli <- dat[1:100, -1]
 
-\dontrun{
 # Fitting the HBAM_MINI model, obtaining 1000 draws:
-fit_hbam <- hbam(self, stimuli, model = "HBAM_MINI", allow_miss = 0, seed = 1,
+fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI",
                  warmup = 500, iter = 1000, chains = 2, thin = 1)
 
-# Fitting the standard HBAM model to the complete ANES 1980 data:
-self <- dat[, 1]
-stimuli <- dat[, -1]
-fit_hbam <- hbam(self, stimuli)
+# Preparing the data before fitting, requiring complete responses:
+dat <- prep_data(self, stimuli, allow_miss = 0)
+fit_hbam_mini <- hbam(data = dat, prep_data = FALSE, model = "HBAM_MINI",
+                 warmup = 500, iter = 1000, chains = 2, thin = 1)
 
-# Preparing the data before fitting, using default settings:
-dat <- prep_data(self, stimuli)
-fit_hbam <- hbam(data = dat, prep_data = FALSE)
+# Obtaining posterior summaries for the latent stimulus positions:
+theta_est <- get_est(fit_hbam_mini, par = "theta")
 }
 }
 \references{

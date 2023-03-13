@@ -29,19 +29,3 @@ A tibble containing summaries of marginal posterior distributions.
 \description{
 This function is a wrapper for wrapper for \code{rstan::summary}.
 }
-\examples{
-\dontrun{
-# Loading and re-coding ANES 1980 data:
-data(LC1980)
-dat <- LC1980
-dat[dat == 0 | dat == 8 | dat == 9] <- NA
-self <- dat[, 1]
-stimuli <- dat[, -1]
-
-# Fitting the standard HBAM model using defaults:
-fit_hbam <- hbam(self, stimuli)
-
-# Extract posterior summaries for theta:
-est_hbam <- get_est(fit_hbam, par = "theta")
-}
-}

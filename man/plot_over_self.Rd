@@ -17,7 +17,7 @@ plot_over_self(
   alpha = 0.5,
   outlier.size = 0.3,
   median_color = "black",
-  median_linewidth = 0.7
+  median_lwd = 0.7
 )
 }
 \arguments{
@@ -45,28 +45,11 @@ plot_over_self(
 
 \item{median_color}{Color of solid line representing the median.}
 
-\item{median_linewidth}{Thickness of solid line representing the median.}
+\item{median_lwd}{Thickness of solid line representing the median.}
 }
 \value{
 A \code{ggplot} object.
 }
 \description{
 Create a boxplot of individual parameter estimates from an HBAM model over self-placements
-}
-\examples{
-\dontrun{
-# Loading and re-coding ANES 1980 data:
-data(LC1980)
-dat <- LC1980
-dat[dat == 0 | dat == 8 | dat == 9] <- NA
-self <- dat[, 1]
-stimuli <- dat[, -1]
-
-# Preparing the data and fitting the standard model:
-dat <- prep_data(self, stimuli)
-fit_hbam <- hbam(data = dat, prep_data = FALSE)
-
-# Plotting estimated respondent positions over self-placements:
-plot_over_self(fit_hbam, dat, "chi")
-}
 }

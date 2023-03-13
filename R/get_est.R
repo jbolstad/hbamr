@@ -9,21 +9,6 @@
 #' @param simplify Logical: Should the returned object be simplified by dropping the Monte Carlo standard error and the posterior standard deviation? Defaults to `TRUE`.
 #' @param ... Other arguments are passed on to `rstan::summary`.
 #' @return A tibble containing summaries of marginal posterior distributions.
-#' @examples
-#' \dontrun{
-#' # Loading and re-coding ANES 1980 data:
-#' data(LC1980)
-#' dat <- LC1980
-#' dat[dat == 0 | dat == 8 | dat == 9] <- NA
-#' self <- dat[, 1]
-#' stimuli <- dat[, -1]
-#'
-#' # Fitting the standard HBAM model using defaults:
-#' fit_hbam <- hbam(self, stimuli)
-#'
-#' # Extract posterior summaries for theta:
-#' est_hbam <- get_est(fit_hbam, par = "theta")
-#' }
 
 get_est <- function (object, par = "theta", probs = c(0.025, 0.50, 0.975), simplify = TRUE, ...) {
   out <- dplyr::as_tibble(rstan::summary(object, par, probs = probs, ...)[[1]])

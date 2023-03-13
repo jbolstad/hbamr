@@ -15,28 +15,13 @@
 #' @param alpha Number in \[0,1\]: Inverse level of transparency for fill color. Passed on to `geom_boxplot`.
 #' @param outlier.size Size of dots representing outliers. Passed on to `geom_boxplot`.
 #' @param median_color Color of solid line representing the median.
-#' @param median_linewidth Thickness of solid line representing the median.
+#' @param median_lwd Thickness of solid line representing the median.
 #' @return A `ggplot` object.
-#' @examples
-#' \dontrun{
-#' # Loading and re-coding ANES 1980 data:
-#' data(LC1980)
-#' dat <- LC1980
-#' dat[dat == 0 | dat == 8 | dat == 9] <- NA
-#' self <- dat[, 1]
-#' stimuli <- dat[, -1]
 #'
-#' # Preparing the data and fitting the standard model:
-#' dat <- prep_data(self, stimuli)
-#' fit_hbam <- hbam(data = dat, prep_data = FALSE)
-#'
-#' # Plotting estimated respondent positions over self-placements:
-#' plot_over_self(fit_hbam, dat, "chi")
-#' }
 
 plot_over_self <- function(object, data, par = "chi", estimate = "median", names = NULL, parlabel = NULL,
                            fill = "#2166AC", color = "#053061", width = .7, alpha = .5, outlier.size = 0.3,
-                           median_color = "black", median_linewidth = .7) {
+                           median_color = "black", median_lwd = .7) {
   if(is.null(parlabel)) { parlabel <- par}
   if(length(object) == 1) {
     pd <- get_pd(object, data, par, estimate)
@@ -44,7 +29,7 @@ plot_over_self <- function(object, data, par = "chi", estimate = "median", names
       xlab("Self-placement") + ylab(par)
     md <- ggplot2::ggplot_build(p)$data[[1]]
     p <- p + ggplot2::geom_segment(data = md, aes(x = .data$xmin, xend = .data$xmax,
-                                   y = .data$middle, yend = .data$middle), colour = median_color, linewidth = median_linewidth)
+                                   y = .data$middle, yend = .data$middle), colour = median_color, linewidth = median_lwd)
   } else {
     pd <- vector()
     for (m in 1:length(object)) {
@@ -60,7 +45,7 @@ plot_over_self <- function(object, data, par = "chi", estimate = "median", names
       md <- ggplot2::ggplot_build(p)$data[[1]]
       md$model <- factor(md$PANEL, levels = as.numeric(unique(pd$model)), labels = levels(pd$model))
       p <- p + ggplot2::geom_segment(data = md, aes(x = .data$xmin, xend = .data$xmax,
-                                            y = .data$middle, yend = .data$middle), colour = median_color, linewidth = median_linewidth)
+                                            y = .data$middle, yend = .data$middle), colour = median_color, linewidth = median_lwd)
   }
   return(p)
 }

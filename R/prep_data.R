@@ -25,7 +25,7 @@
 #' # Prepare data for model fitting, using using alternative settings:
 #' dat2 <- prep_data(self, stimuli, allow_miss = 0, req_unique = 3)
 #'
-#' # Select data that will be included in the analysis:
+#' # Obtain the data that are included in the analysis:
 #' self2 <- self[dat2$keep]
 #' stimuli2 <- stimuli[dat2$keep, ]
 
