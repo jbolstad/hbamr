@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_est.R
 \name{get_est}
 \alias{get_est}
-\title{Extract summaries of marginal posterior distributions from an HBAM model}
+\title{Extract summaries of marginal posterior distributions from an HBAM model or point estimates from an FBAM model}
 \usage{
 get_est(
   object,
@@ -13,19 +13,19 @@ get_est(
 )
 }
 \arguments{
-\item{object}{An instance of class \code{stanfit} produced by \code{hbam}.}
+\item{object}{An instance of class \code{stanfit} produced by \code{hbam}, or a list produced by \code{fbam}.}
 
 \item{par}{Character: Name of the parameter type to be extracted. Typically \code{"theta"} (stimuli positions) or \code{"chi"} (respondent positions).}
 
-\item{probs}{A numeric vector of quantiles of interest. The default is c(0.025, 0.50, 0.975).}
+\item{probs}{A numeric vector of quantiles of interest for summarizing \code{stanfit} objects. The default is c(0.025, 0.50, 0.975).}
 
 \item{simplify}{Logical: Should the returned object be simplified by dropping the Monte Carlo standard error and the posterior standard deviation? Defaults to \code{TRUE}.}
 
-\item{...}{Other arguments are passed on to \code{rstan::summary}.}
+\item{...}{Other arguments are passed on to \code{rstan::summary} when summarizing \code{stanfit} objects.}
 }
 \value{
-A tibble containing summaries of marginal posterior distributions.
+A tibble containing summaries of marginal posterior distributions. For objects produced by \code{fbam}, only maximum a posteriori estimates are returned.
 }
 \description{
-This function is a wrapper for wrapper for \code{rstan::summary}.
+For objects produced by \code{hbam}, this function is a wrapper for \code{rstan::summary}. For objects produced by \code{fbam} it offers a way to extract point estimates.
 }

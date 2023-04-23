@@ -26,9 +26,9 @@ This vignette provides an overview of how to use the key functions in the **hbam
 
 ## Example Data
 
-For illustration, we will use data from the 1980 American National Election Study (ANES). This is the same dataset that serves to illustrate the original AM model in the **basicspace** package. The dataset is included in the **hbamr** package and can be loaded by running `data(LC1980)`.
+For illustration, we will use data from the 1980 American National Election Study (ANES). This is the same data set that serves to illustrate the original AM model in the **basicspace** package. The data set is included in the **hbamr** package and can be loaded by running `data(LC1980)`.
 
-The dataset contains respondents' placements of themselves and six stimuli on 7-point Liberal-Conservative scales. The stimuli in question are: The Democratic and Republican parties, Democratic presidential candidate Jimmy Carter, Republican candidate Ronald Reagan, independent candidate (and former Republican) John B. Anderson, and Ted Kennedy (who challenged the incumbent Carter, but failed to win the Democratic nomination).
+The data set contains respondents' placements of themselves and six stimuli on 7-point Liberal-Conservative scales. The stimuli in question are: The Democratic and Republican parties, Democratic presidential candidate Jimmy Carter, Republican candidate Ronald Reagan, independent candidate (and former Republican) John B. Anderson, and Ted Kennedy (who challenged the incumbent Carter, but failed to win the Democratic nomination).
 
 We load the data and re-code missing values as follows:
 
@@ -62,7 +62,7 @@ To use the `prep_data()` function on the example data using the default settings
 dat <- prep_data(self, stimuli)
 ```
 
-Users who want to keep other covariates for subsequent analysis, may find it useful to run `prep_data()` separately from the call to fit the models. The list returned by this function includes the logical vector `keep`, which identifies the rows in the original data that have been kept. If we had a dataset `x` containing covariates, and used `prep_data()` to produce the list `dat`, then we could use `x[dat$keep, ]` to get a subset of `x` corresponding to the data used in the analysis. (The order of the individuals/rows in the data remains unchanged by the functions in this package.)
+Users who want to keep other covariates for subsequent analysis, may find it useful to run `prep_data()` separately from the call to fit the models. The list returned by this function includes the logical vector `keep`, which identifies the rows in the original data that have been kept. If we had a data set `x` containing covariates, and used `prep_data()` to produce the list `dat`, then we could use `x[dat$keep, ]` to get a subset of `x` corresponding to the data used in the analysis. (The order of the individuals/rows in the data remains unchanged by the functions in this package.)
 
 ## Models
 
@@ -76,13 +76,15 @@ The package provides several alternative models, which can be selected using the
 
 **HBAM_HM** assumes the prediction errors in the stimuli placements to be homoskedastic. This simplified model should normally produce very similar results to the HBAM model, and it runs somewhat faster.
 
-**HBAM_MINI** combines the characteristics of HBAM_NE and HBAM_HM: It models the self-placements as if they contain no error and assumes the prediction errors in the stimuli placements to be homoskedastic. This is the simplest model provided in this package that still retains all key features of the HBAM model. It is also the fastest HBAM variant in this package -- sampling two to three times faster than the standard HBAM model, while typically yielding very similar point estimates. For large datasets, this model may provide a reasonable compromise between model complexity and estimation speed.
+**HBAM_MINI** combines the characteristics of HBAM_NE and HBAM_HM: It models the self-placements as if they contain no error and assumes the prediction errors in the stimuli placements to be homoskedastic. This is the simplest model provided in this package that still retains all key features of the HBAM model. It is also the fastest HBAM variant in this package -- sampling two to three times faster than the standard HBAM model, while typically yielding very similar point estimates. For large data sets, this model may provide a reasonable compromise between model complexity and estimation speed.
 
 **HBAM_0** does not allow for scale flipping. This may be useful if there are truly zero cases of scale flipping in the data. Such scenarios can be created artificially, but may also arise in real data. For example, expert surveys appear unlikely to contain many instances of scale flipping.
 
 **HBAM_R** incorporates the rationalization component of the ISR model by @boelstad:2020. This model requires additional data to be supplied to the `prep_data()` function: An $N \times J$ matrix of stimuli ratings from the respondents, supplied as the argument `pref`. The rationalization part of the model is simplified relative to the original ISR model: The direction in which respondents move disfavored stimuli is estimated as a common expectation for each possible self-placement on the scale.
 
 **HBAM_R\_MINI** combines the features of the HBAM_R model with the light-weight features of the HBAM_MINI model to achieve faster sampling compared to HBAM_R.
+
+**FBAM_MINI** is a version of the HBAM_MINI model with fixed hyperpriors to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. The hyperpriors have been set to realistic values based on analyses of ANES data. As with the other models, scale-dependent priors are automatically adjusted to the length of the survey scale. 
 
 **BAM** is an unpooled model, similar to the JAGS version introduced by @hare:2015. This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions [@boelstad:2023].
 
@@ -119,18 +121,28 @@ dat <- prep_data(self, stimuli, allow_miss = 0)
 
 `hbam()` uses `rstan::sampling()`, and any additional arguments to `hbam()` will be passed on to the sampling function. By default, `hbam()` will run 4 chains and detect the number of available CPU cores. If possible, `hbam()` will use as many cores as there are chains. The other sampling defaults are: `warmup = 1000`, `iter = 4000`, and `thin = 3`. These settings can all be overridden in the `hbam()` call.
 
+## Fitting via Optimization
+
+For very large data sets, optimization can be a useful and much faster alternative to MCMC. An important drawback is that this only provides point estimates (unless we resort to something like Laplace's method, which is not implemented here).  
+
+The `fbam()` function fits the FBAM_MINI model using `rstan::optimizing()`. The `fbam()` function works just like the `hbam()` function, except the arguments for `rstan::sampling()` do not apply. To fit the FBAM_MINI model using default settings, we would run:
+
+```{r fitfbam, eval = FALSE}
+fit_fbam <- fbam(self, stimuli)
+```
+
 ## Execution Times
 
-Models of the kind included in the **hbamr** package face an inevitable trade-off between nuance (i.e. model complexity) and execution times. For small datasets (like ANES 1980), all models provide reasonable running times, but for large datasets (like ANES 2012), more complex models like the standard HBAM model tend to get slow. In these cases, the simpler HBAM_MINI model may be a useful alternative.
+Models of the kind included in the **hbamr** package face an inevitable trade-off between nuance (i.e. model complexity) and execution times. For small data sets (like ANES 1980), all models provide reasonable running times, but for large data sets (like ANES 2012), more complex models like the standard HBAM model tend to get slow. In these cases, the simpler HBAM_MINI model may be a useful alternative. For very large data sets, fitting the FBAM_MINI model via optimization may be the best alternative.
 
 Users should also consider reducing the number of posterior draws. For most applications, 2000 draws per chain (setting `iter = 2000` with `thin = 1`) may be sufficient. This may result in warnings about low accuracy in the tails of some distributions, but whether higher accuracy is required will depend on the goal of the analysis and should be considered on a case-by-case basis.
 
-The table below shows sampling times for a set of relevant scenarios (not counting post-processing). The `warmup` argument was left at 1000 in all these tests, except the final one, where it was set to 500.
+The table below shows execution times for a set of relevant scenarios (not counting post-processing). The `warmup` argument was left at 1000 in all of the tests using MCMC, except the one with 1000 iterations, where it was set to 500. 
 
-|                      | HBAM <br>iter = 4000 | HBAM_MINI <br>iter = 4000 | HBAM_MINI <br>iter = 2000 | HBAM_MINI <br>iter = 1000 |
-|-----------------|:-------------:|:-------------:|:-------------:|:-------------:|
-| ANES 1980 (N = 643)  |         6.5m         |           3.5m            |            2m             |           1.5m            |
-| ANES 2012 (N = 4949) |        3h 20m        |          1h 15m           |            45m            |            30m            |
+|                      | HBAM <br>iter = 4000 | HBAM_MINI <br>iter = 4000 | HBAM_MINI <br>iter = 2000 | HBAM_MINI <br>iter = 1000 | FBAM_MINI <br>optimization |
+|------------------|:----------:|:----------:|:----------:|:----------:|:----------:|
+| ANES 1980 (N = 643)  |         6.5m         |           3.5m            |            2m             |           1.5m            |             2s             |
+| ANES 2012 (N = 4949) |        3h 20m        |          1h 15m           |            45m            |            30m            |             15s             |
 
 : Execution times on an Intel Core i7 3.2-4.6 GHz CPU
 
@@ -246,7 +258,7 @@ est_chi
 
 ## Diagnostics
 
-The `rstan::sampling()` function that `hbam()` uses automatically performs a number of key diagnostic checks after sampling and issues warnings when a potential issue is detected. The authors of **rstan** emphasize diagnostics and careful model development, and users of **rstan** will more frequently encounter warnings than users of **rjags**. One warning users of this package may encounter is that the Bulk or Tail Effective Sample Size (ESS) is too low (see <https://mc-stan.org/misc/warnings.html>). The most straightforward solution to this issue is to increase the number of posterior draws, using the `iter` argument. However, this increases the computational load, and users should consider carefully what level of accuracy they need. 
+The `rstan::sampling()` function that `hbam()` uses automatically performs a number of key diagnostic checks after sampling and issues warnings when a potential issue is detected. The authors of **rstan** emphasize diagnostics and careful model development, and users of **rstan** will more frequently encounter warnings than users of **rjags**. One warning users of this package may encounter is that the Bulk or Tail Effective Sample Size (ESS) is too low (see <https://mc-stan.org/misc/warnings.html>). The most straightforward solution to this issue is to increase the number of posterior draws, using the `iter` argument. However, this increases the computational load, and users should consider carefully what level of accuracy they need.
 
 Because the `hbam()` function returns a `stanfit` object, the model fit can be examined using the full range of diagnostic tools from the **rstan** package. Users should consult the **rstan** documentation for details on the various diagnostic tests and plots that are available. One example of the available tools is `traceplot()`:
 
@@ -260,7 +272,7 @@ knitr::include_graphics("p_trace_theta.svg")
 
 ## Cross-Validation
 
-A useful way to compare alternative models is to estimate their out-of-sample prediction accuracy. More specifically, we can estimate their expected log pointwise predictive density for a new dataset (ELPD). It is most straightforward to do so for the stimuli placements, and this is informative because these form the key basis for estimating most individual level parameters. A similar analysis for the self-placement data is generally not possible, as the models require these placements to estimate the corresponding latent respondent positions. This section therefore focuses on estimating the ELPD for stimulus placements.
+A useful way to compare alternative models is to estimate their out-of-sample prediction accuracy. More specifically, we can estimate their expected log pointwise predictive density for a new data set (ELPD). It is most straightforward to do so for the stimuli placements, and this is informative because these form the key basis for estimating most individual level parameters. A similar analysis for the self-placement data is generally not possible, as the models require these placements to estimate the corresponding latent respondent positions. This section therefore focuses on estimating the ELPD for stimulus placements.
 
 The **rstan** and **loo** packages contain functions for estimating ELPDs by performing approximate leave-one-out (LOO) cross-validation using Pareto smoothed importance sampling (PSIS). However, PSIS-LOO only works when all Pareto *k* values are sufficiently low, or when the number of high values is so low that moment matching can be used on the problematic cases. In practice, this is not always the case, and it rarely seems to be the case with the BAM model.
 
@@ -292,7 +304,7 @@ elpds <- rbind(elpd_bam, elpd_hbam, elpd_hbam0, elpd_hbam_ne, elpd_hbam_2)
 elpds[order(elpds$ELPD), ]
 ```
 
-We see that the unpooled BAM model is worse at predicting out-of-sample data than the other models, suggesting it overfits the data. The HBAM_0 model -- which does not allow for scale flipping -- also performs worse, suggesting it is too restrictive and underfits. The other three models perform equally well, as the differences are too small to be interpreted substantively. Their equal performance is not very surprising, as the models are very similar, but it should be noted that HBAM_2 might perform better or worse than the other models on a different dataset.
+We see that the unpooled BAM model is worse at predicting out-of-sample data than the other models, suggesting it overfits the data. The HBAM_0 model -- which does not allow for scale flipping -- also performs worse, suggesting it is too restrictive and underfits. The other three models perform equally well, as the differences are too small to be interpreted substantively. Their equal performance is not very surprising, as the models are very similar, but it should be noted that HBAM_2 might perform better or worse than the other models on a different data set.
 
 We could also perform cross-validation for the models that do not account for heteroskedastic errors:
 

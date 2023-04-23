@@ -21,13 +21,13 @@ plot_over_self(
 )
 }
 \arguments{
-\item{object}{An object of class \code{stanfit} produced by \code{hbam}, or a \code{list} of such objects, which will produce a faceted plot.}
+\item{object}{An object of class \code{stanfit} produced by \code{hbam}, a list produced by \code{fbam}, or a \code{list} of such objects, which will produce a faceted plot.}
 
-\item{data}{The list of data that was used to produce the \code{stanfit} object(s).}
+\item{data}{The list of data that was used to produce the object(s).}
 
 \item{par}{Character: Name of the parameter to be plotted. One of the following: \code{"alpha"}, \code{"beta"}, \code{"abs_beta"}, \code{"lambda"}, \code{"chi"}, and \code{"eta"}. Defaults to \code{"chi"}.}
 
-\item{estimate}{Character: Specifying which type of posterior point estimate to use. One of \code{"median"} and \code{"mean"}. Defaults to \code{"median"}.}
+\item{estimate}{Character: Specifying which type of posterior point estimate to use. One of \code{"median"} and \code{"mean"}. Defaults to \code{"median"}. This only applies for \code{stanfit} objects.}
 
 \item{names}{An optional character vector of model names of same length as the supplied list of models.}
 

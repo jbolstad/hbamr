@@ -63,6 +63,7 @@ inits <- list(
   HBAM_MINI = inits_HBAM,
   HBAM_R = inits_HBAM,
   HBAM_R_MINI = inits_HBAM,
+  FBAM_MINI = inits_HBAM,
   HBAM_0 = inits_HBAM_0,
   BAM = inits_BAM)
 
