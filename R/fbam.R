@@ -31,9 +31,9 @@
 #' }
 
 fbam <- function(self = NULL, stimuli = NULL, allow_miss = 2, req_valid = NA,
-                 req_unique = 2, prefs = NULL, prep_data = TRUE, data = NULL,
+                 req_unique = 2, prep_data = TRUE, data = NULL,
                  seed = sample.int(.Machine$integer.max, 1), ...) {
-  if (prep_data == TRUE) { dat <- hbamr::prep_data(self, stimuli, prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique) } else { dat <- data }
+  if (prep_data == TRUE) { dat <- hbamr::prep_data(self, stimuli, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique) } else { dat <- data }
   set.seed(seed)
   out <- rstan::optimizing(stanmodels[["FBAM_MINI"]], data = dat, init = inits[["FBAM_MINI"]](1, dat), seed = seed, ...)
   return(out)
