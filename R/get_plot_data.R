@@ -8,7 +8,7 @@
 #'
 
 get_plot_data <- function(object, n_draws = 15, seed = 1) {
-  if (class(object) == "stanfit") {
+  if (inherits(object, "stanfit")) {
     set.seed(seed)
     chi_draws <- as.data.frame((rstan::extract(object, pars = "chi")$chi))
     chi_draws <- chi_draws[sample(nrow(chi_draws), n_draws), ]
@@ -26,7 +26,7 @@ get_plot_data <- function(object, n_draws = 15, seed = 1) {
       dplyr::summarize(x = mean(.data$value), mode_x = get_post_mode_x(.data$value), mode_y = get_post_mode_y(.data$value))
     # label$y_adj <- label$y + mean(label$y) * .07
   } else {
-    if (class(object) == "list") {
+    if (inherits(object, "list")) {
       chi_draws <- dplyr::as_tibble(data.frame(chi = object$par[grepl( "chi[", names(object$par), fixed = TRUE)]))
       chi_draws$draw_no <- 1
       s_draws <- data.frame(theta = object$par[grepl( "theta[", names(object$par), fixed = TRUE)])

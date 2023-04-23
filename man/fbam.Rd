@@ -10,7 +10,6 @@ fbam(
   allow_miss = 2,
   req_valid = NA,
   req_unique = 2,
-  prefs = NULL,
   prep_data = TRUE,
   data = NULL,
   seed = sample.int(.Machine$integer.max, 1),

@@ -23,8 +23,8 @@ plot_over_self <- function(object, data, par = "chi", estimate = "median", names
                            fill = "#2166AC", color = "#053061", width = .7, alpha = .5, outlier.size = 0.3,
                            median_color = "black", median_lwd = .7) {
   if(is.null(parlabel)) { parlabel <- par}
-  if((length(object) == 1 & class(object) == "stanfit") |
-     (length(object) == 4 & class(object) == "list")) {
+  if((length(object) == 1 & inherits(object, "stanfit")) |
+     (length(object) == 4 & inherits(object, "list"))) {
     pd <- get_pd(object, data, par, estimate)
     p <- ggplot2::ggplot(pd, ggplot2::aes(.data$V, .data$parameter)) + ggplot2::geom_boxplot(fill = fill, color = color, width = width, alpha = alpha, outlier.size = outlier.size) +
       xlab("Self-placement") + ylab(par)
@@ -35,7 +35,7 @@ plot_over_self <- function(object, data, par = "chi", estimate = "median", names
     pd <- vector()
     for (m in 1:length(object)) {
       if (is.null(names)) {
-        if (class(object[[m]]) == "stanfit") {
+        if (inherits(object[[m]], "stanfit")) {
           name <- object[[m]]@model_name
         } else {
           name <- paste0("Model ", m)
@@ -58,7 +58,7 @@ plot_over_self <- function(object, data, par = "chi", estimate = "median", names
 }
 
 get_pd <- function(object, data, par, estimate){
-  if (class(object) == "stanfit") {
+  if (inherits(object, "stanfit")) {
     if (par == "abs_beta") {
       draws <- as.matrix(rstan::extract(object, pars = "beta")$beta)
       param <- data.frame(
@@ -76,7 +76,7 @@ get_pd <- function(object, data, par, estimate){
     if (estimate == "median") { pd <- dplyr::bind_cols(parameter = param$`50%`, V = as.ordered(data$V)) }
     if (estimate == "mean") { pd <- dplyr::bind_cols(parameter = param$mean, V = as.ordered(data$V)) }
   } else {
-    if (class(object) == "list") {
+    if (inherits(object, "list")) {
       if (par == "abs_beta") {
         param <- get_est(object, "beta")
         param <- abs(param)
