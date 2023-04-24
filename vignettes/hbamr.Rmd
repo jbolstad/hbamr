@@ -20,7 +20,7 @@ library("dplyr")
 <!-- avoid border around images -->
 <style> img { border: 0; } </style>
 ```
-The goal of the **hbamr** package is to enable users to efficiently perform Hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling in R. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using ideological survey data [@aldrich:1977]. The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for respondent positions and in terms of recovering true respondent positions in simulations [@boelstad:2023]. The package uses Hamiltonian Monte Carlo via **rstan** to fit these models.
+The goal of the **hbamr** package is to enable users to efficiently perform Hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling in R. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using ideological survey data [@aldrich:1977]. The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for all respondent positions and in terms of recovering true respondent positions in simulations [@boelstad:2023]. The package mainly uses the NUTS algorithm in **rstan** -- a Markov chain Monte Carlo (MCMC) algorithm -- to fit these models. However, it also offers a simplified model that can be fit using optimization to analyze large data sets quickly.
 
 This vignette provides an overview of how to use the key functions in the **hbamr** package. The vignette walks through an applied example, showing how to prepare data, fit models, extract estimates, plot key results, and perform cross-validation.
 
@@ -135,7 +135,7 @@ fit_fbam <- fbam(self, stimuli)
 
 Models of the kind included in the **hbamr** package face an inevitable trade-off between nuance (i.e. model complexity) and execution times. For small data sets (like ANES 1980), all models provide reasonable running times, but for large data sets (like ANES 2012), more complex models like the standard HBAM model tend to get slow. In these cases, the simpler HBAM_MINI model may be a useful alternative. For very large data sets, fitting the FBAM_MINI model via optimization may be the best alternative.
 
-Users should also consider reducing the number of posterior draws. For most applications, 2000 draws per chain (setting `iter = 2000` with `thin = 1`) may be sufficient. This may result in warnings about low accuracy in the tails of some distributions, but whether higher accuracy is required will depend on the goal of the analysis and should be considered on a case-by-case basis.
+Users relying on MCMC should consider reducing the number of posterior draws. For most applications, 2000 draws per chain (setting `iter = 2000` with `thin = 1`) may be sufficient. This may result in warnings about low accuracy in the tails of some distributions, but whether higher accuracy is required will depend on the goal of the analysis and should be considered on a case-by-case basis.
 
 The table below shows execution times for a set of relevant scenarios (not counting post-processing). The `warmup` argument was left at 1000 in all of the tests using MCMC, except the one with 1000 iterations, where it was set to 500. 
 
