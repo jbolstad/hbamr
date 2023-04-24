@@ -1,6 +1,6 @@
 #' Fit the FBAM_MINI model using optimization
 #'
-#' Fit a simplified Bayesian Aldrich-McKelvey model with fixed hyperpriors using optimization via `rstan`.
+#' Fit a simplified Bayesian Aldrich-McKelvey model with fixed hyperparameters using optimization via `rstan`.
 #'
 #' @export
 #' @param self A numerical vector of N ideological self-placements. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the `prep_data` function.
