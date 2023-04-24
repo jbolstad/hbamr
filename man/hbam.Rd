@@ -84,7 +84,7 @@ This package provides several alternative models, which can be specified using t
 
 \strong{HBAM_R_MINI} combines the features of the HBAM_R model with the light-weight features of the HBAM_MINI model to achieve faster sampling compared to HBAM_R.
 
-\strong{FBAM_MINI} is a version of the HBAM_MINI model with fixed hyperpriors to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. The hyperpriors have been set to realistic values based on analyses of ANES data. As with the other models, scale-dependent priors are automatically adjusted to the length of the survey scale.
+\strong{FBAM_MINI} is a version of the HBAM_MINI model with fixed hyperparameters to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. The hyperparameters have been set to realistic values based on analyses of ANES data. As with the other models, scale-dependent priors are automatically adjusted to the length of the survey scale.
 
 \strong{BAM} is an unpooled model, similar to the JAGS version introduced by Hare et al. (2015). This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions (Bølstad 2023).
 
