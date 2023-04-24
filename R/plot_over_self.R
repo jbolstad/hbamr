@@ -24,7 +24,7 @@ plot_over_self <- function(object, data, par = "chi", estimate = "median", names
                            median_color = "black", median_lwd = .7) {
   if(is.null(parlabel)) { parlabel <- par}
   if((length(object) == 1 & inherits(object, "stanfit")) |
-     (length(object) == 4 & inherits(object, "list"))) {
+     (names(object)[1] == "par" & names(object)[3] == "return_code" & inherits(object, "list"))) {
     pd <- get_pd(object, data, par, estimate)
     p <- ggplot2::ggplot(pd, ggplot2::aes(.data$V, .data$parameter)) + ggplot2::geom_boxplot(fill = fill, color = color, width = width, alpha = alpha, outlier.size = outlier.size) +
       xlab("Self-placement") + ylab(par)
