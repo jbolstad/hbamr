@@ -2,7 +2,8 @@
 
 <!-- badges: start -->
 
-[![CRAN status](https://www.r-pkg.org/badges/version/hbamr)](https://CRAN.R-project.org/package=hbamr)
+[![CRAN status](https://www.r-pkg.org/badges/version/hbamr)](https://CRAN.R-project.org/package=hbamr) 
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/hbamr)](https://cran.r-project.org/package=hbamr)
 
 <!-- badges: end -->
 
