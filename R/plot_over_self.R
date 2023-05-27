@@ -23,8 +23,7 @@ plot_over_self <- function(object, data, par = "chi", estimate = "median", names
                            fill = "#2166AC", color = "#053061", width = .7, alpha = .5, outlier.size = 0.3,
                            median_color = "black", median_lwd = .7) {
   if(is.null(parlabel)) { parlabel <- par}
-  if((length(object) == 1 & inherits(object, "stanfit")) |
-     (names(object)[1] == "par" & names(object)[3] == "return_code" & inherits(object, "list"))) {
+  if((length(object) == 1 & inherits(object, "stanfit")) | is_fbam(object)) {
     pd <- get_pd(object, data, par, estimate)
     p <- ggplot2::ggplot(pd, ggplot2::aes(.data$V, .data$parameter)) + ggplot2::geom_boxplot(fill = fill, color = color, width = width, alpha = alpha, outlier.size = outlier.size) +
       xlab("Self-placement") + ylab(par)
@@ -88,4 +87,14 @@ get_pd <- function(object, data, par, estimate){
     }
   }
   return(pd)
+}
+
+is_fbam <- function(object) {
+  if (!is.null(names(object))) {
+    if (names(object)[1] == "par" & names(object)[3] == "return_code" & inherits(object, "list")) {
+      output <- TRUE
+    }
+  } else {
+    output <- FALSE
+  }
 }
