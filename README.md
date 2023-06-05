@@ -2,8 +2,7 @@
 
 <!-- badges: start -->
 
-[![CRAN status](https://www.r-pkg.org/badges/version/hbamr)](https://CRAN.R-project.org/package=hbamr) 
-[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/hbamr)](https://cran.r-project.org/package=hbamr)
+[![CRAN status](https://www.r-pkg.org/badges/version/hbamr)](https://CRAN.R-project.org/package=hbamr) [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/hbamr)](https://cran.r-project.org/package=hbamr)
 
 <!-- badges: end -->
 
@@ -15,7 +14,7 @@ This is an R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM
 
 The package is available from [CRAN](https://CRAN.R-project.org/package=hbamr) and can be installed using the standard method:
 
-```{r}
+``` r
 install.packages("hbamr")
 ```
 
@@ -25,7 +24,7 @@ This is the easiest and fastest way to install the package, as the binaries on C
 
 A vignette showing how to use all key functions in the package is available [here](https://cran.r-project.org/web/packages/hbamr/vignettes/hbamr.html). It can also be viewed locally, after installing the package:
 
-```{r}
+``` r
 vignette("hbamr")
 ```
 
@@ -33,13 +32,13 @@ vignette("hbamr")
 
 Load the package:
 
-```{r}
+``` r
 library("hbamr")
 ```
 
 Load and re-code example data:
 
-```{r}
+``` r
 data(LC1980)
 LC1980[LC1980 == 0 | LC1980 == 8 | LC1980 == 9] <- NA 
 self <- LC1980[, 1]
@@ -48,35 +47,35 @@ stimuli <- LC1980[, -1]
 
 Fit standard HBAM model:
 
-```{r}
+``` r
 fit_hbam <- hbam(self, stimuli)
 ```
 
 Fit HBAM_MINI model:
 
-```{r}
+``` r
 fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI")
 ```
 
 Plot estimated stimuli positions:
 
-```{r}
+``` r
 plot_stimuli(fit_hbam)
 ```
 
 <img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_stim.svg?raw=true" width="850px"/>
 
-Plot distribution of estimated respondent positions:
+Plot the distribution of estimated respondent positions:
 
-```{r}
+``` r
 plot_respondents(fit_hbam)
 ```
 
 <img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_resp.svg?raw=true" width="850px"/>
 
-Plot estimated scale stretching by self-placement:
+Plot estimated scale-stretching by self-placements:
 
-```{r}
+``` r
 dat <- prep_data(self, stimuli)
 plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "abs_beta")
 ```
@@ -89,9 +88,9 @@ The development version of the package can be installed from [GitHub](https://gi
 
 Once **rstan** has been set up properly, you can proceed to install **hbamr**. The following two lines will (if necessary) first install the **devtools** package and then install **hbamr**. All models will be compiled upon installation, which means the process will take a few minutes.
 
-```{r}
-     if (!require("devtools")) install.packages("devtools")
-     devtools::install_github("jbolstad/hbamr")
+``` r
+if (!require("devtools")) install.packages("devtools")
+devtools::install_github("jbolstad/hbamr")
 ```
 
 ### References
