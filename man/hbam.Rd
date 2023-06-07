@@ -29,7 +29,7 @@ hbam(
 
 \item{stimuli}{An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the \code{prep_data} function.}
 
-\item{model}{Character: Name of the model to be used. One of: \code{"HBAM"}, \code{"HBAM_2"}, \code{"HBAM_NE"}, \code{"HBAM_HM"}, \code{"HBAM_MINI"}, \code{"HBAM_0"}, \code{"HBAM_R"}, \code{"HBAM_R_MINI"}, or \code{"BAM"}. Defaults to \code{"HBAM"}.}
+\item{model}{Character: Name of the model to be used. One of: \code{"HBAM"}, \code{"HBAM_2"}, \code{"HBAM_NE"}, \code{"HBAM_HM"}, \code{"HBAM_MINI"}, \code{"HBAM_0"}, \code{"HBAM_R"}, \code{"HBAM_R_MINI"}, \code{"FBAM_MINI"}, or \code{"BAM"}. Defaults to \code{"HBAM"}.}
 
 \item{allow_miss}{Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the \code{prep_data} function. Defaults to 2.}
 
