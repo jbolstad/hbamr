@@ -90,11 +90,11 @@ get_pd <- function(object, data, par, estimate){
 }
 
 is_fbam <- function(object) {
+  output <- FALSE
   if (!is.null(names(object))) {
     if (names(object)[1] == "par" & names(object)[3] == "return_code" & inherits(object, "list")) {
       output <- TRUE
     }
-  } else {
-    output <- FALSE
   }
+  return(output)
 }
