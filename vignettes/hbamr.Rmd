@@ -123,7 +123,7 @@ dat <- prep_data(self, stimuli, allow_miss = 0)
 
 ## Fitting via Optimization
 
-For very large data sets, optimization can be a useful and much faster alternative to MCMC. An important drawback is that this only provides point estimates (unless we resort to something like Laplace's method, which is not implemented here).  
+For very large data sets, optimization can be a useful and much faster alternative to MCMC. However, the optimization feature provided in this package only provides maximum a posteriori (MAP) point estimates. 
 
 The `fbam()` function fits the FBAM_MINI model using `rstan::optimizing()`. The `fbam()` function works just like the `hbam()` function, except the arguments for `rstan::sampling()` do not apply. To fit the FBAM_MINI model using default settings, we would run:
 
