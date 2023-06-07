@@ -82,7 +82,7 @@ The package provides several alternative models, which can be selected using the
 
 **HBAM_R** incorporates the rationalization component of the ISR model by @boelstad:2020. This model requires additional data to be supplied to the `prep_data()` function: An $N \times J$ matrix of stimuli ratings from the respondents, supplied as the argument `pref`. The rationalization part of the model is simplified relative to the original ISR model: The direction in which respondents move disfavored stimuli is estimated as a common expectation for each possible self-placement on the scale.
 
-**HBAM_R\_MINI** combines the features of the HBAM_R model with the light-weight features of the HBAM_MINI model to achieve faster sampling compared to HBAM_R.
+**HBAM_R-MINI** combines the features of the HBAM_R model with the light-weight features of the HBAM_MINI model to achieve faster sampling compared to HBAM_R.
 
 **FBAM_MINI** is a version of the HBAM_MINI model with fixed hyperparameters to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. The hyperparameters have been set to realistic values based on analyses of ANES data. As with the other models, scale-dependent priors are automatically adjusted to the length of the survey scale. 
 
@@ -321,5 +321,16 @@ rbind(elpd_hbam_hm, elpd_hbam_mini)
 The estimated ELPDs are notably higher for these two models compared to their respective heteroskedastic counterparts. This suggest there is a considerable degree of heteroskedasticity in the data -- which is not surprising.
 
 Modeling the heteroskedasticity increases prediction accuracy, but it should be noted that this does not necessarily translate into much more accurate estimates of key model outputs. As shown in section on plotting, the results for the HBAM and HBAM_MINI models are very similar. In fact, their estimated respondent positions correlate at .97 and .99, depending on whether we use the posterior means or medians. Their estimated stimulus positions also correlate at .99, but this masks the fact that the HBAM_MINI model places the less well known candidate John B. Anderson further to the left than the HBAM model does. This illustrates that there are some subtle differences that users should be aware of, even if these models tend to produce very similar results.
+
+
+## Limits to Exact Replication
+
+The functions in this package accept a seed argument for all operations that involve a random number generator. Supplying a seed is sufficient to get the exact same results in repeated runs on the same system, but it does not ensure exact replication across systems or software versions. The [Stan Reference Manual](https://mc-stan.org/docs/reference-manual/reproducibility.html) explains why:
+
+> Floating point operations on modern computers are notoriously difficult to replicate because the fundamental arithmetic operations, right down to the IEEE 754 encoding level, are not fully specified. The primary problem is that the precision of operations varies across different hardware platforms and software implementations.
+>
+> Stan is designed to allow full reproducibility. However, this is only possible up to the external constraints imposed by floating point arithmetic.
+
+In short, running the functions in this package on different systems will likely yield slightly different results. It should be noted, however, that the differences across systems will be minimal and substantively negligible as long as the user obtains a sufficient number of posterior draws.
 
 ## References
