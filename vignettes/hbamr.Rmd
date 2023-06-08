@@ -82,7 +82,7 @@ The package provides several alternative models, which can be selected using the
 
 **HBAM_R** incorporates the rationalization component of the ISR model by @boelstad:2020. This model requires additional data to be supplied to the `prep_data()` function: An $N \times J$ matrix of stimuli ratings from the respondents, supplied as the argument `pref`. The rationalization part of the model is simplified relative to the original ISR model: The direction in which respondents move disfavored stimuli is estimated as a common expectation for each possible self-placement on the scale.
 
-**HBAM_R-MINI** combines the features of the HBAM_R model with the light-weight features of the HBAM_MINI model to achieve faster sampling compared to HBAM_R.
+**HBAM_R_MINI** combines the features of the HBAM_R model with the light-weight features of the HBAM_MINI model to achieve faster sampling compared to HBAM_R.
 
 **FBAM_MINI** is a version of the HBAM_MINI model with fixed hyperparameters to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. The hyperparameters have been set to realistic values based on analyses of ANES data. As with the other models, scale-dependent priors are automatically adjusted to the length of the survey scale. 
 
@@ -272,11 +272,13 @@ knitr::include_graphics("p_trace_theta.svg")
 
 ## Cross-Validation
 
-A useful way to compare alternative models is to estimate their out-of-sample prediction accuracy. More specifically, we can estimate their expected log pointwise predictive density for a new data set (ELPD). It is most straightforward to do so for the stimuli placements, and this is informative because these form the key basis for estimating most individual level parameters. A similar analysis for the self-placement data is generally not possible, as the models require these placements to estimate the corresponding latent respondent positions. This section therefore focuses on estimating the ELPD for stimulus placements.
+A useful way to compare alternative models is to estimate their out-of-sample prediction accuracy. More specifically, we can estimate their expected log pointwise predictive density for a new data set (ELPD). It is most straightforward to do so for the stimuli placements, and this is informative because these form the basis for estimating most individual level parameters. A similar analysis for the self-placement data is generally not possible, as the models require these placements to estimate the corresponding latent respondent positions. This section therefore focuses on estimating the ELPD for stimulus placements.
 
 The **rstan** and **loo** packages contain functions for estimating ELPDs by performing approximate leave-one-out (LOO) cross-validation using Pareto smoothed importance sampling (PSIS). However, PSIS-LOO only works when all Pareto *k* values are sufficiently low, or when the number of high values is so low that moment matching can be used on the problematic cases. In practice, this is not always the case, and it rarely seems to be the case with the BAM model.
 
-The **hbamr** package therefore includes model codes and functions to perform *K*-fold cross-validation. The function `hbam_cv()` is similar to `hbam()` and takes the same arguments, but will perform a *K*-fold cross-validation for the chosen model. The key choice here is to set *K* (the number of folds to use), and the default in this package is 10. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously. To preserve memory, the function extracts the summaries of the log-likelihoods for the held-out data and drops the stanfit objects once this is done. The memory requirements of the function is therefore similar to running a single analysis with one chain per core. The function that splits the data into *K* folds uses a default seed to produce the same folds each time, unless a different seed is specified.
+The **hbamr** package therefore includes model codes and functions to perform *K*-fold cross-validation. The function `hbam_cv()` is similar to `hbam()` and takes the same arguments, but will perform a *K*-fold cross-validation for the chosen model. In contrast to `hbam()`, the default for `hbam_cv()` is to not allow respondents to have any missing values (`allow_miss = 0`). The reason is that the cross-validation essentially creates missing values by excluding some data from each run.  
+
+A key choice when performing cross-validation is to set *K* (the number of folds to use), and the default in this package is 10. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously. To preserve memory, the function extracts the summaries of the log-likelihoods for the held-out data and drops the stanfit objects once this is done. The memory requirements of the function is therefore similar to running a single analysis with one chain per core. The function that splits the data into *K* folds uses a default seed to produce the same folds each time, unless a different seed is specified.
 
 To perform 10-fold cross-validation for a selection of models, we could run:
 
@@ -285,11 +287,11 @@ load("elpds.rda")
 ```
 
 ```{r run_cv_new, eval = FALSE}
-elpd_hbam <- hbam_cv(self, stimuli, model = "HBAM", allow_miss = 0)
-elpd_hbam_2 <- hbam_cv(self, stimuli, model = "HBAM_2", allow_miss = 0)
-elpd_hbam_NE <- hbam_cv(self, stimuli, model = "HBAM_NE", allow_miss = 0)
-elpd_hbam_0 <- hbam_cv(self, stimuli, model = "HBAM_0", allow_miss = 0)
-elpd_bam <- hbam_cv(self, stimuli, model = "BAM", allow_miss = 0)
+elpd_hbam <- hbam_cv(self, stimuli, model = "HBAM")
+elpd_hbam_2 <- hbam_cv(self, stimuli, model = "HBAM_2")
+elpd_hbam_NE <- hbam_cv(self, stimuli, model = "HBAM_NE")
+elpd_hbam_0 <- hbam_cv(self, stimuli, model = "HBAM_0")
+elpd_bam <- hbam_cv(self, stimuli, model = "BAM")
 ```
 
 Rather than returning stanfit objects, the function returns a data frame containing the estimated ELPD and its standard error. To compare results across models, we could run:
@@ -309,8 +311,8 @@ We see that the unpooled BAM model is worse at predicting out-of-sample data tha
 We could also perform cross-validation for the models that do not account for heteroskedastic errors:
 
 ```{r, eval = FALSE}
-elpd_hbam_HM <- hbam_cv(self, stimuli, model = "HBAM_HM", allow_miss = 0)
-elpd_hbam_MINI <- hbam_cv(self, stimuli, model = "HBAM_MINI", allow_miss = 0)
+elpd_hbam_HM <- hbam_cv(self, stimuli, model = "HBAM_HM")
+elpd_hbam_MINI <- hbam_cv(self, stimuli, model = "HBAM_MINI")
 rbind(elpd_hbam_hm, elpd_hbam_mini)
 ```
 
