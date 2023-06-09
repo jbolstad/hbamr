@@ -18,10 +18,9 @@
 #' \donttest{
 #' # Loading and re-coding ANES 2012 data:
 #' data(LC2012)
-#' dat <- LC2012
 #'
-#' self <- dat[, 2]
-#' stimuli <- dat[, -c(1:2)]
+#' self <- LC2012[, 2]
+#' stimuli <- LC2012[, -c(1:2)]
 #'
 #' # Fitting the FBAM_MINI model:
 #' fit_fbam_mini <- fbam(self, stimuli)

@@ -17,7 +17,6 @@
 #'
 #' @examples
 #' data(LC1980)
-#' dat <- LC1980
-#' dat[dat == 0 | dat == 8 | dat == 9] <- NA
-#' head(dat)
+#' LC1980[LC1980 == 0 | LC1980 == 8 | LC1980 == 9] <- NA
+#' head(LC1980)
 "LC1980"

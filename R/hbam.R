@@ -54,12 +54,11 @@
 #' \donttest{
 #' # Loading and re-coding ANES 1980 data:
 #' data(LC1980)
-#' dat <- LC1980
-#' dat[dat == 0 | dat == 8 | dat == 9] <- NA
+#' LC1980[LC1980 == 0 | LC1980 == 8 | LC1980 == 9] <- NA
 #'
 #' # Making a small subset of the data for illustration:
-#' self <- dat[1:100, 1]
-#' stimuli <- dat[1:100, -1]
+#' self <- LC1980[1:100, 1]
+#' stimuli <- LC1980[1:100, -1]
 #'
 #' # Fitting the HBAM_MINI model, obtaining 1000 draws:
 #' fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI",

@@ -69,12 +69,11 @@ This function performs a K-fold cross-validation for an HBAM-type model in order
 \donttest{
 # Loading and re-coding ANES 1980 data:
 data(LC1980)
-dat <- LC1980
-dat[dat == 0 | dat == 8 | dat == 9] <- NA
+LC1980[LC1980 == 0 | LC1980 == 8 | LC1980 == 9] <- NA
 
 # Making a small subset of the data for illustration:
-self <- dat[1:50, 1]
-stimuli <- dat[1:50, -1]
+self <- LC1980[1:50, 1]
+stimuli <- LC1980[1:50, -1]
 
 # Performing 10-fold cross-validation for the HBAM_MINI model:
   # NOTE: You normally want to use ALL cores for this, not just 2.

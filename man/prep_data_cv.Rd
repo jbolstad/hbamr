@@ -22,10 +22,9 @@ This function turns data prepared for \code{hbam} into a list of K versions, whe
 \examples{
 # Loading and re-coding ANES 1980 data:
 data(LC1980)
-dat <- LC1980
-dat[dat == 0 | dat == 8 | dat == 9] <- NA
-self <- dat[, 1]
-stimuli <- dat[, -1]
+LC1980[LC1980 == 0 | LC1980 == 8 | LC1980 == 9] <- NA
+self <- LC1980[, 1]
+stimuli <- LC1980[, -1]
 dat <- prep_data(self, stimuli)
 
 # Prepare data for cross-validation:
