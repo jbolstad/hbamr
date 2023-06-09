@@ -16,7 +16,7 @@
 #'
 #' @examples
 #' \donttest{
-#' # Loading and re-coding ANES 2012 data:
+#' # Loading ANES 2012 data:
 #' data(LC2012)
 #'
 #' self <- LC2012[, 2]
