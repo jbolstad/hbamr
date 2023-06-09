@@ -116,8 +116,8 @@ theta_est <- get_est(fit_hbam_mini, par = "theta")
 }
 \references{
 \itemize{
-\item Bølstad, Jørgen (forthcoming). Hierarchical Bayesian Aldrich-McKelvey Scaling. \if{html}{\out{<i>}}Political Analysis\if{html}{\out{</i>}}.
-\item Bølstad, Jørgen (2020). Capturing Rationalization Bias and Differential Item Functioning: A Unified Bayesian Scaling Approach. \if{html}{\out{<i>}}Political Analysis\if{html}{\out{</i>}} 28(3): 340–355.
-\item Hare, Christopher et al. (2015). Using Bayesian Aldrich-McKelvey Scaling to Study Citizens' Ideological Preferences and Perceptions. \if{html}{\out{<i>}}American Journal of Political Science\if{html}{\out{</i>}} 59(3): 759–774.
+\item Bølstad, Jørgen (2023). Hierarchical Bayesian Aldrich-McKelvey Scaling. \emph{Political Analysis}. \url{https://doi.org/10.1017/pan.2023.18}.
+\item Bølstad, Jørgen (2020). Capturing Rationalization Bias and Differential Item Functioning: A Unified Bayesian Scaling Approach. \emph{Political Analysis} 28(3): 340–355.
+\item Hare, Christopher et al. (2015). Using Bayesian Aldrich-McKelvey Scaling to Study Citizens' Ideological Preferences and Perceptions. \emph{American Journal of Political Science} 59(3): 759–774.
 }
 }

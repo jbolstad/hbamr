@@ -10,8 +10,8 @@ Fit hierarchical Bayesian Aldrich-McKelvey (HBAM) models using a form of Hamilto
 }
 \references{
 \itemize{
-\item Bølstad, Jørgen (forthcoming). Hierarchical Bayesian Aldrich-McKelvey Scaling. \if{html}{\out{<i>}}Political Analysis\if{html}{\out{</i>}}.
-\item Stan Development Team (2023). RStan: the R interface to Stan. R package version 2.21.8. https://mc-stan.org
+\item Bølstad, Jørgen (2023). Hierarchical Bayesian Aldrich-McKelvey Scaling. \emph{Political Analysis}. \url{https://doi.org/10.1017/pan.2023.18}.
+\item Stan Development Team (2023). RStan: the R interface to Stan. R package version 2.21.8. \url{https://mc-stan.org}.
 }
 }
 \seealso{
