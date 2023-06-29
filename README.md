@@ -45,19 +45,19 @@ self <- LC1980[, 1]
 stimuli <- LC1980[, -1]
 ```
 
-Fit standard HBAM model:
+Fit the standard HBAM model:
 
 ``` r
 fit_hbam <- hbam(self, stimuli)
 ```
 
-Fit HBAM_MINI model:
+Fit the HBAM_MINI model:
 
 ``` r
 fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI")
 ```
 
-Plot estimated stimuli positions:
+Plot the estimated stimuli positions:
 
 ``` r
 plot_stimuli(fit_hbam)
@@ -73,7 +73,7 @@ plot_respondents(fit_hbam)
 
 <img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_resp.svg?raw=true" width="850px"/>
 
-Plot estimated scale-stretching by self-placements:
+Plot the estimated scale-stretch parameters over the self-placements:
 
 ``` r
 dat <- prep_data(self, stimuli)
