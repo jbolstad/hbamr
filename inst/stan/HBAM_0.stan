@@ -2,15 +2,15 @@ data {
   int<lower = 1> N;                       // n of individuals
   int<lower = 1> J;                       // n of items
   int<lower = 1> N_obs;                   // n of observations
-  int<lower = 1> ii[N_obs];               // index i in matrix
-  int<lower = 1> jj[N_obs];               // index j in matrix
+  array[N_obs] int<lower = 1> ii;               // index i in matrix
+  array[N_obs] int<lower = 1> jj;               // index j in matrix
   int<lower = 1> B;                       // length of scale -1 / 2
   int<lower = 1, upper = J> L;            // left pole
   int<lower = 1, upper = J> R;            // right pole
-  int<lower = -B, upper = B> Y[N_obs];    // reported stimuli positions
+  array[N_obs] int<lower = -B, upper = B> Y;    // reported stimuli positions
   vector<lower = -B, upper = B>[N] V;     // reported self-placements
   int<lower=0, upper=1> CV;               // indicator of cross-validation
-  int<lower=0, upper=1> holdout[N_obs];   // holdout for cross-validation
+  array[N_obs] int<lower=0, upper=1> holdout;   // holdout for cross-validation
 }
 
 transformed data {
@@ -23,7 +23,7 @@ parameters {
   vector[N] alpha_raw;                    // shift parameter, raw
   vector[N] beta_raw;                     // stretch parameter, raw
   ordered[2] theta_lr;                    // left and right pole
-  real theta_raw[J];                      // remaining stimuli
+  array[J] real theta_raw;                      // remaining stimuli
   real<lower = 0> sigma_alpha;            // sd of alpha
   real<lower = 0, upper = 2> sigma_beta;  // sd of log(beta)
   real<lower = 0> sigma_chi;              // sd of chi0
@@ -37,7 +37,7 @@ parameters {
 transformed parameters {
   vector[N] alpha;                        // shift parameter
   vector[N] beta;                         // stretch parameter
-  real theta[J];                          // latent stimuli position
+  array[J] real theta;                          // latent stimuli position
   vector[N_obs] log_lik;                  // pointwise log-likelihood for Y
   vector[N] log_lik_V;                    // pointwise log-likelihood for V
   real<lower = 0> eta_scale = tau * J;

@@ -2,23 +2,23 @@ data {
   int<lower = 1> N;                       // n of individuals
   int<lower = 1> J;                       // n of items
   int<lower = 1> N_obs;                   // n of observations
-  int<lower = 1> ii[N_obs];               // index i in matrix
-  int<lower = 1> jj[N_obs];               // index j in matrix
+  array[N_obs] int<lower = 1> ii;               // index i in matrix
+  array[N_obs] int<lower = 1> jj;               // index j in matrix
   int<lower = 1> B;                       // length of scale -1 / 2
   int<lower = 1, upper = J> L;            // left pole
   int<lower = 1, upper = J> R;            // right pole
-  int<lower = -B, upper = B> Y[N_obs];    // reported stimuli positions
-  real<lower = 0, upper = 1> U[N_obs];    // reported voter preferences
-  int<lower = -B, upper = B> V[N];        // reported voter positions
+  array[N_obs] int<lower = -B, upper = B> Y;    // reported stimuli positions
+  array[N_obs] real<lower = 0, upper = 1> U;    // reported voter preferences
+  array[N] int<lower = -B, upper = B> V;        // reported voter positions
   int<lower=0, upper=1> CV;               // indicator of cross-validation
-  int<lower=0, upper=1> holdout[N_obs];   // holdout for cross-validation
+  array[N_obs] int<lower=0, upper=1> holdout;   // holdout for cross-validation
 }
 
 transformed data {
   real<lower = 0> sigma_alpha_prior_rate = (2 - 1) / (B / 5.0);
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
   vector<lower = -B, upper = B>[N] Vvec = to_vector(V);
-  real<lower = -B, upper = B> p[2, N_obs];
+  array[2, N_obs] real<lower = -B, upper = B> p;
   for (n in 1:N_obs) {
     p[1, n] = U[n] * V[ii[n]] + B * U[n] - B;
     p[2, n] = U[n] * V[ii[n]] - B * U[n] + B;
@@ -29,14 +29,14 @@ parameters {
   matrix[N, 2] alpha_raw;                 // shift parameter, split, raw
   matrix[N, 2] beta_raw;                  // stretch parameter, split, raw
   ordered[2] theta_lr;                    // left and right pole
-  real theta_raw[J];                      // remaining stimuli
+  array[J] real theta_raw;                      // remaining stimuli
   real<lower = 0> sigma_alpha;            // sd of alpha
   real<lower = 0, upper = 2> sigma_beta;  // sd of log(beta)
   real<lower = 0> tau;                    // sd of errors
   vector<lower = 0, upper = 1>[N] lambda; // mixing proportion, flipping
   real<lower = .5, upper = 1> psi;        // mean of prior on lambda
   real<lower = 2, upper = 100> delta;     // concentration of prior on lambda
-  real<lower = 0, upper = 1> gamma[N];    // rationalization per respondent
+  array[N] real<lower = 0, upper = 1> gamma;    // rationalization per respondent
   real<lower = 1> gam_a;                  // hyperparameter for gamma
   real<lower = 1> gam_b;                  // hyperparameter for gamma
   vector<lower = 0, upper = 1>[2 * B + 1] zeta; // direction of rationalization
@@ -46,7 +46,7 @@ transformed parameters {
   vector[4] log_probs;
   real<lower=0> alpha_lambda = delta * psi; // reparameterization
   real<lower=0> beta_lambda = delta * (1 - psi);
-  real theta[J];                          // latent stimuli position
+  array[J] real theta;                          // latent stimuli position
   matrix[N, 2] alpha0;                    // shift parameter, split
   matrix[N, 2] beta0;                     // stretch parameter, split
   matrix[N, 2] chi0;                      // latent respondent positions, split
