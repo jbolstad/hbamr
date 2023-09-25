@@ -27,8 +27,8 @@ Imports:
     pbmcapply,
     plyr,
     RColorBrewer,
-    Rcpp (>= 0.12.0),
-    RcppParallel (>= 5.0.1),
+    Rcpp (>= 1.0.7),
+    RcppParallel (>= 5.1.4),
     rlang, 
     rstan (>= 2.26.1),
     rstantools (>= 2.2.0),
@@ -40,11 +40,11 @@ Suggests:
     rmarkdown
 LinkingTo: 
     BH (>= 1.66.0),
-    Rcpp (>= 0.12.0),
-    RcppEigen (>= 0.3.3.3.0),
-    RcppParallel (>= 5.0.1),
-    rstan (>= 2.18.1),
-    StanHeaders (>= 2.18.0)
+    Rcpp (>= 1.0.7),
+    RcppEigen (>= 0.3.3.9.1),
+    RcppParallel (>= 5.1.4),
+    rstan (>= 2.26.1),
+    StanHeaders (>= 2.26.22)
 Biarch: true
 Encoding: UTF-8
 LazyData: true
