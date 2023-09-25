@@ -1,6 +1,6 @@
 Package: hbamr
 Title: Hierarchical Bayesian Aldrich-McKelvey Scaling via 'Stan'
-Version: 1.1.7
+Version: 1.2.0
 Authors@R: 
     person("Jørgen", "Bølstad", , "jorgen.bolstad@stv.uio.no", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7623-5741"))
@@ -30,7 +30,7 @@ Imports:
     Rcpp (>= 0.12.0),
     RcppParallel (>= 5.0.1),
     rlang, 
-    rstan (>= 2.18.1),
+    rstan (>= 2.26.1),
     rstantools (>= 2.2.0),
     stats,
     tidyr
