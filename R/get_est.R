@@ -16,7 +16,7 @@ get_est <- function (object, par = "theta", probs = c(0.025, 0.50, 0.975), simpl
     if (simplify == TRUE) { out <- out[, -c(2, 3)] }
   } else {
     if (inherits(object, "list")) {
-      out <- dplyr::as_tibble(object$par[grepl( paste0(par, "[") , names(object$par), fixed = TRUE)])
+      out <- dplyr::as_tibble(object$par[startsWith( names(object$par), paste0(par, "[") )])
       names(out) <- par
     }
   }
