@@ -2,14 +2,16 @@
 % Please edit documentation in R/fbam.R
 \name{fbam}
 \alias{fbam}
-\title{Fit the FBAM_MINI model using optimization}
+\title{Fit an FBAM model using optimization}
 \usage{
 fbam(
   self = NULL,
   stimuli = NULL,
+  model = "FBAM_MINI",
   allow_miss = 2,
   req_valid = NA,
   req_unique = 2,
+  group_id = NULL,
   prep_data = TRUE,
   data = NULL,
   seed = sample.int(.Machine$integer.max, 1),
@@ -21,11 +23,15 @@ fbam(
 
 \item{stimuli}{An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the \code{prep_data} function.}
 
+\item{model}{Character: Name of the model to be used. Defaults to FBAM_MINI. The options are the three models with "FBAM" in the name. See the documentation for the \code{hbam()} function for descriptions of the models.}
+
 \item{allow_miss}{Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the \code{prep_data} function. Defaults to 2.}
 
 \item{req_valid}{Integer specifying how many valid observations to require for a respondent to be included in the analysis. The default is \code{req_valid = J - allow_miss}, but if specified, \code{req_valid} takes precedence. This argument will not be used if the data have been prepared in advance via the \code{prep_data} function.}
 
 \item{req_unique}{Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is \code{req_unique = 2}. This argument will not be used if the data have been prepared in advance via the \code{prep_data} function.}
+
+\item{group_id}{Integer vector of length N identifying which group each respondent belongs to. The supplied vector should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with "MULTI" in their name and will be ignored when fitting other models.}
 
 \item{prep_data}{Logical: Should the data be prepared before fitting the model? (Or have the data been prepared in advance via the \code{prep_data} function? If so, set \code{prep_data = FALSE}.)}
 

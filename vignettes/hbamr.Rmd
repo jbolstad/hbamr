@@ -20,12 +20,11 @@ library("dplyr")
 <!-- avoid border around images -->
 <style> img { border: 0; } </style>
 ```
-The goal of the **hbamr** package is to enable users to efficiently perform Hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling in R. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using ideological survey data [@aldrich:1977]. The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for all respondent positions and in terms of recovering true respondent positions in simulations. The default model is described in an [open access article](https://doi.org/10.1017/pan.2023.18) [@boelstad:2023]. 
+The goal of the **hbamr** package is to enable users to efficiently perform Hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling in R. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using ideological survey data [@aldrich:1977]. The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for all respondent positions and in terms of recovering true respondent positions in simulations. The default model is described in an [open access article](https://doi.org/10.1017/pan.2023.18) [@boelstad:2023].
 
-The package mainly fits models via the NUTS algorithm in **rstan** -- a Markov chain Monte Carlo (MCMC) algorithm. However, it also offers a simplified model that can be fit using optimization to analyze large data sets quickly. 
+The package mainly fits models via the NUTS algorithm in **rstan** -- a Markov chain Monte Carlo (MCMC) algorithm. However, it also offers a simplified model that can be fit using optimization to analyze large data sets quickly.
 
-This vignette provides an overview of how to use the key functions in the **hbamr** package. The vignette walks through an applied example, showing how to prepare data, fit models, extract estimates, plot key results, and perform cross-validation. 
-
+This vignette provides an overview of how to use the key functions in the **hbamr** package. The vignette walks through an applied example, showing how to prepare data, fit models, extract estimates, plot key results, and perform cross-validation.
 
 ## Example Data
 
@@ -69,29 +68,68 @@ Users who want to keep other covariates for subsequent analysis, may find it use
 
 ## Models
 
-The package provides several alternative models, which can be selected using the names below. Users who are unsure which model to use are advised to use the default HBAM model. If speed or sampling diagnostics are an issue, the HBAM_MINI model may provide a useful alternative.
+This package provides several alternative models, which can be selected using the names below. Users who are unsure which model to use are advised to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI or FBAM_MINI may provide useful alternatives.
 
 **HBAM** is the default model, which allows for scale flipping and employs hierarchical priors on all individual level parameters. It also models heteroskedastic errors that vary by both individual and stimuli.
-
-**HBAM_2** uses different hyperpriors for the shift parameters of respondents with different self-placements. In particular, the model estimates a separate mean hyperparameter for each self-placement. This model avoids shrinking the shift parameters toward a common population mean, and may therefore fit better than HBAM if there are clear differences in average shifting across the scale of self-placements. However, this model also tends to sample slower than the standard model.
 
 **HBAM_NE** models the self-placements as if they contain no error. The latent respondent positions are not treated as parameters, but rather calculated as function of the self-placements and other individual level parameters. The respondents positions are not given a prior, which means the model relies on the likelihood function and the prior on beta to yield meaningful results for these positions. By assuming no error in the self-placements, the model may underestimate the uncertainty in estimated respondents positions, while otherwise yielding very similar results to the standard HBAM model. In contrast to the standard model, the estimated respondent positions from this model will not exhibit any shrinkage, which for some purposes may be desirable, as the results may better represent the true distances between respondents and stimuli. This model also runs somewhat faster than the standard HBAM model.
 
 **HBAM_HM** assumes the prediction errors in the stimuli placements to be homoskedastic. This simplified model should normally produce very similar results to the HBAM model, and it runs somewhat faster.
 
-**HBAM_MINI** combines the characteristics of HBAM_NE and HBAM_HM: It models the self-placements as if they contain no error and assumes the prediction errors in the stimuli placements to be homoskedastic. This is the simplest model provided in this package that still retains all key features of the HBAM model. It is also the fastest HBAM variant in this package -- sampling two to three times faster than the standard HBAM model, while typically yielding very similar point estimates. For large data sets, this model may provide a reasonable compromise between model complexity and estimation speed.
+**HBAM_MINI** combines the characteristics of HBAM_NE and HBAM_HM: It models the self-placements as if they contain no error and assumes the prediction errors in the stimuli placements to be homoskedastic. This model tends to sample two to three times faster than the standard HBAM model while yielding very similar point estimates. For large datasets, this model may provide a reasonable compromise between model complexity and estimation speed.
 
-**HBAM_0** does not allow for scale flipping. This may be useful if there are truly zero cases of scale flipping in the data. Such scenarios can be created artificially, but may also arise in real data. For example, expert surveys appear unlikely to contain many instances of scale flipping.
+**HBAM_MULTI** is a version of the HBAM_MINI model that models differences between groups defined by the user. It requires an integer vector identifying the groups to be supplied as the argument `group_id`. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called `mu_alpha` and `mu_beta` and are constructed to have means of 0. One potential use for this model is to supply self-placements (appropriately transformed) as `group_id`, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
 
-**HBAM_R** incorporates the rationalization component of the ISR model by @boelstad:2020. This model requires additional data to be supplied to the `prep_data()` function: An $N \times J$ matrix of stimuli ratings from the respondents, supplied as the argument `pref`. The rationalization part of the model is simplified relative to the original ISR model: The direction in which respondents move disfavored stimuli is estimated as a common expectation for each possible self-placement on the scale.
+**HBAM_0** does not allow for scale flipping, but retains the other features of the HBAM model. This may be useful if there are truly zero cases of scale flipping in the data. Such scenarios can be created artificially, but may also arise in real data. For example, expert surveys appear unlikely to contain many instances of scale flipping. For data that contain zero cases of flipping, models that allow for flipping contain superfluous parameters that undermine efficient sampling. Models that do not allow for flipping will sample faster and typically yield slightly more accurate estimates (getting closer to the true parameter values in Monte Carlo simulations). This model (or any other that does not allow for scale flipping) is therefore preferable when no flipping is present.
+
+**HBAM_MULTI_0** is a version of the HBAM_NE model that does not allow for scale flipping, but shares the group-modeling features of the HBAM_MULTI model. If differs from HBAM_MULTI by modeling heteroskedastic prediction errors and not allowing for scale flipping.
+
+**FBAM_MINI** is a version of the HBAM_MINI model with fixed hyperparameters to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. The hyperparameters have been set to realistic and weakly informative values based on analyses of ANES data. As with the other models, the scale-dependent priors are automatically adjusted to the length of the survey scale. While this model allows for fitting via optimization, it can also be fit via MCMC using the `hbam()` function. This model (and the other FBAM models) therefore also provides a fast and robust alternative for fitting large or otherwise difficult datasets via MCMC.
+
+**FBAM_MULTI** is a version of the FBAM_MINI model that shares the group-modeling features of the HBAM_MULTI model.
+
+**FBAM_MULTI_0** is a version of the FBAM_MULTI model that does not allow for scale flipping.
+
+**HBAM_R** incorporates the rationalization component of the ISR model by @boelstad:2020. This model requires additional data to be supplied as the argument `pref`: An N × J matrix of stimuli ratings from the respondents. The rationalization part of the model is simplified relative to the original ISR model: The direction in which respondents move disfavored stimuli is estimated as a common expectation for each possible self-placement on the scale.
 
 **HBAM_R_MINI** combines the features of the HBAM_R model with the light-weight features of the HBAM_MINI model to achieve faster sampling compared to HBAM_R.
 
-**FBAM_MINI** is a version of the HBAM_MINI model with fixed hyperparameters to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. The hyperparameters have been set to realistic values based on analyses of ANES data. As with the other models, scale-dependent priors are automatically adjusted to the length of the survey scale. 
+**BAM** is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by @hare:2015. This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions [@boelstad:2023].
 
-**BAM** is an unpooled model, similar to the JAGS version introduced by @hare:2015. This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions [@boelstad:2023].
+Some of these models can also be used in situations where self-placements are not available and the only goal is to estimate stimulus positions. This can be achieved by supplying a vector of zeros (or random data) instead of real self-placements: `self = rep(0, nrow(stimuli))`. It is then advisable to choose a model that does not treat the respondent positions as latent parameters to avoid estimating superfluous parameters. Note also that other models will not sample properly if there is zero variance in the supplied self-placement data.
 
-Some of these models can also be used in situations where self-placements are not available and the only goal is to estimate stimulus positions. This can be achieved by supplying a vector of zeros (or random data) instead of real self-placements: `self = rep(0, nrow(stimuli))`. The HBAM_NE and HBAM_MINI models are then the relevant alternatives, as the other HBAM variants will include superfluous parameters (and will not sample properly with zero variance in the supplied self-placement data).
+To see the Stan code for any of the models, use the `show_code()` function:
+
+```{r, eval = FALSE}
+show_code("HBAM_MULTI")
+```
+
+The two tables below summarize the key features of the different models.
+
+|                               | HBAM<br>  | HBAM<br>NE | HBAM<br>HM | HBAM<br>MINI | HBAM<br>MULTI | HBAM<br>0 | HBAM<br>MULTI_0 |
+|----------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Hierarchical priors           |     X     |     X      |     X      |      X       |       X       |     X     |        X        |
+| Scale flipping                |     X     |     X      |     X      |      X       |       X       |           |                 |
+| Group-differences             |           |            |            |              |       X       |           |        X        |
+| Respondent pos. as parameters |     X     |            |     X      |              |               |     X     |                 |
+| Heteroskedastic errors        |     X     |     X      |            |              |               |     X     |        X        |
+| Faster/safer sampling         |           |            |            |      X       |               |     X     |        X        |
+
+: Summary of model characteristics, part I
+
+|                                      | FBAM<br>MINI | FBAM<br>MULTI | FBAM<br>MULTI_0 | HBAM<br>R | HBAM<br>R_MINI | BAM<br>  |
+|------------------------------|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
+| Hierarchical priors                  |              |               |                 |     X     |       X        |          |
+| Weakly inf., non-hierarchical priors |      X       |       X       |        X        |           |                |          |
+| Scale flipping                       |      X       |       X       |                 |     X     |       X        |    X     |
+| Group-differences                    |              |       X       |        X        |           |                |          |
+| Respondent pos. as parameters        |              |               |                 |     X     |                |          |
+| Heteroskedastic errors               |              |               |                 |     X     |                |    X     |
+| Preference-based rationalization     |              |               |                 |     X     |       X        |          |
+| Faster/safer sampling                |      X       |       X       |        X        |           |                |          |
+| Fitting via optimization (optional)  |      X       |       X       |        X        |           |                |          |
+
+: Summary of model characteristics, part II
 
 ## Fitting
 
@@ -126,7 +164,7 @@ dat <- prep_data(self, stimuli, allow_miss = 0)
 
 ## Fitting via Optimization
 
-For very large data sets, optimization can be a useful and much faster alternative to MCMC. However, the optimization feature provided in this package only provides maximum a posteriori (MAP) point estimates. 
+For very large data sets, optimization can be a useful and much faster alternative to MCMC. However, the optimization feature provided in this package only provides maximum a posteriori (MAP) point estimates.
 
 The `fbam()` function fits the FBAM_MINI model using `rstan::optimizing()`. The `fbam()` function works just like the `hbam()` function, except the arguments for `rstan::sampling()` do not apply. To fit the FBAM_MINI model using default settings, we would run:
 
@@ -140,12 +178,12 @@ Models of the kind included in the **hbamr** package face an inevitable trade-of
 
 Users relying on MCMC should consider reducing the number of posterior draws. For most applications, 2000 draws per chain (setting `iter = 2000` with `thin = 1`) may be sufficient. This may result in warnings about low accuracy in the tails of some distributions, but whether higher accuracy is required will depend on the goal of the analysis and should be considered on a case-by-case basis.
 
-The table below shows execution times for a set of relevant scenarios (not counting post-processing). The `warmup` argument was left at 1000 in all of the tests using MCMC, except the one with 1000 iterations, where it was set to 500. 
+The table below shows execution times for a set of relevant scenarios (not counting post-processing). The `warmup` argument was left at 1000 in all of the tests using MCMC, except the one with 1000 iterations, where it was set to 500.
 
 |                      | HBAM <br>iter = 4000 | HBAM_MINI <br>iter = 4000 | HBAM_MINI <br>iter = 2000 | HBAM_MINI <br>iter = 1000 | FBAM_MINI <br>optimization |
-|------------------|:----------:|:----------:|:----------:|:----------:|:----------:|
+|-----------------|:----------:|:----------:|:----------:|:----------:|:----------:|
 | ANES 1980 (N = 643)  |         6.5m         |           3.5m            |            2m             |           1.5m            |             2s             |
-| ANES 2012 (N = 4949) |        3h 20m        |          1h 15m           |            45m            |            30m            |             15s             |
+| ANES 2012 (N = 4949) |        3h 20m        |          1h 15m           |            45m            |            30m            |            15s             |
 
 : Execution times on an Intel Core i7 3.2-4.6 GHz CPU
 
@@ -279,7 +317,7 @@ A useful way to compare alternative models is to estimate their out-of-sample pr
 
 The **rstan** and **loo** packages contain functions for estimating ELPDs by performing approximate leave-one-out (LOO) cross-validation using Pareto smoothed importance sampling (PSIS). However, PSIS-LOO only works when all Pareto *k* values are sufficiently low, or when the number of high values is so low that moment matching can be used on the problematic cases. In practice, this is not always the case, and it rarely seems to be the case with the BAM model.
 
-The **hbamr** package therefore includes model codes and functions to perform *K*-fold cross-validation. The function `hbam_cv()` is similar to `hbam()` and takes the same arguments, but will perform a *K*-fold cross-validation for the chosen model. In contrast to `hbam()`, the default for `hbam_cv()` is to not allow respondents to have any missing values (`allow_miss = 0`). The reason is that the cross-validation essentially creates missing values by excluding some data from each run.  
+The **hbamr** package therefore includes model codes and functions to perform *K*-fold cross-validation. The function `hbam_cv()` is similar to `hbam()` and takes the same arguments, but will perform a *K*-fold cross-validation for the chosen model. In contrast to `hbam()`, the default for `hbam_cv()` is to not allow respondents to have any missing values (`allow_miss = 0`). The reason is that the cross-validation essentially creates missing values by excluding some data from each run.
 
 A key choice when performing cross-validation is to set *K* (the number of folds to use), and the default in this package is 10. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously. To preserve memory, the function extracts the summaries of the log-likelihoods for the held-out data and drops the stanfit objects once this is done. The memory requirements of the function is therefore similar to running a single analysis with one chain per core. The function that splits the data into *K* folds uses a default seed to produce the same folds each time, unless a different seed is specified.
 
@@ -326,7 +364,6 @@ rbind(elpd_hbam_hm, elpd_hbam_mini)
 The estimated ELPDs are notably higher for these two models compared to their respective heteroskedastic counterparts. This suggest there is a considerable degree of heteroskedasticity in the data -- which is not surprising.
 
 Modeling the heteroskedasticity increases prediction accuracy, but it should be noted that this does not necessarily translate into much more accurate estimates of key model outputs. As shown in section on plotting, the results for the HBAM and HBAM_MINI models are very similar. In fact, their estimated respondent positions correlate at .97 and .99, depending on whether we use the posterior means or medians. Their estimated stimulus positions also correlate at .99, but this masks the fact that the HBAM_MINI model places the less well known candidate John B. Anderson further to the left than the HBAM model does. This illustrates that there are some subtle differences that users should be aware of, even if these models tend to produce very similar results.
-
 
 ## Limits to Exact Replication
 

@@ -11,7 +11,8 @@ prep_data(
   allow_miss = 2,
   req_valid = NA,
   req_unique = 2,
-  B = NULL
+  B = NULL,
+  group_id = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ prep_data(
 \item{req_unique}{Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is \code{req_unique = 2}.}
 
 \item{B}{Integer specifying the upper bound of the survey scale after centering. If not supplied, this information will be inferred from the data.}
+
+\item{group_id}{Integer vector of length N identifying which group each respondent belongs to. The supplied id-variable should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with \code{"MULTI"} in their name and will be ignored when fitting other models.}
 }
 \value{
 A list of data to be used by \code{hbam}. The returned list includes the logical vector \code{keep}, which identifies the rows in the original data that have been kept for further analysis. The stimuli data are stored in a vector as a long-form sparse matrix. If the stimuli data include column-names, these will be preserved for later use.

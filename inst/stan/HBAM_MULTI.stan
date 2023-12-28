@@ -1,49 +1,42 @@
 data {
   int<lower = 1> N;                       // n of individuals
   int<lower = 1> J;                       // n of items
+  int<lower = 1> G;                       // n of groups
   int<lower = 1> N_obs;                   // n of observations
   array[N_obs] int<lower = 1> ii;         // index i in matrix
   array[N_obs] int<lower = 1> jj;         // index j in matrix
+  array[N] int<lower = 1> gg;             // group-index of i
   int<lower = 1> B;                       // length of scale -1 / 2
   int<lower = 1, upper = J> L;            // left pole
   int<lower = 1, upper = J> R;            // right pole
   array[N_obs] int<lower = -B, upper = B> Y; // reported stimuli positions
-  array[N] int<lower = -B, upper = B> V;  // reported self-placements
+  vector<lower = -B, upper = B>[N] V;     // reported self-placements
   int<lower=0, upper=1> CV;               // indicator of cross-validation
   array[N_obs] int<lower=0, upper=1> holdout; // holdout for cross-validation
 }
 
 transformed data {
-  real<lower = 0> sigma_chi_prior_rate = (5 - 1) / (B / 2.0);
   real<lower = 0> sigma_alpha_prior_rate = (2 - 1) / (B / 5.0);
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
-  array[N] int Vi;                        // self-placements as indexes
-  for (i in 1:N) {
-    if (V[i] < 0) {
-      Vi[i] = V[i] + B + 1;
-    } else { // the index for those at 0 will not be used
-        Vi[i] = V[i] + B;
-    }
-  }
+  real<lower = 0> sigma_mu_alpha = B / 5.0; // sd of mu_alpha
+  real sigma_mu_beta = .2;                // sd of mu_beta
+  real mean_mu_simplexes = 1.0 / G;       // for later scaling of simplexes
+  real sd_mu_simplexes = sqrt(mean_mu_simplexes * (1 - mean_mu_simplexes) / (50 * G + 1));
 }
 
 parameters {
   matrix[N, 2] alpha_raw;                 // shift parameter, split, raw
-  vector[B * 2] alpha_mean;               // means of priors on alphas
   matrix[N, 2] beta_raw;                  // stretch parameter, split, raw
   ordered[2] theta_lr;                    // left and right pole
   array[J] real theta_raw;                // remaining stimuli
+  simplex[G] mu_alpha_raw;                // group-level mean of alpha, raw
+  simplex[G] mu_beta_raw;                 // group-level mean of log(beta), raw
   real<lower = 0> sigma_alpha;            // sd of alpha
   real<lower = 0, upper = 2> sigma_beta;  // sd of log(beta)
-  real<lower = 0> sigma_chi;              // sd of chi0
-  real<lower = 3, upper = 30> nu;         // concentration of etas
-  real<lower = 0> tau;                    // scale of errors
-  vector<lower = 0>[N] eta;               // mean ind. error variance x J^2
-  simplex[J] rho;                         // stimuli-shares of variance
+  real<lower = 0> tau;                    // sd of errors
   vector<lower = 0, upper = 1>[N] lambda; // mixing proportion, flipping
   real<lower = .5, upper = 1> psi;        // mean of prior on lambda
   real<lower = 2, upper = 100> delta;     // concentration of prior on lambda
-  matrix[N, 2] chi0;                      // latent respondent positions, split
 }
 
 transformed parameters {
@@ -52,39 +45,27 @@ transformed parameters {
   array[J] real theta;                    // latent stimuli position
   matrix[N, 2] alpha0;                    // shift parameter, split
   matrix[N, 2] beta0;                     // stretch parameter, split
+  matrix[N, 2] chi0;                      // latent respondent positions, split
   vector[N_obs] log_lik;                  // pointwise log-likelihood for Y
-  vector[N] log_lik_V;                    // pointwise log-likelihood for V
-  real<lower = 0> eta_scale = tau * J;
-  real<lower=0> min_rho = min(rho);
+  vector[G] mu_alpha = ((mu_alpha_raw - mean_mu_simplexes) / sd_mu_simplexes) * sigma_mu_alpha;
+  vector[G] mu_beta = ((mu_beta_raw - mean_mu_simplexes) / sd_mu_simplexes) * sigma_mu_beta;
   theta = theta_raw;
   theta[L] = theta_lr[1];                 // safeguard to ensure identification
   theta[R] = theta_lr[2];
 
   for (i in 1:N) {
-    if (V[i] != 0) {
-      alpha0[i, 1] = alpha_raw[i, 1] * sigma_alpha + alpha_mean[Vi[i]]; // non-centered specifications
-      alpha0[i, 2] = alpha_raw[i, 2] * sigma_alpha + alpha_mean[Vi[i]];
-    } else {
-      alpha0[i, 1] = alpha_raw[i, 1] * sigma_alpha;
-      alpha0[i, 2] = alpha_raw[i, 2] * sigma_alpha;
-    }
+    alpha0[i, 1] = alpha_raw[i, 1] * sigma_alpha + mu_alpha[gg[i]]; // non-centered specifications
+    alpha0[i, 2] = alpha_raw[i, 2] * sigma_alpha + mu_alpha[gg[i]];
+    beta0[i, 1] = exp(beta_raw[i, 1] * sigma_beta + mu_beta[gg[i]]);
+    beta0[i, 2] = -exp(beta_raw[i, 2] * sigma_beta); // group-level mean not added for flipped state
   }
-  beta0[, 1] = exp(beta_raw[, 1] * sigma_beta);
-  beta0[, 2] = -exp(beta_raw[, 2] * sigma_beta);
+  chi0[, 1] = ((V - alpha0[, 1]) ./ beta0[, 1]);
+  chi0[, 2] = ((V - alpha0[, 2]) ./ beta0[, 2]);
 
   for (n in 1:N_obs) {
     log_lik[n] = log_mix( lambda[ii[n]],
-      normal_lpdf(Y[n] | alpha0[ii[n], 1] + beta0[ii[n], 1] * theta[jj[n]],
-        sqrt(eta[ii[n]]) * rho[jj[n]]),
-      normal_lpdf(Y[n] | alpha0[ii[n], 2] + beta0[ii[n], 2] * theta[jj[n]],
-        sqrt(eta[ii[n]]) * rho[jj[n]]) );
-  }
-  for (i in 1:N) {
-    log_lik_V[i] = log_mix( lambda[i],
-      normal_lpdf(V[i] | alpha0[i, 1] + beta0[i, 1] * chi0[i, 1],
-        sqrt(eta[i]) * min_rho),
-      normal_lpdf(V[i] | alpha0[i, 2] + beta0[i, 2] * chi0[i, 2],
-        sqrt(eta[i]) * min_rho) );
+      normal_lpdf(Y[n] | alpha0[ii[n], 1] + beta0[ii[n], 1] * theta[jj[n]], tau),
+      normal_lpdf(Y[n] | alpha0[ii[n], 2] + beta0[ii[n], 2] * theta[jj[n]], tau) );
   }
 }
 
@@ -94,22 +75,16 @@ model {
   alpha_raw[, 1] ~ normal(0, 1);
   alpha_raw[, 2] ~ normal(0, 1);
   sigma_alpha ~ gamma(2, sigma_alpha_prior_rate);
-  alpha_mean ~ normal(0, B / 2.0);
   beta_raw[, 1] ~ normal(0, 1);
   beta_raw[, 2] ~ normal(0, 1);
   sigma_beta ~ gamma(3, 10);
-  chi0[, 1] ~ normal(0, sigma_chi);
-  chi0[, 2] ~ normal(0, sigma_chi);
-  sigma_chi ~ gamma(5, sigma_chi_prior_rate);
-  eta ~ scaled_inv_chi_square(nu, eta_scale);
-  nu ~ gamma(25, 2.5);
+  mu_alpha_raw ~ dirichlet(rep_vector(50, G));
+  mu_beta_raw ~ dirichlet(rep_vector(50, G));
   tau ~ gamma(2, tau_prior_rate);
-  rho ~ dirichlet(rep_vector(5, J));
   lambda ~ beta(alpha_lambda, beta_lambda);
   psi ~ beta(8.5, 1.5);
   delta - 2 ~ gamma(2, .1);
 
-  target += sum(log_lik_V);
   if(CV == 0)
     target += sum(log_lik);
   else

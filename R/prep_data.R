@@ -10,6 +10,7 @@
 #' @param req_valid Integer specifying how many valid observations to require for a respondent to be included in the analysis. The default is `req_valid = J - allow_miss`, but if specified, `req_valid` takes precedence.
 #' @param req_unique Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is `req_unique = 2`.
 #' @param B Integer specifying the upper bound of the survey scale after centering. If not supplied, this information will be inferred from the data.
+#' @param group_id Integer vector of length N identifying which group each respondent belongs to. The supplied id-variable should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with `"MULTI"` in their name and will be ignored when fitting other models.
 #' @return A list of data to be used by `hbam`. The returned list includes the logical vector `keep`, which identifies the rows in the original data that have been kept for further analysis. The stimuli data are stored in a vector as a long-form sparse matrix. If the stimuli data include column-names, these will be preserved for later use.
 #' @examples
 #' # Loading and re-coding ANES 1980 data:
@@ -31,10 +32,14 @@
 prep_data <- function(self, stimuli,
                       prefs = NULL,
                       allow_miss = 2,
-                      req_valid = NA, req_unique = 2, B = NULL) {
+                      req_valid = NA, req_unique = 2, B = NULL, group_id = NULL) {
 
   #dimnames(stimuli) <- NULL
   #self <- as_numeric(self)
+
+  if(!is.null(group_id) && !complete_sequence_integers(group_id)) {
+    stop("Supplied group_id is not a complete sequence of integers.")
+  }
 
   # req_valid takes precedence over allow_miss they are not consistent:
   if (!is.na(req_valid)) { allow_miss <- ncol(stimuli) - req_valid }
@@ -75,6 +80,7 @@ prep_data <- function(self, stimuli,
 
   stimuli <- stimuli[keep, ]
   self <- self[keep]
+  if(!is.null(group_id)) { group_id <- group_id[keep] }
   mean_spos <- apply(stimuli, 2, mean, na.rm = T)
 
   # Coding Y as a long-form sparse matrix:
@@ -95,6 +101,27 @@ prep_data <- function(self, stimuli,
 
   return(list(J = ncol(stimuli), N = nrow(stimuli), B = B, N_obs = length(stimuli_vec),
               V = self, Y = stimuli_vec, U = prefs_vec, L = which.min(mean_spos), R = which.max(mean_spos),
-              ii = ii, jj = jj, mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
+              ii = ii, jj = jj, gg = group_id, G = length(unique(group_id)), mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
               CV = 0, holdout = rep(0, length(stimuli_vec))))
 }
+
+all_integers <- function(vec) {
+  all(is.numeric(vec) & !is.na(vec)) && all(vec == as.integer(vec))
+}
+
+complete_sequence_integers <- function(vec) {
+  unique_vals <- unique(vec)
+
+  if (!all_integers(vec)) {
+    return(FALSE)  # If not all integers, return FALSE
+  }
+
+  sorted_unique <- sort(unique_vals)
+  expected_sequence <- seq(min(sorted_unique), max(sorted_unique))
+
+  is_complete_sequence <- length(sorted_unique) == length(expected_sequence) &&
+    all(sorted_unique == expected_sequence)
+
+  is_complete_sequence
+}
+

@@ -5,13 +5,14 @@
 #' @export
 #' @param self A numerical vector of N ideological self-placements. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the `prep_data` function.
 #' @param stimuli An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the `prep_data` function.
-#' @param model Character: Name of the model to be used. Defaults to `"HBAM"`.
+#' @param model Character: Name of the model to be used. Defaults to HBAM.
 #' @param allow_miss Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the `prep_data` function. Defaults to 0.
 #' @param req_valid Integer specifying how many valid observations to require for a respondent to be included in the analysis. The default is `req_valid = J - allow_miss`, but if specified, `req_valid` takes precedence. This argument will not be used if the data have been prepared in advance via the `prep_data` function.
 #' @param req_unique Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is `req_unique = 2`. This argument will not be used if the data have been prepared in advance via the `prep_data` function.
 #' @param prep_data Logical: Should the data be prepared before fitting the model? (Or have the data been prepared in advance by first running the `prep_data` and `prep_data_cv` functions)? If so, set `prep_data = FALSE`.) Defaults to `prep_data = TRUE`.
 #' @param data A list of data produced by `prep_data` followed by `prep_data_cv`.
-#' @param prefs An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the `"HBAM_R"` and `"HBAM_R_MINI"` models and will be ignored when fitting other models.
+#' @param prefs An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the HBAM_R and HBAM_R_MINI models and will be ignored when fitting other models.
+#' @param group_id Integer vector of length N identifying which group each respondent belongs to. The supplied vector should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with "MULTI" in their name and will be ignored when fitting other models.
 #' @param K An integer above 2, specifying the number of folds to use in the analysis. Defaults to 10.
 #' @param chains A positive integer specifying the number of Markov chains to use for each model fit. Defaults to 2.
 #' @param cores The number of cores to use when executing the Markov chains in parallel. Defaults to `parallel::detectCores(logical = FALSE)`. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously to save time.
@@ -39,7 +40,7 @@
 
 hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                     allow_miss = 0, req_valid = NA, req_unique = 2,
-                    prefs = NULL, prep_data = TRUE, data = NULL, K = 10,
+                    prefs = NULL, group_id = NULL, prep_data = TRUE, data = NULL, K = 10,
                     chains = 2, cores = parallel::detectCores(logical = FALSE),
                     warmup = 1000, iter = 4000,
                     thin = 1,
@@ -51,7 +52,7 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
   }
 
   if (prep_data == TRUE) {
-    dat <- hbamr::prep_data(self = self, stimuli = stimuli, prefs = prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique)
+    dat <- hbamr::prep_data(self = self, stimuli = stimuli, prefs = prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id)
     dat_l <- hbamr::prep_data_cv(data = dat, K = K, seed = seed)
   } else {
     dat_l <- data

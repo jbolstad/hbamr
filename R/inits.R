@@ -8,15 +8,16 @@ inits_HBAM <- function(chain_id = 1, dat) {
     alpha_raw = matrix(rnorm(2 * dat$N, 0, .5), ncol = 2),
     sigma_beta = runif(1, .1, .2),
     beta_raw = matrix(rnorm(dat$N * 2, 0, .2), ncol = 2),
-    delta = runif(1, 2.1, 2.5),
+    delta = runif(1, 2.05, 2.1),
     lambda = runif(dat$N, .7, .95),
     psi = runif(1, .875, .925),
     nu = 3 + rinvchisq(1, 100, 7),
     tau = rinvchisq(1, 500, (dat$B / 3)),
     eta = rinvchisq(dat$N, 100, dat$J^2 * (dat$B / 3)^2),
     rho = c(rdirichlet(1, rep(50, dat$J))),
-    # For HBAM_2:
-    mu_alpha_raw = rnorm(2 * dat$B, 0, 0.1),
+    # For HBAM_MULTI:
+    mu_alpha_raw = rdirichlet(1, rep(500, dat$G)),
+    mu_beta_raw = rdirichlet(1, rep(500, dat$G)),
     # For HBAM_R:
     gammma = runif(dat$N, 0, .3),
     gam_a = runif(1, 2, 3),
@@ -38,7 +39,10 @@ inits_HBAM_0 <- function(chain_id = 1, dat) {
     nu = 3 + rinvchisq(1, 100, 7),
     tau = rinvchisq(1, 500, (dat$B / 3)),
     eta = rinvchisq(dat$N, 100, dat$J^2 * (dat$B / 3)^2),
-    rho = c(rdirichlet(1, rep(50, dat$J)))
+    rho = c(rdirichlet(1, rep(50, dat$J))),
+    # For HBAM_MULTI:
+    mu_alpha_raw = rdirichlet(1, rep(500, dat$G)),
+    mu_beta_raw = rdirichlet(1, rep(500, dat$G))
   )
 }
 
@@ -61,10 +65,14 @@ inits <- list(
   HBAM_NE = inits_HBAM,
   HBAM_HM = inits_HBAM,
   HBAM_MINI = inits_HBAM,
+  HBAM_MULTI = inits_HBAM,
   HBAM_R = inits_HBAM,
   HBAM_R_MINI = inits_HBAM,
   FBAM_MINI = inits_HBAM,
+  FBAM_MULTI = inits_HBAM,
   HBAM_0 = inits_HBAM_0,
+  HBAM_MULTI_0 = inits_HBAM_0,
+  FBAM_MULTI_0 = inits_HBAM_0,
   BAM = inits_BAM)
 
 rinvchisq <- function(n, df, scale = 1/df) {
