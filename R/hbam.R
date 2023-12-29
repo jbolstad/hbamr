@@ -13,6 +13,8 @@
 #' @param data List of data that have been prepared in advance via the `prep_data` function. Only applicable when `prep_data = TRUE`.
 #' @param prefs An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the HBAM_R and HBAM_R_MINI models and will be ignored when fitting other models.
 #' @param group_id Integer vector of length N identifying which group each respondent belongs to. The supplied vector should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with "MULTI" in their name and will be ignored when fitting other models.
+#' @param pars A vector of character strings specifying parameters of interest. If `include = TRUE`, only samples for parameters named in pars are stored in the fitted results. Conversely, if `include = FALSE`, samples for all parameters except those named in pars are stored in the fitted results. The default is "`kappa`" in combination with `include = FALSE`, indicating all parameters in the model except kappa (as kappa can be constant and thus yield NA for Rhat).
+#' @param include Logical scalar defaulting to `FALSE` indicating whether to include or exclude the parameters given by the pars argument. If `FALSE`, only entire multidimensional parameters can be excluded, rather than particular elements of them.
 #' @param chains A positive integer specifying the number of Markov chains. Defaults to 4.
 #' @param cores The number of cores to use when executing the Markov chains in parallel. By default, all detected physical cores will be used if `chains` is equal to or higher than the number of cores.
 #' @param warmup A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than `iter`.
@@ -92,6 +94,7 @@
 
 hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, req_valid = NA,
                  req_unique = 2, prefs = NULL, group_id = NULL, prep_data = TRUE, data = NULL,
+                 pars = "kappa", include = FALSE,
                  chains = 4, cores = parallel::detectCores(logical = FALSE),
                  warmup = 1000, iter = 2000, thin = 1,
                  seed = sample.int(.Machine$integer.max, 1), ...) {
@@ -100,6 +103,6 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
   set.seed(seed)
   init_ll <- lapply(1:chains, function(id) inits[[model]](id, dat))
   out <- rstan::sampling(stanmodels[[model]], data = dat, init = init_ll,
-                         chains = chains, cores = cores, warmup = warmup, iter = iter, thin = thin, control = control, seed = seed, ...)
+                         chains = chains, cores = cores, warmup = warmup, iter = iter, thin = thin, control = control, seed = seed, pars = pars, include = include, ...)
   return(out)
 }
