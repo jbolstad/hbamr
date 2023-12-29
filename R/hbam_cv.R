@@ -42,9 +42,8 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                     allow_miss = 0, req_valid = NA, req_unique = 2,
                     prefs = NULL, group_id = NULL, prep_data = TRUE, data = NULL, K = 10,
                     chains = 2, cores = parallel::detectCores(logical = FALSE),
-                    warmup = 1000, iter = 4000,
-                    thin = 1,
-                    control = list(adapt_delta = .6), seed = 1){
+                    warmup = 1000, iter = 3000,
+                    thin = 1, seed = 1){
 
   logColMeansExp <- function(x) {
     S <- nrow(x)

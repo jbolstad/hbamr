@@ -74,12 +74,12 @@
 #'
 #' # Fitting the HBAM_MINI model, obtaining 1000 draws:
 #' fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI",
-#'                  warmup = 500, iter = 1000, chains = 2, thin = 1)
+#'                  warmup = 500, iter = 1000, chains = 2)
 #'
 #' # Preparing the data before fitting, requiring complete responses:
 #' dat <- prep_data(self, stimuli, allow_miss = 0)
 #' fit_hbam_mini <- hbam(data = dat, prep_data = FALSE, model = "HBAM_MINI",
-#'                  warmup = 500, iter = 1000, chains = 2, thin = 1)
+#'                  warmup = 500, iter = 1000, chains = 2)
 #'
 #' # Obtaining posterior summaries for the latent stimulus positions:
 #' theta_est <- get_est(fit_hbam_mini, par = "theta")
@@ -87,13 +87,13 @@
 #' # Fitting the FBAM_MULTI_NF model with self-placements as group_id:
 #'   # Note: This works because the self-placements in this case are positive integers.
 #' fit_fbam_multi_NF <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF",
-#'                     warmup = 500, iter = 1000, chains = 2, thin = 1)
+#'                     warmup = 500, iter = 1000, chains = 2)
 #' }
 
 hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, req_valid = NA,
                  req_unique = 2, prefs = NULL, group_id = NULL, prep_data = TRUE, data = NULL,
                  chains = 4, cores = parallel::detectCores(logical = FALSE),
-                 warmup = 1000, iter = 4000, thin = 3, control = list(adapt_delta = .6),
+                 warmup = 1000, iter = 2000, thin = 1,
                  seed = sample.int(.Machine$integer.max, 1), ...) {
   if (prep_data == TRUE) { dat <- hbamr::prep_data(self, stimuli, prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id) } else { dat <- data }
   if (grepl("MULTI", model) & is.null(dat$gg)) { stop("No group_id supplied for MULTI-type model.") }
