@@ -26,7 +26,7 @@ inits_HBAM <- function(chain_id = 1, dat) {
   )
 }
 
-inits_HBAM_0 <- function(chain_id = 1, dat) {
+inits_HBAM_NF <- function(chain_id = 1, dat) {
   list (
     theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
     theta_lr = dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B / 10, 0), runif(1, 0, dat$B / 10)),
@@ -70,9 +70,9 @@ inits <- list(
   HBAM_R_MINI = inits_HBAM,
   FBAM_MINI = inits_HBAM,
   FBAM_MULTI = inits_HBAM,
-  HBAM_0 = inits_HBAM_0,
-  HBAM_MULTI_0 = inits_HBAM_0,
-  FBAM_MULTI_0 = inits_HBAM_0,
+  HBAM_NF = inits_HBAM_NF,
+  HBAM_MULTI_NF = inits_HBAM_NF,
+  FBAM_MULTI_NF = inits_HBAM_NF,
   BAM = inits_BAM)
 
 rinvchisq <- function(n, df, scale = 1/df) {

@@ -34,7 +34,7 @@
 fbam <- function(self = NULL, stimuli = NULL, model = "FBAM_MINI", allow_miss = 2, req_valid = NA,
                  req_unique = 2, group_id = NULL, prep_data = TRUE, data = NULL,
                  seed = sample.int(.Machine$integer.max, 1), ...) {
-  if (!model %in% c("FBAM_MINI", "FBAM_MULTI", "FBAM_MULTI_0")) {
+  if (!model %in% c("FBAM_MINI", "FBAM_MULTI", "FBAM_MULTI_NF")) {
     stop(paste(model, "is not a valid model choice for optimization."))
   }
   if (prep_data == TRUE) { dat <- hbamr::prep_data(self, stimuli, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id) } else { dat <- data }

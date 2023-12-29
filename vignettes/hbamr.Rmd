@@ -74,21 +74,19 @@ This package provides several alternative models, which can be selected using th
 
 **HBAM_NE** models the self-placements as if they contain no error. The latent respondent positions are not treated as parameters, but rather calculated as function of the self-placements and other individual level parameters. The respondents positions are not given a prior, which means the model relies on the likelihood function and the prior on beta to yield meaningful results for these positions. By assuming no error in the self-placements, the model may underestimate the uncertainty in estimated respondents positions, while otherwise yielding very similar results to the standard HBAM model. In contrast to the standard model, the estimated respondent positions from this model will not exhibit any shrinkage, which for some purposes may be desirable, as the results may better represent the true distances between respondents and stimuli. This model also runs somewhat faster than the standard HBAM model.
 
-**HBAM_HM** assumes the prediction errors in the stimuli placements to be homoskedastic. This simplified model should normally produce very similar results to the HBAM model, and it runs somewhat faster.
-
-**HBAM_MINI** combines the characteristics of HBAM_NE and HBAM_HM: It models the self-placements as if they contain no error and assumes the prediction errors in the stimuli placements to be homoskedastic. This model tends to sample two to three times faster than the standard HBAM model while yielding very similar point estimates. For large datasets, this model may provide a reasonable compromise between model complexity and estimation speed.
+**HBAM_MINI** models the self-placements as if they contain no error (like HBAM_NE) and additionally assumes the prediction errors in the stimuli placements to be homoskedastic. This model tends to sample two to three times faster than the standard HBAM model while yielding very similar point estimates. For large datasets, this model may provide a reasonable compromise between model complexity and estimation speed.
 
 **HBAM_MULTI** is a version of the HBAM_MINI model that models differences between groups defined by the user. It requires an integer vector identifying the groups to be supplied as the argument `group_id`. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called `mu_alpha` and `mu_beta` and are constructed to have means of 0. One potential use for this model is to supply self-placements (appropriately transformed) as `group_id`, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
 
-**HBAM_0** does not allow for scale flipping, but retains the other features of the HBAM model. This may be useful if there are truly zero cases of scale flipping in the data. Such scenarios can be created artificially, but may also arise in real data. For example, expert surveys appear unlikely to contain many instances of scale flipping. For data that contain zero cases of flipping, models that allow for flipping contain superfluous parameters that undermine efficient sampling. Models that do not allow for flipping will sample faster and typically yield slightly more accurate estimates (getting closer to the true parameter values in Monte Carlo simulations). This model (or any other that does not allow for scale flipping) is therefore preferable when no flipping is present.
+**HBAM_NF** does not allow for scale flipping, but retains the other features of the HBAM model. This may be useful if there are truly zero cases of scale flipping in the data. Such scenarios can be created artificially, but may also arise in real data. For example, expert surveys appear unlikely to contain many instances of scale flipping. For data that contain zero cases of flipping, models that allow for flipping contain superfluous parameters that undermine efficient sampling. Models that do not allow for flipping will sample faster and typically yield slightly more accurate estimates (getting closer to the true parameter values in Monte Carlo simulations). This model (or any other that does not allow for scale flipping) is therefore preferable when no flipping is present.
 
-**HBAM_MULTI_0** is a version of the HBAM_NE model that does not allow for scale flipping, but shares the group-modeling features of the HBAM_MULTI model. If differs from HBAM_MULTI by modeling heteroskedastic prediction errors and not allowing for scale flipping.
+**HBAM_MULTI_NF** is a version of the HBAM_NE model that does not allow for scale flipping, but shares the group-modeling features of the HBAM_MULTI model. If differs from HBAM_MULTI by modeling heteroskedastic prediction errors and not allowing for scale flipping.
 
 **FBAM_MINI** is a version of the HBAM_MINI model with fixed hyperparameters to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. The hyperparameters have been set to realistic and weakly informative values based on analyses of ANES data. As with the other models, the scale-dependent priors are automatically adjusted to the length of the survey scale. While this model allows for fitting via optimization, it can also be fit via MCMC using the `hbam()` function. This model (and the other FBAM models) therefore also provides a fast and robust alternative for fitting large or otherwise difficult datasets via MCMC.
 
 **FBAM_MULTI** is a version of the FBAM_MINI model that shares the group-modeling features of the HBAM_MULTI model.
 
-**FBAM_MULTI_0** is a version of the FBAM_MULTI model that does not allow for scale flipping.
+**FBAM_MULTI_NF** is a version of the FBAM_MULTI model that does not allow for scale flipping.
 
 **HBAM_R** incorporates the rationalization component of the ISR model by @boelstad:2020. This model requires additional data to be supplied as the argument `pref`: An N × J matrix of stimuli ratings from the respondents. The rationalization part of the model is simplified relative to the original ISR model: The direction in which respondents move disfavored stimuli is estimated as a common expectation for each possible self-placement on the scale.
 
@@ -106,28 +104,28 @@ show_code("HBAM_MULTI")
 
 The two tables below summarize the key features of the different models.
 
-|                               | HBAM<br>  | HBAM<br>NE | HBAM<br>HM | HBAM<br>MINI | HBAM<br>MULTI | HBAM<br>0 | HBAM<br>MULTI_0 |
-|----------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-| Hierarchical priors           |     X     |     X      |     X      |      X       |       X       |     X     |        X        |
-| Scale flipping                |     X     |     X      |     X      |      X       |       X       |           |                 |
-| Group-differences             |           |            |            |              |       X       |           |        X        |
-| Respondent pos. as parameters |     X     |            |     X      |              |               |     X     |                 |
-| Heteroskedastic errors        |     X     |     X      |            |              |               |     X     |        X        |
-| Faster/safer sampling         |           |            |            |      X       |               |     X     |        X        |
+|                               | HBAM<br>  | HBAM<br>NE | HBAM<br>MINI | HBAM<br>MULTI | HBAM<br>NF | HBAM<br>MULTI_NF |
+|-----------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Hierarchical priors           |     X     |     X      |      X       |       X       |     X      |        X         |
+| Scale flipping                |     X     |     X      |      X       |       X       |            |                  |
+| Group-differences             |           |            |              |       X       |            |        X         |
+| Respondent pos. as parameters |     X     |            |              |               |     X      |                  |
+| Heteroskedastic errors        |     X     |     X      |              |               |     X      |        X         |
+| Faster/safer sampling         |           |            |      X       |               |     X      |        X         |
 
 : Summary of model characteristics, part I
 
-|                                      | FBAM<br>MINI | FBAM<br>MULTI | FBAM<br>MULTI_0 | HBAM<br>R | HBAM<br>R_MINI | BAM<br>  |
+|                                      | FBAM<br>MINI | FBAM<br>MULTI | FBAM<br>MULTI_NF | HBAM<br>R | HBAM<br>R_MINI | BAM<br>  |
 |------------------------------|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
-| Hierarchical priors                  |              |               |                 |     X     |       X        |          |
-| Weakly inf., non-hierarchical priors |      X       |       X       |        X        |           |                |          |
-| Scale flipping                       |      X       |       X       |                 |     X     |       X        |    X     |
-| Group-differences                    |              |       X       |        X        |           |                |          |
-| Respondent pos. as parameters        |              |               |                 |     X     |                |          |
-| Heteroskedastic errors               |              |               |                 |     X     |                |    X     |
-| Preference-based rationalization     |              |               |                 |     X     |       X        |          |
-| Faster/safer sampling                |      X       |       X       |        X        |           |                |          |
-| Fitting via optimization (optional)  |      X       |       X       |        X        |           |                |          |
+| Hierarchical priors                  |              |               |                  |     X     |       X        |          |
+| Weakly inf., non-hierarchical priors |      X       |       X       |        X         |           |                |          |
+| Scale flipping                       |      X       |       X       |                  |     X     |       X        |    X     |
+| Group-differences                    |              |       X       |        X         |           |                |          |
+| Respondent pos. as parameters        |              |               |                  |     X     |                |          |
+| Heteroskedastic errors               |              |               |                  |     X     |                |    X     |
+| Preference-based rationalization     |              |               |                  |     X     |       X        |          |
+| Faster/safer sampling                |      X       |       X       |        X         |           |                |          |
+| Fitting via optimization (optional)  |      X       |       X       |        X         |           |                |          |
 
 : Summary of model characteristics, part II
 
@@ -329,39 +327,37 @@ load("elpds.rda")
 
 ```{r run_cv_new, eval = FALSE}
 elpd_hbam <- hbam_cv(self, stimuli, model = "HBAM")
-elpd_hbam_2 <- hbam_cv(self, stimuli, model = "HBAM_2")
-elpd_hbam_NE <- hbam_cv(self, stimuli, model = "HBAM_NE")
-elpd_hbam_0 <- hbam_cv(self, stimuli, model = "HBAM_0")
+elpd_hbam_ne <- hbam_cv(self, stimuli, model = "HBAM_NE")
+elpd_hbam_nf <- hbam_cv(self, stimuli, model = "HBAM_NF")
 elpd_bam <- hbam_cv(self, stimuli, model = "BAM")
 ```
 
 Rather than returning stanfit objects, the function returns a data frame containing the estimated ELPD and its standard error. To compare results across models, we could run:
 
 ```{r elpd_ill, eval = FALSE, include = TRUE}
-elpds <- rbind(elpd_bam, elpd_hbam, elpd_hbam0, elpd_hbam_ne, elpd_hbam_2)
+elpds <- rbind(elpd_bam, elpd_hbam, elpd_hbam_nf, elpd_hbam_ne)
 elpds[order(elpds$ELPD), ]
 ```
 
 ```{r, echo = FALSE, include = TRUE}
-elpds <- rbind(elpd_bam, elpd_hbam, elpd_hbam0, elpd_hbam_ne, elpd_hbam_2)
+elpds <- rbind(elpd_bam, elpd_hbam, elpd_hbam_nf, elpd_hbam_ne)
 elpds[order(elpds$ELPD), ]
 ```
 
-We see that the unpooled BAM model is worse at predicting out-of-sample data than the other models, suggesting it overfits the data. The HBAM_0 model -- which does not allow for scale flipping -- also performs worse, suggesting it is too restrictive and underfits. The other three models perform equally well, as the differences are too small to be interpreted substantively. Their equal performance is not very surprising, as the models are very similar, but it should be noted that HBAM_2 might perform better or worse than the other models on a different data set.
+We see that the unpooled BAM model is worse at predicting out-of-sample data than the other models, suggesting it overfits the data. The HBAM_NF model -- which does not allow for scale flipping -- also performs worse, suggesting it is too restrictive and underfits. The other three models perform equally well, as the differences are too small to be interpreted substantively. <!--Their equal performance is not very surprising, as the models are very similar, but it should be noted that HBAM_2 might perform better or worse than the other models on a different data set.-->
 
-We could also perform cross-validation for the models that do not account for heteroskedastic errors:
+We could also perform cross-validation for a model that does not account for heteroskedastic errors:
 
 ```{r, eval = FALSE}
-elpd_hbam_HM <- hbam_cv(self, stimuli, model = "HBAM_HM")
-elpd_hbam_MINI <- hbam_cv(self, stimuli, model = "HBAM_MINI")
-rbind(elpd_hbam_hm, elpd_hbam_mini)
+elpd_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI")
+elpd_hbam_mini
 ```
 
 ```{r, echo = FALSE}
-rbind(elpd_hbam_hm, elpd_hbam_mini)
+elpd_hbam_mini
 ```
 
-The estimated ELPDs are notably higher for these two models compared to their respective heteroskedastic counterparts. This suggest there is a considerable degree of heteroskedasticity in the data -- which is not surprising.
+The estimated ELPD is notably higher for this model compared to its heteroskedastic counterpart. This suggest there is a considerable degree of heteroskedasticity in the data -- which is not surprising.
 
 Modeling the heteroskedasticity increases prediction accuracy, but it should be noted that this does not necessarily translate into much more accurate estimates of key model outputs. As shown in section on plotting, the results for the HBAM and HBAM_MINI models are very similar. In fact, their estimated respondent positions correlate at .97 and .99, depending on whether we use the posterior means or medians. Their estimated stimulus positions also correlate at .99, but this masks the fact that the HBAM_MINI model places the less well known candidate John B. Anderson further to the left than the HBAM model does. This illustrates that there are some subtle differences that users should be aware of, even if these models tend to produce very similar results.
 

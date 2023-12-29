@@ -27,21 +27,19 @@
 #'
 #' **HBAM_NE** models the self-placements as if they contain no error. The latent respondent positions are not treated as parameters, but rather calculated as function of the self-placements and other individual level parameters. The respondents positions are not given a prior, which means the model relies on the likelihood function and the prior on beta to yield meaningful results for these positions. By assuming no error in the self-placements, the model may underestimate the uncertainty in estimated respondents positions, while otherwise yielding very similar results to the standard HBAM model. In contrast to the standard model, the estimated respondent positions from this model will not exhibit any shrinkage, which for some purposes may be desirable, as the results may better represent the true distances between respondents and stimuli. This model also runs somewhat faster than the standard HBAM model.
 #'
-#' **HBAM_HM** assumes the prediction errors in the stimuli placements to be homoskedastic. This simplified model should normally produce very similar results to the HBAM model, and it runs somewhat faster.
-#'
-#' **HBAM_MINI** combines the characteristics of HBAM_NE and HBAM_HM: It models the self-placements as if they contain no error and assumes the prediction errors in the stimuli placements to be homoskedastic. This model tends to sample two to three times faster than the standard HBAM model while yielding very similar point estimates. For large datasets, this model may provide a reasonable compromise between model complexity and estimation speed.
+#' **HBAM_MINI** models the self-placements as if they contain no error (like HBAM_NE) and additionally assumes the prediction errors in the stimuli placements to be homoskedastic. This model tends to sample two to three times faster than the standard HBAM model while yielding very similar point estimates. For large datasets, this model may provide a reasonable compromise between model complexity and estimation speed.
 #'
 #' **HBAM_MULTI** is a version of the HBAM_MINI model that models differences between groups defined by the user. It requires an integer vector identifying the groups to be supplied as the argument `group_id`. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called `mu_alpha` and `mu_beta` and are constructed to have means of 0. One potential use for this model is to supply self-placements (appropriately transformed) as `group_id`, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
 #'
-#' **HBAM_0** does not allow for scale flipping, but retains the other features of the HBAM model. This may be useful if there are truly zero cases of scale flipping in the data. Such scenarios can be created artificially, but may also arise in real data. For example, expert surveys appear unlikely to contain many instances of scale flipping. For data that contain zero cases of flipping, models that allow for flipping contain superfluous parameters that undermine efficient sampling. Models that do not allow for flipping will sample faster and typically yield slightly more accurate estimates (getting closer to the true parameter values in Monte Carlo simulations). This model (or any other that does not allow for scale flipping) is therefore preferable when no flipping is present.
+#' **HBAM_NF** (formerly HBAM_NF) does not allow for scale flipping, but retains the other features of the HBAM model. This may be useful if there are truly zero cases of scale flipping in the data. Such scenarios can be created artificially, but may also arise in real data. For example, expert surveys appear unlikely to contain many instances of scale flipping. For data that contain zero cases of flipping, models that allow for flipping contain superfluous parameters that undermine efficient sampling. Models that do not allow for flipping will sample faster and typically yield slightly more accurate estimates (getting closer to the true parameter values in Monte Carlo simulations). This model (or any other that does not allow for scale flipping) is therefore preferable when no flipping is present.
 #'
-#' **HBAM_MULTI_0** is a version of the HBAM_NE model that does not allow for scale flipping, but shares the group-modeling features of the HBAM_MULTI model. If differs from HBAM_MULTI by modeling heteroskedastic prediction errors and not allowing for scale flipping.
+#' **HBAM_MULTI_NF** is a version of the HBAM_NE model that does not allow for scale flipping, but shares the group-modeling features of the HBAM_MULTI model. If differs from HBAM_MULTI by modeling heteroskedastic prediction errors and not allowing for scale flipping.
 #'
 #' **FBAM_MINI** is a version of the HBAM_MINI model with fixed hyperparameters to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. The hyperparameters have been set to realistic and weakly informative values based on analyses of ANES data. As with the other models, the scale-dependent priors are automatically adjusted to the length of the survey scale. While this model allows for fitting via optimization, it can also be fit via MCMC using the `hbam()` function. This model (and the other FBAM models) therefore also provides a fast and robust alternative for fitting large or otherwise difficult datasets via MCMC.
 #'
 #' **FBAM_MULTI** is a version of the FBAM_MINI model that shares the group-modeling features of the HBAM_MULTI model.
 #'
-#' **FBAM_MULTI_0** is a version of the FBAM_MULTI model that does not allow for scale flipping.
+#' **FBAM_MULTI_NF** is a version of the FBAM_MULTI model that does not allow for scale flipping.
 #'
 #' **HBAM_R** incorporates the rationalization component of the ISR model by Bølstad (2020). This model requires additional data to be supplied as the argument `pref`: An N × J matrix of stimuli ratings from the respondents. The rationalization part of the model is simplified relative to the original ISR model: The direction in which respondents move disfavored stimuli is estimated as a common expectation for each possible self-placement on the scale.
 #'
@@ -86,9 +84,9 @@
 #' # Obtaining posterior summaries for the latent stimulus positions:
 #' theta_est <- get_est(fit_hbam_mini, par = "theta")
 #'
-#' # Fitting the FBAM_MULTI_0 model with self-placements as group_id:
+#' # Fitting the FBAM_MULTI_NF model with self-placements as group_id:
 #'   # Note: This works because the self-placements in this case are positive integers.
-#' fit_fbam_multi_0 <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_0",
+#' fit_fbam_multi_NF <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF",
 #'                     warmup = 500, iter = 1000, chains = 2, thin = 1)
 #' }
 
