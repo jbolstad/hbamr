@@ -19,10 +19,10 @@ hbam_cv(
   chains = 2,
   cores = parallel::detectCores(logical = FALSE),
   warmup = 1000,
-  iter = 4000,
+  iter = 3000,
   thin = 1,
-  control = list(adapt_delta = 0.6),
-  seed = 1
+  seed = 1,
+  ...
 )
 }
 \arguments{
@@ -58,9 +58,9 @@ hbam_cv(
 
 \item{thin}{A positive integer specifying the period for saving samples.}
 
-\item{control}{A named list of parameters to control the sampler's behavior. See the details in the documentation for the control argument in the \code{stan} function in the \code{rstan} package.}
-
 \item{seed}{An integer passed on to \code{set.seed} before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument \code{prep_data} is \code{TRUE}. The supplied \code{seed} argument is also used to generate seeds for the sampling algorithm.}
+
+\item{...}{Arguments passed to \code{rstan::sampling}.}
 }
 \value{
 A data frame containing the estimated ELPD and its standard error.

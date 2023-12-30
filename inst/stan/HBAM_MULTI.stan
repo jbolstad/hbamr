@@ -33,15 +33,14 @@ parameters {
   simplex[G] mu_beta_raw;                 // group-level mean of log(beta), raw
   real<lower = 0> sigma_alpha;            // sd of alpha
   real<lower = 0, upper = 2> sigma_beta;  // sd of log(beta)
-  real<lower = 0> tau;                    // sd of errors
+  real<lower = 3, upper = 30> nu;         // concentration of etas
+  real<lower = 0> tau;                    // scale of errors
+  vector<lower = 0>[N] eta;               // mean ind. error variance x J^2
+  simplex[J] rho;                         // stimuli-shares of variance
   vector<lower = 0, upper = 1>[N] lambda; // mixing proportion, flipping
-  real<lower = .5, upper = 1> psi;        // mean of prior on lambda
-  real<lower = 2, upper = 100> delta;     // concentration of prior on lambda
 }
 
 transformed parameters {
-  real<lower=0> alpha_lambda = delta * psi; // reparameterization
-  real<lower=0> beta_lambda = delta * (1 - psi);
   array[J] real theta;                    // latent stimuli position
   matrix[N, 2] alpha0;                    // shift parameter, split
   matrix[N, 2] beta0;                     // stretch parameter, split
@@ -49,6 +48,7 @@ transformed parameters {
   vector[N_obs] log_lik;                  // pointwise log-likelihood for Y
   vector[G] mu_alpha = ((mu_alpha_raw - mean_mu_simplexes) / sd_mu_simplexes) * sigma_mu_alpha;
   vector[G] mu_beta = ((mu_beta_raw - mean_mu_simplexes) / sd_mu_simplexes) * sigma_mu_beta;
+  real<lower = 0> eta_scale = tau * J;
   theta = theta_raw;
   theta[L] = theta_lr[1];                 // safeguard to ensure identification
   theta[R] = theta_lr[2];
@@ -64,8 +64,10 @@ transformed parameters {
 
   for (n in 1:N_obs) {
     log_lik[n] = log_mix( lambda[ii[n]],
-      normal_lpdf(Y[n] | alpha0[ii[n], 1] + beta0[ii[n], 1] * theta[jj[n]], tau),
-      normal_lpdf(Y[n] | alpha0[ii[n], 2] + beta0[ii[n], 2] * theta[jj[n]], tau) );
+      normal_lpdf(Y[n] | alpha0[ii[n], 1] + beta0[ii[n], 1] * theta[jj[n]],
+        sqrt(eta[ii[n]]) * rho[jj[n]]),
+      normal_lpdf(Y[n] | alpha0[ii[n], 2] + beta0[ii[n], 2] * theta[jj[n]],
+        sqrt(eta[ii[n]]) * rho[jj[n]]) );
   }
 }
 
@@ -80,10 +82,11 @@ model {
   sigma_beta ~ gamma(3, 10);
   mu_alpha_raw ~ dirichlet(rep_vector(50, G));
   mu_beta_raw ~ dirichlet(rep_vector(50, G));
+  eta ~ scaled_inv_chi_square(nu, eta_scale);
+  nu ~ gamma(25, 2.5);
   tau ~ gamma(2, tau_prior_rate);
-  lambda ~ beta(alpha_lambda, beta_lambda);
-  psi ~ beta(8.5, 1.5);
-  delta - 2 ~ gamma(2, .1);
+  rho ~ dirichlet(rep_vector(5, J));
+  lambda ~ beta(2, 1);
 
   if(CV == 0)
     target += sum(log_lik);
@@ -95,7 +98,7 @@ model {
 }
 
 generated quantities {
-  vector[N] kappa = to_vector(bernoulli_rng(lambda));
+  vector[N] kappa = to_vector(round(lambda));
   vector[N] chi = (kappa .* chi0[, 1]) + ((1 - kappa) .* chi0[, 2]);
   vector[N] alpha = (kappa .* alpha0[, 1]) + ((1 - kappa) .* alpha0[, 2]);
   vector[N] beta = (kappa .* beta0[, 1]) + ((1 - kappa) .* beta0[, 2]);

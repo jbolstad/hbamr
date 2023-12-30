@@ -23,7 +23,7 @@ fbam(
 
 \item{stimuli}{An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the \code{prep_data} function.}
 
-\item{model}{Character: Name of the model to be used. Defaults to FBAM_MINI. The options are the three models with "FBAM" in the name. See the documentation for the \code{hbam()} function for descriptions of the models.}
+\item{model}{Character: Name of the model to be used. Defaults to FBAM_MINI. The available options are the three models with "FBAM" in their name. See the documentation for the \code{hbam()} function for descriptions of the models.}
 
 \item{allow_miss}{Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the \code{prep_data} function. Defaults to 2.}
 

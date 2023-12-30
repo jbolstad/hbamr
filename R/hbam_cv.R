@@ -19,8 +19,8 @@
 #' @param warmup A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than `iter`.
 #' @param iter A positive integer specifying the number of iterations for each chain (including warmup).
 #' @param thin A positive integer specifying the period for saving samples.
-#' @param control A named list of parameters to control the sampler's behavior. See the details in the documentation for the control argument in the `stan` function in the `rstan` package.
 #' @param seed An integer passed on to `set.seed` before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument `prep_data` is `TRUE`. The supplied `seed` argument is also used to generate seeds for the sampling algorithm.
+#' @param ... Arguments passed to `rstan::sampling`.
 #' @return A data frame containing the estimated ELPD and its standard error.
 #' @examples
 #' \donttest{
@@ -43,7 +43,7 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                     prefs = NULL, group_id = NULL, prep_data = TRUE, data = NULL, K = 10,
                     chains = 2, cores = parallel::detectCores(logical = FALSE),
                     warmup = 1000, iter = 3000,
-                    thin = 1, seed = 1){
+                    thin = 1, seed = 1, ...){
 
   logColMeansExp <- function(x) {
     S <- nrow(x)
@@ -68,7 +68,7 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                             init_l <- list(inits[[model]](chain_id = i, dat = dat_l[[k]]))
                             # Obtain chain:
                             s <- rstan::sampling(stanmodels[[model]], data = dat_l[[k]], init = init_l,
-                                                 chains = 1, cores = 1, warmup = warmup, iter = iter, thin = thin, control = control, chain_id = i, seed = seed + i)
+                                                 chains = 1, cores = 1, warmup = warmup, iter = iter, thin = thin, chain_id = i, seed = seed + i, ...)
                             # Calculate expected value of log-likelihood for each held-out observation:
                             log_lik <- loo::extract_log_lik(s)
                             draws <- dim(log_lik)[1]
