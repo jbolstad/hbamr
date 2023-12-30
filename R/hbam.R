@@ -97,6 +97,7 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
                  chains = 4, cores = parallel::detectCores(logical = FALSE),
                  warmup = 1000, iter = 2000, thin = 1,
                  seed = sample.int(.Machine$integer.max, 1), ...) {
+  if (!model %in% names(stanmodels)) { stop(paste(model, "is not a valid model choice.")) }
   if (prep_data == TRUE) { dat <- hbamr::prep_data(self, stimuli, prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id) } else { dat <- data }
   if (grepl("MULTI", model) & is.null(dat$gg)) { stop("No group_id supplied for MULTI-type model.") }
   if (!grepl("MULTI", model) & !is.null(dat$gg)) { message("Note: The supplied group_id will not be used as the chosen model is not a MULTI-type model.") }
