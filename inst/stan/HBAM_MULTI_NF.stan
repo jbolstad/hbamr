@@ -19,7 +19,7 @@ transformed data {
   real<lower = 0> sigma_alpha_prior_rate = (2 - 1) / (B / 5.0);
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
   real<lower = 0> sigma_mu_alpha = B / 5.0; // sd of mu_alpha
-  real sigma_mu_beta = .2;                // sd of mu_beta
+  real sigma_mu_beta = .25;               // sd of mu_beta
   real mean_mu_simplexes = 1.0 / G;       // for later scaling of simplexes
   real sd_mu_simplexes = sqrt(mean_mu_simplexes * (1 - mean_mu_simplexes) / (50 * G + 1));
 }
