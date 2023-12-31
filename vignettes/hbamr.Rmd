@@ -171,7 +171,7 @@ fit_hbam_multi <- hbam(self, stimuli, model = "HBAM_MULTI", group_id = self, all
 
 For very large data sets, optimization can be a useful and much faster alternative to MCMC. However, the optimization feature provided in this package only provides maximum a posteriori (MAP) point estimates.
 
-The `fbam()` function fits the FBAM_MINI model using `rstan::optimizing()`. The `fbam()` function works just like the `hbam()` function, except the arguments for `rstan::sampling()` do not apply. To fit the FBAM_MINI model using default settings, we would run:
+The `fbam()` function fits FBAM models using `rstan::optimizing()`. The `fbam()` function works just like the `hbam()` function, except the arguments for `rstan::sampling()` do not apply. To fit the FBAM_MINI model using default settings, we would run:
 
 ```{r fitfbam, eval = FALSE}
 fit_fbam <- fbam(self, stimuli)
