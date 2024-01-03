@@ -99,10 +99,13 @@ prep_data <- function(self, stimuli,
 
   if(is.null(B)) { B <- max(abs(c(stimuli_vec, self)), na.rm = T) }
 
-  return(list(J = ncol(stimuli), N = nrow(stimuli), B = B, N_obs = length(stimuli_vec),
-              V = self, Y = stimuli_vec, U = prefs_vec, L = which.min(mean_spos), R = which.max(mean_spos),
-              ii = ii, jj = jj, gg = group_id, G = length(unique(group_id)), mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
-              CV = 0, holdout = rep(0, length(stimuli_vec))))
+  datlist <- list(J = ncol(stimuli), N = nrow(stimuli), B = B, N_obs = length(stimuli_vec),
+       V = self, Y = stimuli_vec, U = prefs_vec, L = which.min(mean_spos), R = which.max(mean_spos),
+       ii = ii, jj = jj, gg = group_id, G = length(unique(group_id)), mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
+       CV = 0, holdout = rep(0, length(stimuli_vec)))
+  class(datlist) <- c("list", "hbam_data")
+
+  return(datlist)
 }
 
 all_integers <- function(vec) {
