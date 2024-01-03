@@ -2,7 +2,7 @@
 % Please edit documentation in R/hbam_cv.R
 \name{hbam_cv}
 \alias{hbam_cv}
-\title{Perform K-fold cross-validation for an HBAM-type model}
+\title{Perform K-fold cross-validation for models fit via MCMC}
 \usage{
 hbam_cv(
   self = NULL,
@@ -22,6 +22,10 @@ hbam_cv(
   iter = 3000,
   thin = 1,
   seed = 1,
+  sigma_alpha = NULL,
+  sigma_beta = 0.35,
+  sigma_mu_alpha = NULL,
+  sigma_mu_beta = 0.3,
   ...
 )
 }
@@ -60,13 +64,21 @@ hbam_cv(
 
 \item{seed}{An integer passed on to \code{set.seed} before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument \code{prep_data} is \code{TRUE}. The supplied \code{seed} argument is also used to generate seeds for the sampling algorithm.}
 
+\item{sigma_alpha}{A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM_MINI model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.}
+
+\item{sigma_beta}{A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM_MINI model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.}
+
+\item{sigma_mu_alpha}{A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 5.}
+
+\item{sigma_mu_beta}{A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .3.}
+
 \item{...}{Arguments passed to \code{rstan::sampling}.}
 }
 \value{
 A data frame containing the estimated ELPD and its standard error.
 }
 \description{
-This function performs a K-fold cross-validation for an HBAM-type model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
+This function performs a K-fold cross-validation for an HBAM or FBAM model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
 }
 \examples{
 \donttest{

@@ -15,6 +15,10 @@ fbam(
   prep_data = TRUE,
   data = NULL,
   seed = sample.int(.Machine$integer.max, 1),
+  sigma_alpha = NULL,
+  sigma_beta = 0.35,
+  sigma_mu_alpha = NULL,
+  sigma_mu_beta = 0.3,
   ...
 )
 }
@@ -38,6 +42,14 @@ fbam(
 \item{data}{List of data that have been prepared in advance via the \code{prep_data} function. Only applicable when \code{prep_data = TRUE}.}
 
 \item{seed}{A positive integer specifying an optional seed for reproducibility. If this argument is not supplied, a random seed will be generated and the function will produce slightly different results on each run.}
+
+\item{sigma_alpha}{A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM_MINI model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.}
+
+\item{sigma_beta}{A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM_MINI model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.}
+
+\item{sigma_mu_alpha}{A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 5.}
+
+\item{sigma_mu_beta}{A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .3.}
 
 \item{...}{Arguments passed to \code{rstan::optimizing}.}
 }

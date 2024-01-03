@@ -1,6 +1,6 @@
-#' Perform K-fold cross-validation for an HBAM-type model
+#' Perform K-fold cross-validation
 #'
-#' This function performs a K-fold cross-validation for an HBAM-type model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
+#' This function performs a K-fold cross-validation for an HBAM or FBAM model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
 #'
 #' @export
 #' @param self A numerical vector of N ideological self-placements. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the `prep_data` function.
@@ -20,6 +20,10 @@
 #' @param iter A positive integer specifying the number of iterations for each chain (including warmup).
 #' @param thin A positive integer specifying the period for saving samples.
 #' @param seed An integer passed on to `set.seed` before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument `prep_data` is `TRUE`. The supplied `seed` argument is also used to generate seeds for the sampling algorithm.
+#' @param sigma_alpha A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM_MINI model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.
+#' @param sigma_beta A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM_MINI model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.
+#' @param sigma_mu_alpha A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 5.
+#' @param sigma_mu_beta A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .3.
 #' @param ... Arguments passed to `rstan::sampling`.
 #' @return A data frame containing the estimated ELPD and its standard error.
 #' @examples
@@ -43,18 +47,33 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                     prefs = NULL, group_id = NULL, prep_data = TRUE, data = NULL, K = 10,
                     chains = 2, cores = parallel::detectCores(logical = FALSE),
                     warmup = 1000, iter = 3000,
-                    thin = 1, seed = 1, ...){
+                    thin = 1, seed = 1,
+                    sigma_alpha = NULL, sigma_beta = .35,
+                    sigma_mu_alpha = NULL, sigma_mu_beta = .3, ...){
 
   logColMeansExp <- function(x) {
     S <- nrow(x)
     matrixStats::colLogSumExps(x) - log(S) # This is an alternative way of calculating the col means to taking sum of exps and dividing by N before then logging
   }
 
+  if (is.null(sigma_alpha)) { sigma_alpha <- dat$B / 4.0 }
+  if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat$B / 5.0 }
+
   if (prep_data == TRUE) {
     dat <- hbamr::prep_data(self = self, stimuli = stimuli, prefs = prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id)
+    dat$sigma_alpha <- sigma_alpha
+    dat$sigma_mu_alpha <- sigma_mu_alpha
+    dat$sigma_beta <- sigma_beta
+    dat$sigma_mu_beta <- sigma_mu_beta
     dat_l <- hbamr::prep_data_cv(data = dat, K = K, seed = seed)
   } else {
     dat_l <- data
+    for (k in 1:length(dat_l)) {
+      dat_l[[k]]$sigma_alpha <- sigma_alpha
+      dat_l[[k]]$sigma_mu_alpha <- sigma_mu_alpha
+      dat_l[[k]]$sigma_beta <- sigma_beta
+      dat_l[[k]]$sigma_mu_beta <- sigma_mu_beta
+    }
   }
 
   n_fold <- length(dat_l)
