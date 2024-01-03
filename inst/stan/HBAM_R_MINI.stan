@@ -11,7 +11,7 @@ data {
   array[N_obs] real<lower = 0, upper = 1> U; // reported voter preferences
   array[N] int<lower = -B, upper = B> V;  // reported voter positions
   int<lower=0, upper=1> CV;               // indicator of cross-validation
-  array[N_obs] int<lower=0, upper=1> holdout; // holdout for cross-validation
+  array[N_obs] int<lower = 0, upper = 1> holdout; // holdout for cross-validation
 }
 
 transformed data {

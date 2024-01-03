@@ -9,8 +9,8 @@ data {
   int<lower = 1, upper = J> R;            // right pole
   array[N_obs] int<lower = -B, upper = B> Y; // reported stimuli positions
   vector<lower = -B, upper = B>[N] V;     // reported self-placements
-  int<lower=0, upper=1> CV;               // indicator of cross-validation
-  array[N_obs] int<lower=0, upper=1> holdout; // holdout for cross-validation
+  int<lower = 0, upper = 1> CV;           // indicator of cross-validation
+  array[N_obs] int<lower = 0, upper = 1> holdout; // holdout for cross-validation
 }
 
 transformed data {
