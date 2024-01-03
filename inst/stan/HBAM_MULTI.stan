@@ -11,15 +11,15 @@ data {
   int<lower = 1, upper = J> R;            // right pole
   array[N_obs] int<lower = -B, upper = B> Y; // reported stimuli positions
   vector<lower = -B, upper = B>[N] V;     // reported self-placements
-  int<lower=0, upper=1> CV;               // indicator of cross-validation
-  array[N_obs] int<lower=0, upper=1> holdout; // holdout for cross-validation
+  int<lower = 0, upper = 1> CV;           // indicator of cross-validation
+  array[N_obs] int<lower = 0, upper = 1> holdout; // holdout for cross-validation
+  real<lower = 0> sigma_mu_alpha;         // sd of prior on mu_alpha
+  real<lower = 0> sigma_mu_beta;          // sd of prior on mu_beta
 }
 
 transformed data {
   real<lower = 0> sigma_alpha_prior_rate = (2 - 1) / (B / 5.0);
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
-  real<lower = 0> sigma_mu_alpha = B / 5.0; // sd of mu_alpha
-  real sigma_mu_beta = .25;               // sd of mu_beta
   real mean_mu_simplexes = 1.0 / G;       // for later scaling of simplexes
   real sd_mu_simplexes = sqrt(mean_mu_simplexes * (1 - mean_mu_simplexes) / (50 * G + 1));
 }
