@@ -159,10 +159,12 @@ fit_hbam <- hbam(data = dat, prep_data = FALSE)
 dat <- prep_data(self, stimuli, allow_miss = 0) 
 ```
 
-To fit the HBAM_MULTI model, we would need to supply a vector identifying the groups of interest. One option would be to give each self-placement group their own prior distributions for the shift and stretch parameters. (Note that supplying the raw self-placements as `group_id` works in this case because the self-placements are stored as positive integers from 1 to 7 -- otherwise they would have to be re-coded.) To use the self-placements as `group_id`, we would run:
+To fit the HBAM_MULTI or FBAM_MULTI model, we would need to supply a vector identifying the groups of interest. One option would be to give each self-placement group their own prior distributions for the shift and stretch parameters. (Note that supplying the raw self-placements as `group_id` works in this case because the self-placements are stored as positive integers from 1 to 7 -- otherwise they would have to be re-coded.) If we decided to fit the FBAM_MULTI model, we could also specify our own scales for the priors on key parameters: 
 
 ```{r, eval = FALSE}
-fit_hbam_multi <- hbam(self, stimuli, model = "HBAM_MULTI", group_id = self, allow_miss = 0)
+fit_fbam_multi <- hbam(self, stimuli, model = "FBAM_MULTI", group_id = self, 
+                       sigma_alpha = .8, sigma_mu_alpha = .5, 
+                       sigma_beta = .4, sigma_mu_beta = .25)
 ```
 
 `hbam()` uses `rstan::sampling()`, and any additional arguments to `hbam()` will be passed on to the sampling function. By default, `hbam()` will run 4 chains and detect the number of available CPU cores. If possible, `hbam()` will use as many cores as there are chains. The other sampling defaults are: `warmup = 1000` and `iter = 2000`. These settings can all be overridden in the `hbam()` call.
