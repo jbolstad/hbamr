@@ -56,27 +56,24 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
     matrixStats::colLogSumExps(x) - log(S) # This is an alternative way of calculating the col means to taking sum of exps and dividing by N before then logging
   }
 
-  if (is.null(sigma_alpha)) { sigma_alpha <- dat$B / 4.0 }
-  if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat$B / 5.0 }
-
   if (prep_data == TRUE) {
     dat <- hbamr::prep_data(self = self, stimuli = stimuli, prefs = prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id)
-    dat$sigma_alpha <- sigma_alpha
-    dat$sigma_mu_alpha <- sigma_mu_alpha
-    dat$sigma_beta <- sigma_beta
-    dat$sigma_mu_beta <- sigma_mu_beta
     dat_l <- hbamr::prep_data_cv(data = dat, K = K, seed = seed)
   } else {
     dat_l <- data
-    for (k in 1:length(dat_l)) {
-      dat_l[[k]]$sigma_alpha <- sigma_alpha
-      dat_l[[k]]$sigma_mu_alpha <- sigma_mu_alpha
-      dat_l[[k]]$sigma_beta <- sigma_beta
-      dat_l[[k]]$sigma_mu_beta <- sigma_mu_beta
-    }
   }
 
   n_fold <- length(dat_l)
+
+  if (is.null(sigma_alpha)) { sigma_alpha <- dat_l[[1]]$B / 4.0 }
+  if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat_l[[1]]$B / 5.0 }
+  for (k in 1:n_fold) {
+    dat_l[[k]]$sigma_alpha <- sigma_alpha
+    dat_l[[k]]$sigma_mu_alpha <- sigma_mu_alpha
+    dat_l[[k]]$sigma_beta <- sigma_beta
+    dat_l[[k]]$sigma_mu_beta <- sigma_mu_beta
+  }
+
   # Run all chains in parallel and store only the log-likelihoods for held-out data to save memory:
   pointwise_ll_list <-
     pbmcapply::pbmclapply(1:(n_fold * chains),
