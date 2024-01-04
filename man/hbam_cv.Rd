@@ -2,7 +2,7 @@
 % Please edit documentation in R/hbam_cv.R
 \name{hbam_cv}
 \alias{hbam_cv}
-\title{Perform K-fold cross-validation for models fit via MCMC}
+\title{Perform K-fold cross-validation}
 \usage{
 hbam_cv(
   self = NULL,
