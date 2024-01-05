@@ -42,7 +42,7 @@ fbam <- function(self = NULL, stimuli = NULL, model = "FBAM_MINI", allow_miss = 
   if (!model %in% c("FBAM_MINI", "FBAM_MULTI", "FBAM_MULTI_NF")) { stop(paste(model, "is not a valid model choice for optimization.")) }
   if (!is.null(data) & (!is.null(self) | !is.null(stimuli))) { message("Note: When pre-prepared data are supplied, other data arguments will be ignored.") }
   if (is.null(data) & (is.null(self) | is.null(stimuli))) { message("Note: Required data not supplied.") }
-  if (is.null(data)) { dat <- hbamr::prep_data(self, stimuli, prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id) } else { dat <- data }
+  if (is.null(data)) { dat <- hbamr::prep_data(self, stimuli, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id) } else { dat <- data }
   if (grepl("MULTI", model) & is.null(dat$gg)) { stop("No group_id supplied for MULTI-type model.") }
   if (!grepl("MULTI", model) & !is.null(dat$gg)) { message("Note: The supplied group_id will not be used as the chosen model is not a MULTI-type model.") }
 
