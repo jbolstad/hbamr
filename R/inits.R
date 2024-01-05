@@ -64,7 +64,7 @@ inits_BAM <- function(chain_id = 1, dat) {
 # Collecting all inits-functions:
 inits <- list(
   HBAM = inits_HBAM,
-  HBAM_ORIG = inits_HBAM,
+  #HBAM_ORIG = inits_HBAM,
   HBAM_MAX = inits_HBAM,
   # HBAM_2 = inits_HBAM,
   # HBAM_HM = inits_HBAM,
