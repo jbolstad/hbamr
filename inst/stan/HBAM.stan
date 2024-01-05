@@ -86,7 +86,7 @@ model {
 }
 
 generated quantities {
-  vector[N] kappa = to_vector(round(lambda));
+  vector[N] kappa = to_vector(bernoulli_rng(lambda));
   vector[N] chi = (kappa .* chi0[, 1]) + ((1 - kappa) .* chi0[, 2]);
   vector[N] alpha = (kappa .* alpha0[, 1]) + ((1 - kappa) .* alpha0[, 2]);
   vector[N] beta = (kappa .* beta0[, 1]) + ((1 - kappa) .* beta0[, 2]);
