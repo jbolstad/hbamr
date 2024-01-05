@@ -29,7 +29,8 @@ parameters {
   real<lower = 0> tau;                    // scale of errors
   vector<lower = 0>[N] eta;               // mean ind. error variance x J^2
   simplex[J] rho;                         // stimuli-shares of variance
-  vector<lower = 0, upper = 1>[N] lambda; // mixing proportion, flipping
+  vector[N] logit_lambda;                 // raw mixing proportion, flipping
+  real<lower = 0> psi;                    // mean of prior on logit of lambda
 }
 
 transformed parameters {
@@ -38,6 +39,7 @@ transformed parameters {
   matrix[N, 2] beta0;                     // stretch parameter, split
   matrix[N, 2] chi0;                      // latent respondent positions, split
   vector[N_obs] log_lik;                  // pointwise log-likelihood for Y
+  vector<lower = 0, upper = 1>[N] lambda = inv_logit(psi + logit_lambda * 3); // prob. of non-flipping
   real<lower = 0> eta_scale = tau * J;
   theta = theta_raw;
   theta[L] = theta_lr[1];                 // safeguard to ensure identification
@@ -71,7 +73,8 @@ model {
   nu ~ gamma(25, 2.5);
   tau ~ gamma(2, tau_prior_rate);
   rho ~ dirichlet(rep_vector(5, J));
-  lambda ~ beta(2, 1);
+  logit_lambda ~ normal(0, 1);
+  psi ~ lognormal(1.4, .5);
 
   if(CV == 0)
     target += sum(log_lik);
