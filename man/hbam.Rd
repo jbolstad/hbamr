@@ -13,9 +13,8 @@ hbam(
   req_unique = 2,
   prefs = NULL,
   group_id = NULL,
-  prep_data = TRUE,
   data = NULL,
-  pars = "kappa",
+  pars = "logit_lambda",
   include = FALSE,
   chains = 4,
   cores = parallel::detectCores(logical = FALSE),
@@ -46,11 +45,9 @@ hbam(
 
 \item{group_id}{Integer vector of length N identifying which group each respondent belongs to. The supplied vector should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with "MULTI" in their name and will be ignored when fitting other models.}
 
-\item{prep_data}{Logical: Should the data be prepared before fitting the model? (Or have the data been prepared in advance via the \code{prep_data} function? If so, set \code{prep_data = FALSE}.)}
+\item{data}{List of data that have been prepared in advance via the \code{prep_data} function. Not required if the arguments \code{self} and \code{stimuli} are provided.}
 
-\item{data}{List of data that have been prepared in advance via the \code{prep_data} function. Only applicable when \code{prep_data = TRUE}.}
-
-\item{pars}{A vector of character strings specifying parameters of interest. If \code{include = TRUE}, only samples for parameters named in pars are stored in the fitted results. Conversely, if \code{include = FALSE}, samples for all parameters except those named in pars are stored in the fitted results. The default is "\code{kappa}" in combination with \code{include = FALSE}, indicating all parameters in the model except kappa (as kappa can be constant and thus yield NA for Rhat).}
+\item{pars}{A vector of character strings specifying parameters of interest. If \code{include = TRUE}, only samples for parameters named in pars are stored in the fitted results. Conversely, if \code{include = FALSE}, samples for all parameters except those named in pars are stored in the fitted results. The default is "\code{logit_lambda}" for HBAM models and "\code{kappa}" for FBAM models, which in combination with \code{include = FALSE}, selects all but these parameters.}
 
 \item{include}{Logical scalar defaulting to \code{FALSE} indicating whether to include or exclude the parameters given by the pars argument. If \code{FALSE}, only entire multidimensional parameters can be excluded, rather than particular elements of them.}
 
@@ -83,7 +80,7 @@ Fit a Hierarchical Bayesian Aldrich-McKelvey model using automatically tuned Ham
 \details{
 This package provides several alternative models that can be selected using the names below. Users who are unsure which model to use are advised to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI may provide a useful alternative.
 
-\strong{HBAM} is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in Bølstad (2023), this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of the self-placements and the individual-level parameters. This makes the model considerably faster, while yielding very similar results. (The original HBAM model is available under the name HBAM_ORIG. However, users who would like to treat the respondent positions as parameters should rather use the newer HBAM_MAX model.)
+\strong{HBAM} is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in Bølstad (2023), this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of the self-placements and the individual-level parameters. This makes the model considerably faster, while yielding very similar results.
 
 \strong{HBAM_MULTI} is a version that models differences between groups defined by the user. It requires an integer vector identifying the groups to be supplied as the argument \code{group_id}. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called \code{mu_alpha} and \code{mu_beta} and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments \code{sigma_mu_alpha} and \code{sigma_mu_beta}. The default values are B / 5 and .3, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements (appropriately transformed) as \code{group_id}, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
 
@@ -103,9 +100,7 @@ This package provides several alternative models that can be selected using the 
 
 \strong{BAM} is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by Hare et al. (2015). This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions (see Bølstad 2023).
 
-\strong{HBAM_ORIG} is the model presented in Bølstad (2023). It differs from all the other HBAM models in this package by employing hierarchical priors on the mixing proportions, lambda (i.e. the expectations of the latent discrete flipping parameters, kappa). The lambda parameters are sampled from a beta-distribution with hyperparameters, which poses a challenge for Stan's sampler and sometimes leads to a high number of divergent transitions. The more recent models in this package give the lambda parameters a fixed prior of Beta(2,1), which results in fewer sampling issues while still reflecting that flipping is less likely than non-flipping. The ideal prior would be hierarchical and allow for a strongly bi-modal beta distribution, but this would break the sampling algorithm. Compared to the ideal, the prior in the current HBAM models yields too many draws of moderate values between zero and one. The models therefore counter this by rounding the lambda draws to obtain kappa, rather than sampling kappa from a Bernoulli distribution like the original HBAM model. The current HBAM model tends to yield very similar results to the HBAM_ORIG model, but without divergent transitions.
-
-\strong{HBAM_MAX} only differs from HBAM_ORIG by not placing hierarchical priors on the mixing proportions, lambda. Like HBAM_ORIG -- and in contrast to all the other models -- HBAM_MAX treats the latent respondent positions as parameters. The advantage of doing so is that the uncertainty in the respondent positions may be estimated more accurately. A key disadvantage is the model takes longer to fit. Another potential disadvantage is that the hierarchical prior on the respondent positions shrinks them toward their common mean, which may be undesirable if the distances between respondents and stimuli are of interest.
+\strong{HBAM_MAX} treats the latent respondent positions as parameters -- in contrast to all other models in this package. The advantage of doing so is that the uncertainty of the respondent positions may be estimated more accurately. A key disadvantage is the model takes longer to fit. Another potential disadvantage is that the hierarchical prior on the respondent positions shrinks them toward their common mean, which may be undesirable if the distances between respondents and stimuli are of interest.
 
 \strong{HBAM_2} is deprecated and replaced by the more general HBAM_MULTI model.
 

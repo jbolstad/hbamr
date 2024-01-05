@@ -70,7 +70,7 @@ Users who want to keep other covariates for subsequent analysis, may find it use
 
 This package provides several alternative models that can be selected using the names below. Users who are unsure which model to use are advised to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI may provide a useful alternative.
 
-**HBAM** is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in @boelstad:2023, this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of the self-placements and the individual-level parameters. This makes the model considerably faster, while yielding very similar results. (The original HBAM model is available under the name HBAM_ORIG. However, users who would like to treat the respondent positions as parameters should rather use the newer HBAM_MAX model.)
+**HBAM** is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in @boelstad:2023, this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of the self-placements and the individual-level parameters. This makes the model considerably faster, while yielding very similar results.
 
 **HBAM_MULTI** is a version that models differences between groups defined by the user. It requires an integer vector identifying the groups to be supplied as the argument `group_id`. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called `mu_alpha` and `mu_beta` and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments `sigma_mu_alpha` and `sigma_mu_beta`. The default values are B / 5 and .3, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements (appropriately transformed) as `group_id`, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
 
@@ -90,9 +90,7 @@ This package provides several alternative models that can be selected using the 
 
 **BAM** is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by @hare:2015. This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions [@boelstad:2023].
 
-**HBAM_ORIG** is the model presented in @boelstad:2023. It differs from all the other HBAM models in this package by employing hierarchical priors on the mixing proportions, lambda (i.e. the expectations of the latent discrete flipping parameters, kappa). The lambda parameters are sampled from a beta-distribution with hyperparameters, which poses a challenge for Stan's sampler and sometimes leads to a high number of divergent transitions. The more recent models in this package give the lambda parameters a fixed prior of Beta(2,1), which results in fewer sampling issues while still reflecting that flipping is less likely than non-flipping. The ideal prior would be hierarchical and allow for a strongly bi-modal beta distribution, but this would break the sampling algorithm. Compared to the ideal, the prior in the current HBAM models yields too many draws of moderate values between zero and one. The models therefore counter this by rounding the lambda draws to obtain kappa, rather than sampling kappa from a Bernoulli distribution like the original HBAM model. The current HBAM model tends to yield very similar results to the HBAM_ORIG model, but without divergent transitions.
-
-**HBAM_MAX** only differs from HBAM_ORIG by not placing hierarchical priors on the mixing proportions, lambda. Like HBAM_ORIG -- and in contrast to all the other models -- HBAM_MAX treats the latent respondent positions as parameters. The advantage of doing so is that the uncertainty in the respondent positions may be estimated more accurately. A key disadvantage is the model takes longer to fit. Another potential disadvantage is that the hierarchical prior on the respondent positions shrinks them toward their common mean, which may be undesirable if the distances between respondents and stimuli are of interest.
+**HBAM_MAX** treats the latent respondent positions as parameters -- in contrast to all other models in this package. The advantage of doing so is that the uncertainty of the respondent positions may be estimated more accurately. A key disadvantage is the model takes longer to fit. Another potential disadvantage is that the hierarchical prior on the respondent positions shrinks them toward their common mean, which may be undesirable if the distances between respondents and stimuli are of interest.
 
 **HBAM_2** is deprecated and replaced by the more general HBAM_MULTI model.
 
@@ -107,7 +105,7 @@ show_code("HBAM_MULTI")
 ## Summary of Model Features
 
 |                               | HBAM<br>  | HBAM<br>MULTI | HBAM<br>NF | HBAM<br>MULTI_NF | HBAM<br>MINI | HBAM<br>MAX |
-|----------------------------|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|
+|-------------------------|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
 | Hierarchical priors           |     X     |       X       |     X      |        X         |      X       |      X      |
 | Scale flipping                |     X     |       X       |            |                  |      X       |      X      |
 | Group-differences             |           |       X       |            |        X         |              |             |
@@ -116,17 +114,15 @@ show_code("HBAM_MULTI")
 
 : Recommended models for fitting via MCMC
 
-|                                     | FBAM<br>MINI | FBAM<br>MULTI | FBAM<br>MULTI_NF | HBAM<br>R_MINI | BAM<br>  | HBAM<br>ORIG |
-|----------------------------|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|
-| Hierarchical priors                 |              |               |                  |       X        |          |      X       |
-| User-defined priors (optional)      |      X       |       X       |        X         |                |          |              |
-| Scale flipping                      |      X       |       X       |                  |       X        |    X     |      X       |
-| Group-differences                   |              |       X       |        X         |                |          |              |
-| Heteroskedastic errors              |              |               |                  |                |    X     |      X       |
-| Respondent pos. as parameters       |              |               |                  |                |          |      X       |
-| Preference-based rationalization    |              |               |                  |       X        |          |              |
-| Hierarchical prior on lambda        |              |               |                  |                |          |      X       |
-| Fitting via optimization (optional) |      X       |       X       |        X         |                |          |              |
+|                                     | FBAM<br>MINI | FBAM<br>MULTI | FBAM<br>MULTI_NF | HBAM<br>R_MINI | BAM<br>  |
+|-------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|
+| Hierarchical priors                 |              |               |                  |       X        |          |
+| User-defined priors (optional)      |      X       |       X       |        X         |                |          |
+| Scale flipping                      |      X       |       X       |                  |       X        |    X     |
+| Group-differences                   |              |       X       |        X         |                |          |
+| Heteroskedastic errors              |              |               |                  |                |    X     |
+| Preference-based rationalization    |              |               |                  |       X        |          |
+| Fitting via optimization (optional) |      X       |       X       |        X         |                |          |
 
 : Non-hierarchical, specialized, and historical models
 
@@ -159,7 +155,7 @@ fit_hbam <- hbam(data = dat, prep_data = FALSE)
 dat <- prep_data(self, stimuli, allow_miss = 0) 
 ```
 
-To fit the HBAM_MULTI or FBAM_MULTI model, we would need to supply a vector identifying the groups of interest. One option would be to give each self-placement group their own prior distributions for the shift and stretch parameters. (Note that supplying the raw self-placements as `group_id` works in this case because the self-placements are stored as positive integers from 1 to 7 -- otherwise they would have to be re-coded.) If we decided to fit the FBAM_MULTI model, we could also specify our own scales for the priors on key parameters: 
+To fit the HBAM_MULTI or FBAM_MULTI model, we would need to supply a vector identifying the groups of interest. One option would be to give each self-placement group their own prior distributions for the shift and stretch parameters. (Note that supplying the raw self-placements as `group_id` works in this case because the self-placements are stored as positive integers from 1 to 7 -- otherwise they would have to be re-coded.) If we decided to fit the FBAM_MULTI model, we could also specify our own scales for the priors on key parameters:
 
 ```{r, eval = FALSE}
 fit_fbam_multi <- hbam(self, stimuli, model = "FBAM_MULTI", group_id = self, 
@@ -184,7 +180,7 @@ fit_fbam <- fbam(self, stimuli)
 Models of the kind included in the **hbamr** package face an inevitable trade-off between nuance (i.e. model complexity) and execution times. For small data sets (like ANES 1980), all models provide reasonable running times, but for large data sets (like ANES 2012), more complex models tend to get slow. In these cases, the HBAM_MINI model may be a useful alternative. For very large data sets, fitting the FBAM_MINI model via optimization may be the best alternative.
 
 |                      | HBAM <br>iter = 2000 | HBAM_NF <br>iter = 2000 | HBAM_MINI <br>iter = 2000 | FBAM_MINI<br>iter = 2000 | FBAM_MINI <br>optimization |
-|-----------------|:----------:|:----------:|:----------:|:----------:|:----------:|
+|-----------------------|:------------:|:------------:|:------------:|:------------:|:------------:|
 | ANES 1980 (N = 643)  |          5m          |         1m 20s          |          3m 30s           |          3m 45s          |             3s             |
 | ANES 2012 (N = 4949) |          1h          |           15m           |            35m            |           40m            |            21s             |
 

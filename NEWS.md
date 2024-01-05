@@ -9,14 +9,13 @@
     -   **FBAM_MULTI** is a version of the FBAM_MINI model that shares the group-modeling features of the HBAM_MULTI model. It allows the user to set the scales of the priors for the shift and stretch parameters via the arguments `sigma_alpha` and `sigma_beta`, and set the scales of the priors on `mu_alpha` and `mu_beta` via the arguments `sigma_mu_alpha` and `sigma_mu_beta`.
     -   **FBAM_MULTI_NF** is a version of the FBAM_MULTI model that does not allow for scale flipping.
 -   Renamed models:
-    -   The original HBAM model has been renamed **HBAM_ORIG** as a revised **HBAM** model is provided. 
-    -   A slightly revised version of the original model, which still treats the respondent positions as parameters is included as **HBAM_MAX**.
-    -   **HBAM_0** has been renamed **HBAM_NF**. To be consistent with the other models and offer faster sampling, the model no longer models the latent respondent positions as parameters.
+    -   The original HBAM model has been renamed **HBAM_MAX**.
+    -   The HBAM_NE model has been renamed **HBAM** as it makes a better default model. 
+    -   HBAM_0 has been renamed **HBAM_NF**. To be consistent with the other models and offer faster sampling, the model no longer models the latent respondent positions as parameters.
 - Revisions to existing models:
     -   **FBAM_MINI** (as well as the new FBAM models) now allows for user-defined prior distributions.
-    -   All models (except HBAM_ORIG and HBAM_MAX) have been revised to not treat the respondent positions as parameters. This results in considerably faster sampling. 
-    -   All models that allow for scale flipping (except HBAM_ORIG) have been given a new non-hierarchical prior on the mixing proportions, lambda (i.e. the expectations of the latent discrete flipping parameters, kappa). This avoids the divergent transitions that the original specification could trigger. 
-
+    -   All models (except HBAM_MAX) have been revised to not treat the respondent positions as parameters. This results in considerably faster sampling. 
+    -   All HBAM models that allow for scale flipping have been given a logit-normal prior on the mixing proportions, lambda (i.e. the expectations of the latent discrete flipping parameters, kappa). This replaces the original beta prior, which could trigger divergent transitions. 
 -   Deprecated models:
     -   **HBAM_2** has been replaced by the more general HBAM_MULTI model.
     -   **HBAM_HM** has been removed as it offered little extra and the number of models should be kept somewhat limited.
