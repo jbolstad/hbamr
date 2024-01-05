@@ -130,7 +130,7 @@ show_code("HBAM_MULTI")
 
 The `hbam()` function can be used to fit all models in this package and it returns a `stanfit` object. The default model is HBAM, while other models can be specified via the argument `model`. For each model, `hbam()` selects a suitable function to produce initial values for the sampling algorithm.
 
-Unless the user specifies the argument `prep_data = FALSE`, `hbam()` will implicitly run `prep_data()`. It therefore takes the same arguments as the `prep_data()` function (i.e. `self`, `stimuli`, `allow_miss`, `req_valid`, and `req_unique`).
+Unless the user supplies pre-prepared data via the `data`-argument, `hbam()` will implicitly run `prep_data()`. It therefore takes the same arguments as the `prep_data()` function (i.e. `self`, `stimuli`, `allow_miss`, `req_valid`, and `req_unique`).
 
 To fit the HBAM model using the default settings, we would run:
 
@@ -144,11 +144,11 @@ To fit the HBAM_MINI model while requiring complete data for all respondents, we
 fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI", allow_miss = 0)
 ```
 
-If we wanted to run the `prep_data()` function separately before fitting the model, we would specify `prep_data = FALSE`. The `hbam()` function then expects the argument `data` instead of `self` and `stimuli`. The `data`-argument should be a list produced by `prep_data()`:
+If we wanted to run the `prep_data()` function separately before fitting the model, we would supply output from `prep_data()` as the argument `data`:
 
 ```{r fithbam2, cache = FALSE, eval = FALSE, message = FALSE, warning = FALSE}
 dat <- prep_data(self, stimuli, allow_miss = 0) 
-fit_hbam <- hbam(data = dat, prep_data = FALSE)
+fit_hbam <- hbam(data = dat)
 ```
 
 ```{r prep_data3, include = FALSE, eval = FALSE}

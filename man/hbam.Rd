@@ -126,7 +126,7 @@ fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI",
 
 # Preparing the data before fitting, requiring complete responses:
 dat <- prep_data(self, stimuli, allow_miss = 0)
-fit_hbam_mini <- hbam(data = dat, prep_data = FALSE, model = "HBAM_MINI",
+fit_hbam_mini <- hbam(data = dat, model = "HBAM_MINI",
                    warmup = 500, iter = 1000, chains = 2)
 
 # Obtaining posterior summaries for the latent stimulus positions:
