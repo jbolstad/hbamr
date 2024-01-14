@@ -63,5 +63,6 @@ model {
 }
 
 generated quantities {
-  vector[N] chi = (V - alpha) ./ beta;
+  real<lower = 0> min_rho = min(rho);
+  vector[N] chi = ((V + to_vector(normal_rng(0, sqrt(eta) * min_rho)) - alpha) ./ beta);
 }
