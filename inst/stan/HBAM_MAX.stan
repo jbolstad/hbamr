@@ -44,7 +44,7 @@ transformed parameters {
   vector[N] log_lik_V;                    // pointwise log-likelihood for V
   vector<lower = 0, upper = 1>[N] lambda = inv_logit(psi + logit_lambda * 3); // prob. of non-flipping
   real<lower = 0> eta_scale = tau * J;
-  real<lower=0> min_rho = min(rho);
+  real<lower = 0> min_rho = min(rho);
   theta = theta_raw;
   theta[L] = theta_lr[1];                 // safeguard to ensure identification
   theta[R] = theta_lr[2];
