@@ -34,7 +34,6 @@ parameters {
 transformed parameters {
   vector[N] alpha;                        // shift parameter
   vector[N] beta;                         // stretch parameter
-  vector[N] chi;                          // latent respondent positions
   array[J] real theta;                    // latent stimuli position
   vector[N_obs] log_lik;                  // pointwise log-likelihood for Y
   real<lower = 0> eta_scale = tau * J;
@@ -43,7 +42,6 @@ transformed parameters {
   theta[R] = theta_lr[2];
   alpha = alpha_raw * sigma_alpha;        // non-centered specifications
   beta = exp(beta_raw * sigma_beta);
-  chi = ((V - alpha) ./ beta);
 
   for (n in 1:N_obs) {
     log_lik[n] = normal_lpdf(Y[n] | alpha[ii[n]] + beta[ii[n]] * theta[jj[n]],
@@ -70,4 +68,9 @@ model {
       if(holdout[n] == 0)
         target += log_lik[n];
     }
+}
+
+generated quantities {
+  real<lower = 0> min_rho = min(rho);
+  vector[N] chi = ((V + to_vector(normal_rng(0, sqrt(eta) * min_rho)) - alpha) ./ beta);
 }

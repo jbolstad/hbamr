@@ -40,7 +40,6 @@ transformed parameters {
   array[J] real theta;                    // latent stimuli position
   matrix[N, 2] alpha0;                    // shift parameter, split
   matrix[N, 2] beta0;                     // stretch parameter, split
-  matrix[N, 2] chi0;                      // latent respondent positions, split
   vector[N_obs] log_lik;                  // pointwise log-likelihood for Y
   vector[G] mu_alpha = ((mu_alpha_raw - mean_mu_simplexes) / sd_mu_simplexes) * sigma_mu_alpha;
   vector[G] mu_beta = ((mu_beta_raw - mean_mu_simplexes) / sd_mu_simplexes) * sigma_mu_beta;
@@ -54,8 +53,6 @@ transformed parameters {
     beta0[i, 1] = exp(beta_raw[i, 1] * sigma_beta + mu_beta[gg[i]]);
     beta0[i, 2] = -exp(beta_raw[i, 2] * sigma_beta); // group-level mean not added for flipped state
   }
-  chi0[, 1] = ((V - alpha0[, 1]) ./ beta0[, 1]);
-  chi0[, 2] = ((V - alpha0[, 2]) ./ beta0[, 2]);
 
   for (n in 1:N_obs) {
     log_lik[n] = log_mix( lambda[ii[n]],
@@ -86,8 +83,13 @@ model {
 }
 
 generated quantities {
+  matrix[N, 2] chi0;                      // latent respondent positions, split
+  vector[N] chi;                          // latent respondent positions, combined
   vector[N] kappa = to_vector(round(lambda)); // Rounding to MAP instead of sampling
-  vector[N] chi = (kappa .* chi0[, 1]) + ((1 - kappa) .* chi0[, 2]);
   vector[N] alpha = (kappa .* alpha0[, 1]) + ((1 - kappa) .* alpha0[, 2]);
   vector[N] beta = (kappa .* beta0[, 1]) + ((1 - kappa) .* beta0[, 2]);
+  vector[N] V_error = to_vector(normal_rng(0, rep_vector(tau, N)));
+  chi0[, 1] = ((Vvec + V_error - alpha0[, 1]) ./ beta0[, 1]);
+  chi0[, 2] = ((Vvec + V_error - alpha0[, 2]) ./ beta0[, 2]);
+  chi = (kappa .* chi0[, 1]) + ((1 - kappa) .* chi0[, 2]);
 }
