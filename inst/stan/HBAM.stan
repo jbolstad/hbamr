@@ -90,7 +90,7 @@ generated quantities {
   vector[N] alpha = (kappa .* alpha0[, 1]) + ((1 - kappa) .* alpha0[, 2]);
   vector[N] beta = (kappa .* beta0[, 1]) + ((1 - kappa) .* beta0[, 2]);
   vector[N] V_error = to_vector(normal_rng(0, sqrt(eta) * min_rho));
-  chi0[, 1] = ((V + V_error - alpha0[, 1]) ./ beta0[, 1]);
-  chi0[, 2] = ((V + V_error - alpha0[, 2]) ./ beta0[, 2]);
+  chi0[, 1] = ((V - V_error - alpha0[, 1]) ./ beta0[, 1]);
+  chi0[, 2] = ((V - V_error - alpha0[, 2]) ./ beta0[, 2]);
   chi = (kappa .* chi0[, 1]) + ((1 - kappa) .* chi0[, 2]);
 }

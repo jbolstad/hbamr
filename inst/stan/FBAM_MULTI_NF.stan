@@ -76,5 +76,5 @@ model {
 }
 
 generated quantities {
-  vector[N] chi = (V + to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
+  vector[N] chi = (V - to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
 }
