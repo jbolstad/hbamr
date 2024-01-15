@@ -12,8 +12,9 @@
 #' @param data List of data that have been prepared in advance via the `prep_data` function. Not required if the arguments `self` and `stimuli` are provided.
 #' @param prefs An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the HBAM_R and HBAM_R_MINI models and will be ignored when fitting other models.
 #' @param group_id Integer vector of length N identifying which group each respondent belongs to. The supplied vector should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with "MULTI" in their name and will be ignored when fitting other models.
-#' @param pars A vector of character strings specifying parameters of interest. If `include = TRUE`, only samples for parameters named in pars are stored in the fitted results. Conversely, if `include = FALSE`, samples for all parameters except those named in pars are stored in the fitted results. The default is "`logit_lambda`" for HBAM models and "`kappa`" for FBAM models, which in combination with `include = FALSE`, selects all but these parameters.
-#' @param include Logical scalar defaulting to `FALSE` indicating whether to include or exclude the parameters given by the pars argument. If `FALSE`, only entire multidimensional parameters can be excluded, rather than particular elements of them.
+#' @param pars A vector of character strings specifying parameters of interest. If `include = TRUE`, only samples for parameters named in pars are stored in the fitted results. Conversely, if `include = FALSE`, samples for all parameters except those named in pars are stored in the fitted results. The default is to store results for "alpha", "beta", "chi", "lambda", and "theta".
+#' @param extra_pars A vector of character strings specifying parameters to be added to `pars`. This makes it easy to add one or several additional parameters of interest, without having to repeat the default `pars` vector. The default is `NULL`.
+#' @param include Logical scalar defaulting to `TRUE` indicating whether to include or exclude the parameters given by the pars argument. If `FALSE`, only entire multidimensional parameters can be excluded, rather than particular elements of them.
 #' @param chains A positive integer specifying the number of Markov chains. Defaults to 4.
 #' @param cores The number of cores to use when executing the Markov chains in parallel. By default, all detected physical cores will be used if `chains` is equal to or higher than the number of cores.
 #' @param warmup A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than `iter`.
@@ -26,7 +27,7 @@
 #' @param ... Arguments passed to `rstan::sampling`.
 #' @details This package provides several alternative models that can be selected using the names below. Users who are unsure which model to use are advised to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI may provide a useful alternative.
 #'
-#' **HBAM** is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in Bølstad (2023), this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of the self-placements and the individual-level parameters. This makes the model considerably faster, while yielding very similar results.
+#' **HBAM** is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in Bølstad (2024), this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of self-placements, individual-level parameters, and simulated errors. This makes the model considerably faster, while yielding very similar results. The model simulates errors in the self-placements of the same magnitude as that with which the respondent in question places the stimulus with the smallest errors. All models in the package use the same approach.
 #'
 #' **HBAM_MULTI** is a version that models differences between groups defined by the user. It requires an integer vector identifying the groups to be supplied as the argument `group_id`. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called `mu_alpha` and `mu_beta` and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments `sigma_mu_alpha` and `sigma_mu_beta`. The default values are B / 5 and .3, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements (appropriately transformed) as `group_id`, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
 #'
@@ -44,9 +45,7 @@
 #'
 #' **HBAM_R_MINI** is a version of the HBAM_MINI model that incorporates the rationalization component of the ISR model by Bølstad (2020). This model requires additional data to be supplied as the argument `pref`: An N × J matrix of stimuli ratings from the respondents. The rationalization part of the model is simplified relative to the original ISR model: The direction in which respondents move disfavored stimuli is estimated as a common expectation for each possible self-placement on the scale.
 #'
-#' **BAM** is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by Hare et al. (2015). This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions (see Bølstad 2023).
-#'
-#' **HBAM_MAX** treats the latent respondent positions as parameters -- in contrast to all other models in this package. The advantage of doing so is that the uncertainty of the respondent positions may be estimated more accurately. A key disadvantage is the model takes longer to fit. Another potential disadvantage is that the hierarchical prior on the respondent positions shrinks them toward their common mean, which may be undesirable if the distances between respondents and stimuli are of interest.
+#' **BAM** is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by Hare et al. (2015). This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions (see Bølstad 2024).
 #'
 #' **HBAM_2** is deprecated and replaced by the more general HBAM_MULTI model.
 #'
@@ -59,7 +58,7 @@
 #' @return An object of S4 class `stanfit`.
 
 #' @references
-#' - Bølstad, Jørgen (2023). Hierarchical Bayesian Aldrich-McKelvey Scaling. \emph{Political Analysis}. \doi{10.1017/pan.2023.18}.
+#' - Bølstad, Jørgen (2024). Hierarchical Bayesian Aldrich-McKelvey Scaling. \emph{Political Analysis}. 32(1): 50–64. \doi{10.1017/pan.2023.18}.
 #' - Bølstad, Jørgen (2020). Capturing Rationalization Bias and Differential Item Functioning: A Unified Bayesian Scaling Approach. \emph{Political Analysis} 28(3): 340–355.
 #' - Hare, Christopher et al. (2015). Using Bayesian Aldrich-McKelvey Scaling to Study Citizens' Ideological Preferences and Perceptions. \emph{American Journal of Political Science} 59(3): 759–774.
 #'
@@ -87,25 +86,27 @@
 #'
 #' # Fitting the FBAM_MULTI_NF model with self-placements as group_id:
 #'   # Note: This works because the self-placements in this case are positive integers.
-#' fit_fbam_multi_NF <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF",
+#' fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF",
 #'                        warmup = 500, iter = 1000, chains = 2)
 #' }
 
 hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, req_valid = NA,
                  req_unique = 2, prefs = NULL, group_id = NULL, data = NULL,
-                 pars = "logit_lambda", include = FALSE,
+                 pars = c("alpha", "beta", "chi", "lambda", "theta"),
+                 extra_pars = NULL, include = TRUE,
                  chains = 4, cores = parallel::detectCores(logical = FALSE),
                  warmup = 1000, iter = 2000,
                  seed = sample.int(.Machine$integer.max, 1),
                  sigma_alpha = NULL, sigma_beta = .35,
                  sigma_mu_alpha = NULL, sigma_mu_beta = .3, ...) {
   if (!model %in% names(stanmodels)) { stop(paste(model, "is not a valid model choice.")) }
-  if (model %in% c("FBAM_MINI", "FBAM_MULTI", "FBAM_MULTI_NF") & pars == "logit_lambda") { pars <- "kappa" }
   if (!is.null(data) & (!is.null(self) | !is.null(stimuli))) { message("Note: When pre-prepared data are supplied, other data arguments will be ignored.") }
   if (is.null(data) & (is.null(self) | is.null(stimuli))) { message("Note: Required data not supplied.") }
   if (is.null(data)) { dat <- hbamr::prep_data(self, stimuli, prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id) } else { dat <- data }
   if (grepl("MULTI", model) & is.null(dat$gg)) { stop("No group_id supplied for MULTI-type model.") }
   if (!grepl("MULTI", model) & !is.null(dat$gg)) { message("Note: The supplied group_id will not be used as the chosen model is not a MULTI-type model.") }
+  if (model == "BAM" | grepl("_NF", model)) { pars = c("alpha", "beta", "chi", "theta") }
+  if (!is.null(extra_pars)) {pars = c(pars, extra_pars) }
 
   if (is.null(sigma_alpha)) { sigma_alpha <- dat$B / 4.0 }
   if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat$B / 5.0 }

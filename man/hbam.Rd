@@ -14,8 +14,9 @@ hbam(
   prefs = NULL,
   group_id = NULL,
   data = NULL,
-  pars = "logit_lambda",
-  include = FALSE,
+  pars = c("alpha", "beta", "chi", "lambda", "theta"),
+  extra_pars = NULL,
+  include = TRUE,
   chains = 4,
   cores = parallel::detectCores(logical = FALSE),
   warmup = 1000,
@@ -47,9 +48,11 @@ hbam(
 
 \item{data}{List of data that have been prepared in advance via the \code{prep_data} function. Not required if the arguments \code{self} and \code{stimuli} are provided.}
 
-\item{pars}{A vector of character strings specifying parameters of interest. If \code{include = TRUE}, only samples for parameters named in pars are stored in the fitted results. Conversely, if \code{include = FALSE}, samples for all parameters except those named in pars are stored in the fitted results. The default is "\code{logit_lambda}" for HBAM models and "\code{kappa}" for FBAM models, which in combination with \code{include = FALSE}, selects all but these parameters.}
+\item{pars}{A vector of character strings specifying parameters of interest. If \code{include = TRUE}, only samples for parameters named in pars are stored in the fitted results. Conversely, if \code{include = FALSE}, samples for all parameters except those named in pars are stored in the fitted results. The default is to store results for "alpha", "beta", "chi", "lambda", and "theta".}
 
-\item{include}{Logical scalar defaulting to \code{FALSE} indicating whether to include or exclude the parameters given by the pars argument. If \code{FALSE}, only entire multidimensional parameters can be excluded, rather than particular elements of them.}
+\item{extra_pars}{A vector of character strings specifying parameters to be added to \code{pars}. This makes it easy to add one or several additional parameters of interest, without having to repeat the default \code{pars} vector. The default is \code{NULL}.}
+
+\item{include}{Logical scalar defaulting to \code{TRUE} indicating whether to include or exclude the parameters given by the pars argument. If \code{FALSE}, only entire multidimensional parameters can be excluded, rather than particular elements of them.}
 
 \item{chains}{A positive integer specifying the number of Markov chains. Defaults to 4.}
 
@@ -80,7 +83,7 @@ Fit a Hierarchical Bayesian Aldrich-McKelvey model using automatically tuned Ham
 \details{
 This package provides several alternative models that can be selected using the names below. Users who are unsure which model to use are advised to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI may provide a useful alternative.
 
-\strong{HBAM} is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in Bølstad (2023), this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of the self-placements and the individual-level parameters. This makes the model considerably faster, while yielding very similar results.
+\strong{HBAM} is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in Bølstad (2024), this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of self-placements, individual-level parameters, and simulated errors. This makes the model considerably faster, while yielding very similar results. The model simulates errors in the self-placements of the same magnitude as that with which the respondent in question places the stimulus with the smallest errors. All models in the package use the same approach.
 
 \strong{HBAM_MULTI} is a version that models differences between groups defined by the user. It requires an integer vector identifying the groups to be supplied as the argument \code{group_id}. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called \code{mu_alpha} and \code{mu_beta} and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments \code{sigma_mu_alpha} and \code{sigma_mu_beta}. The default values are B / 5 and .3, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements (appropriately transformed) as \code{group_id}, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
 
@@ -98,9 +101,7 @@ This package provides several alternative models that can be selected using the 
 
 \strong{HBAM_R_MINI} is a version of the HBAM_MINI model that incorporates the rationalization component of the ISR model by Bølstad (2020). This model requires additional data to be supplied as the argument \code{pref}: An N × J matrix of stimuli ratings from the respondents. The rationalization part of the model is simplified relative to the original ISR model: The direction in which respondents move disfavored stimuli is estimated as a common expectation for each possible self-placement on the scale.
 
-\strong{BAM} is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by Hare et al. (2015). This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions (see Bølstad 2023).
-
-\strong{HBAM_MAX} treats the latent respondent positions as parameters -- in contrast to all other models in this package. The advantage of doing so is that the uncertainty of the respondent positions may be estimated more accurately. A key disadvantage is the model takes longer to fit. Another potential disadvantage is that the hierarchical prior on the respondent positions shrinks them toward their common mean, which may be undesirable if the distances between respondents and stimuli are of interest.
+\strong{BAM} is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by Hare et al. (2015). This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions (see Bølstad 2024).
 
 \strong{HBAM_2} is deprecated and replaced by the more general HBAM_MULTI model.
 
@@ -134,13 +135,13 @@ theta_est <- get_est(fit_hbam_mini, par = "theta")
 
 # Fitting the FBAM_MULTI_NF model with self-placements as group_id:
   # Note: This works because the self-placements in this case are positive integers.
-fit_fbam_multi_NF <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF",
+fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF",
                        warmup = 500, iter = 1000, chains = 2)
 }
 }
 \references{
 \itemize{
-\item Bølstad, Jørgen (2023). Hierarchical Bayesian Aldrich-McKelvey Scaling. \emph{Political Analysis}. \doi{10.1017/pan.2023.18}.
+\item Bølstad, Jørgen (2024). Hierarchical Bayesian Aldrich-McKelvey Scaling. \emph{Political Analysis}. 32(1): 50–64. \doi{10.1017/pan.2023.18}.
 \item Bølstad, Jørgen (2020). Capturing Rationalization Bias and Differential Item Functioning: A Unified Bayesian Scaling Approach. \emph{Political Analysis} 28(3): 340–355.
 \item Hare, Christopher et al. (2015). Using Bayesian Aldrich-McKelvey Scaling to Study Citizens' Ideological Preferences and Perceptions. \emph{American Journal of Political Science} 59(3): 759–774.
 }
