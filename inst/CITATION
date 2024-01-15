@@ -1,7 +1,7 @@
 bibentry(
   bibtype  = "Article",
   header   = "If you use the 'hbamr' package in publications, please cite:",
-  title    = "Hierarchical Bayesian Aldrich–McKelvey Scaling",
+  title    = "Hierarchical {B}ayesian {A}ldrich–{M}c{K}elvey Scaling",
   author   = "Jørgen Bølstad",
   journal  = "Political Analysis",
   year     = "2024",
@@ -14,9 +14,9 @@ bibentry(
 bibentry(
   bibtype  = "Misc",
   header   = "To cite the R package, which includes improved models, please use:",
-  title    = "{hbamr}: {H}ierarchical {B}ayesian {A}ldrich-{M}cKelvey Scaling via '{S}tan'",
+  title    = "{hbamr}: {H}ierarchical {B}ayesian {A}ldrich-{M}c{K}elvey Scaling via '{S}tan'",
   author   = "Jørgen Bølstad",
-  year     = sub("-.*", "", meta$Date),
+  year     = substr(meta$Date, start = 1, stop = 4),
   note     = sprintf("R package version %s", meta$Version),
   url      = "https://github.com/jbolstad/hbamr"
 )
