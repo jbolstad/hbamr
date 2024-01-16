@@ -25,7 +25,7 @@ plot_over_self(
 
 \item{data}{The list of data that was used to produce the object(s).}
 
-\item{par}{Character: Name of the parameter to be plotted. One of the following: \code{"alpha"}, \code{"beta"}, \code{"abs_beta"}, \code{"lambda"}, \code{"chi"}, and \code{"eta"}. Defaults to \code{"chi"}.}
+\item{par}{Character: Name of the parameter to be plotted. One of the following: \code{"alpha"}, \code{"beta"}, \code{"abs_beta"}, \code{"lambda"}, or \code{"chi"}. Defaults to \code{"chi"}. Further individual-level parameters like \code{"eta"} can be specified if these have been passed to \code{hbam()} via the argument \code{extra_pars} when fitting the model. (Note that homoskedastic models have no \code{"eta"} parameters and "NF"-type models have no \code{"lambda"} or \code{"kappa"} parameters.)}
 
 \item{estimate}{Character: Specifying which type of posterior point estimate to use. One of \code{"median"} and \code{"mean"}. Defaults to \code{"median"}. This only applies for \code{stanfit} objects.}
 

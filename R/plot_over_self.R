@@ -5,7 +5,7 @@
 #' @export
 #' @param object An object of class `stanfit` produced by `hbam`, a list produced by `fbam`, or a `list` of such objects, which will produce a faceted plot.
 #' @param data The list of data that was used to produce the object(s).
-#' @param par Character: Name of the parameter to be plotted. One of the following: `"alpha"`, `"beta"`, `"abs_beta"`, `"lambda"`, `"chi"`, and `"eta"`. Defaults to `"chi"`.
+#' @param par Character: Name of the parameter to be plotted. One of the following: `"alpha"`, `"beta"`, `"abs_beta"`, `"lambda"`, or `"chi"`. Defaults to `"chi"`. Further individual-level parameters like `"eta"` can be specified if these have been passed to `hbam()` via the argument `extra_pars` when fitting the model. (Note that homoskedastic models have no `"eta"` parameters and "NF"-type models have no `"lambda"` or `"kappa"` parameters.)
 #' @param estimate Character: Specifying which type of posterior point estimate to use. One of `"median"` and `"mean"`. Defaults to `"median"`. This only applies for `stanfit` objects.
 #' @param names An optional character vector of model names of same length as the supplied list of models.
 #' @param parlabel An optional character containing an alternative label for the parameter (will be parsed if passed as an expression).
