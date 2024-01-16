@@ -1,3 +1,9 @@
+if (exists("meta$Date")) {
+  year <- sub("-.*", "", meta$Date)
+} else {
+  year <- substr(Sys.Date(), start = 1, stop = 4)
+}
+
 bibentry(
   bibtype  = "Article",
   header   = "If you use the 'hbamr' package in publications, please cite:",
@@ -13,10 +19,10 @@ bibentry(
 
 bibentry(
   bibtype  = "Misc",
-  header   = "To cite the R package, which includes improved models, please use:",
-  title    = "{hbamr}: {H}ierarchical {B}ayesian {A}ldrich-{M}c{K}elvey Scaling via '{S}tan'",
+  header   = "To cite the R package (which includes improved models), please use:",
+  title    = "{hbamr}: {H}ierarchical {B}ayesian {A}ldrich-{M}c{K}elvey Scaling via {S}tan",
   author   = "Jørgen Bølstad",
-  year     = substr(meta$Date, start = 1, stop = 4),
+  year     = year,
   note     = sprintf("R package version %s", meta$Version),
-  url      = "https://github.com/jbolstad/hbamr"
+  url      = "https://jbolstad.github.io/hbamr/"
 )
