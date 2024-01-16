@@ -1,21 +1,28 @@
 # hbamr: Hierarchical Bayesian Aldrich-McKelvey Scaling in R via Stan
 
 <!-- badges: start -->
-[![CRAN status](https://www.r-pkg.org/badges/version/hbamr)](https://CRAN.R-project.org/package=hbamr) [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/hbamr)](https://cran.r-project.org/package=hbamr) 
+
+[![CRAN status](https://www.r-pkg.org/badges/version/hbamr)](https://CRAN.R-project.org/package=hbamr) [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/hbamr)](https://cran.r-project.org/package=hbamr)
+
 <!-- badges: end -->
 
 ### Overview
 
-This is an R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling using Hamiltonian Monte Carlo simulations via Stan. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using positional survey data (Aldrich & McKelvey 1977). The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for respondent positions and in terms of recovering true respondent positions in simulations ([Bølstad 2023](https://doi.org/10.1017/pan.2023.18)). The package contains functions for preparing data, fitting models, extracting estimates, plotting key results, and comparing models using cross-validation.
+This is an R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling using Hamiltonian Monte Carlo simulations via Stan. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using positional survey data (Aldrich & McKelvey 1977). The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for respondent positions and in terms of recovering true respondent positions in simulations ([Bølstad 2024](https://doi.org/10.1017/pan.2023.18)). The package contains functions for preparing data, fitting models, extracting estimates, plotting key results, and comparing models using cross-validation.
 
 ### News
 
-Version 2.0.1 introduces several updates (see [NEWS.md](https://github.com/jbolstad/hbamr/blob/55367671a61eded9e69fcda458845ab0d6845fd6/NEWS.md)
-for a full list):
+**Version 2.1.0**:
 
-- The models have been revised to offer faster and better sampling.
-- New MULTI-type models are introduced to explicitly model group-differences.
-- Models of FBAM-type now allow users to specify key priors.
+-   All models now simulate errors in respondents' self-placements to yield realistic levels of uncertainty in estimated respondent positions, while offering faster sampling.
+
+**Version 2.0.1**:
+
+-   New MULTI-type models explicitly model group-differences.
+-   Models of FBAM-type now allow users to specify key priors.
+-   Most models have been revised to offer faster and better sampling.
+
+See [NEWS.md](https://github.com/jbolstad/hbamr/blob/55367671a61eded9e69fcda458845ab0d6845fd6/NEWS.md) for a full list of updates.
 
 ### Installation
 
@@ -93,5 +100,5 @@ plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "abs_beta")
 
 -   Aldrich, John H, and Richard D McKelvey. 1977. "A Method of Scaling with Applications to the 1968 and 1972 Presidential Elections." *American Political Science Review* 71(1): 111-130.
 -   Bølstad, Jørgen. 2020. "Capturing Rationalization Bias and Differential Item Functioning: A Unified Bayesian Scaling Approach." *Political Analysis* 28(3): 340-355.
--   Bølstad, Jørgen. 2023. "[Hierarchical Bayesian Aldrich-McKelvey Scaling](https://doi.org/10.1017/pan.2023.18)." *Political Analysis*.
+-   Bølstad, Jørgen. 2024. "[Hierarchical Bayesian Aldrich-McKelvey Scaling](https://doi.org/10.1017/pan.2023.18)." *Political Analysis* 32(1): 50-64.
 -   Hare, Christopher et al. 2015. "Using Bayesian Aldrich-McKelvey Scaling to Study Citizens' Ideological Preferences and Perceptions." *American Journal of Political Science* 59(3): 759-774.
