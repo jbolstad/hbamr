@@ -14,7 +14,7 @@ Description: Perform hierarchical Bayesian Aldrich-McKelvey scaling using Hamilt
     results, and comparing models using cross-validation. The original version of the default 
     model is described in Bølstad (2024) <doi:10.1017/pan.2023.18>.
 License: GPL (>= 3)
-URL: https://github.com/jbolstad/hbamr/
+URL: https://github.com/jbolstad/hbamr/, https://jbolstad.github.io/hbamr/
 Depends: 
     R (>= 3.4.0)
 Imports: 
