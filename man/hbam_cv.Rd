@@ -94,5 +94,6 @@ stimuli <- LC1980[1:50, -1]
   # NOTE: You normally want to use ALL cores for this, not just 2.
 cv_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI",
                         cores = 2, warmup = 500, iter = 1000)
+cv_hbam_mini
 }
 }

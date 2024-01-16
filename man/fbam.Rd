@@ -54,7 +54,7 @@ fbam(
 A list produced by \code{rstan::optimizing}.
 }
 \description{
-Fit a simplified Bayesian Aldrich-McKelvey model with fixed hyperparameters using optimization via \code{rstan}.
+Fit a simplified Bayesian Aldrich-McKelvey model with fixed hyperparameters using optimization via \code{rstan}. Users may replace the default priors by supplying their own values for the hyperparameters.
 }
 \examples{
 \donttest{
