@@ -2,11 +2,11 @@
 
 ### Revisions to existing models
 
--   All models in the package now simulate errors in respondents' self-placements. In the original HBAM model, respondents' latent positions were treated as parameters, which had several consequences: It yielded a realistic level of uncertainty in the estimated positions, but also led to slower sampling. Furthermore, the hierarchical prior on the latent respondent positions shrunk them toward zero, which was probably undesirable in most applications as it affected the distances between respondents and stimuli. Finally, the original approach led to a more nuanced posterior distribution where combinations of individual-level parameters that would lead to implausible values for the respondent positions were weighted down. However, the model's log-normal prior on the stretch parameters is by itself sufficient to yield meaningful respondent positions estimates, so there is no significant cost to not treating the latent respondent positions as parameters. The current versions of the model instead simulate errors in the self-placements to yield the same level of uncertainty as the original model, while sampling considerably faster.
+-   All models in the package now simulate errors in respondents' self-placements. In the original HBAM model, respondents' latent positions were treated as parameters, which had several consequences: It yielded a realistic level of uncertainty in the estimated positions, but also led to slower sampling. Furthermore, the hierarchical prior on the latent respondent positions shrunk them toward zero, which was undesirable in most applications as it affected the distances between respondents and stimuli. Finally, the original approach led to a more nuanced posterior distribution where combinations of individual-level parameter values that would lead to implausible values for the respondent positions were weighted down. However, the model's log-normal prior on the stretch parameters is by itself sufficient to yield meaningful respondent positions estimates, so there is no significant cost to not treating the latent respondent positions as parameters. The current versions of the model instead simulate errors in the self-placements to yield the same level of uncertainty as the original model, while sampling considerably faster.
 
 ### Deprecated models
 
--   **HBAM_MAX** has been removed as it offered little extra after the other models were revised to simulate error in respondents' self-placements.
+-   **HBAM_MAX** has been removed as it offered little extra after the other models were revised to simulate errors in respondents' self-placements.
 
 # hbamr 2.0.1
 
