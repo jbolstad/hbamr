@@ -136,7 +136,7 @@ theta_est <- get_est(fit_hbam_mini, par = "theta")
 # Fitting the FBAM_MULTI_NF model with self-placements as group_id:
   # Note: This works because the self-placements in this case are positive integers.
 fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF",
-                       warmup = 500, iter = 1000, chains = 2)
+                       warmup = 500, iter = 1000, chains = 1)
 }
 }
 \references{
