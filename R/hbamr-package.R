@@ -4,7 +4,7 @@
 #'
 #' @author Jørgen Bølstad
 #'
-#' @seealso \itemize{\item \url{https://github.com/jbolstad/hbamr/}}
+#' @seealso \itemize{\item \url{https://jbolstad.github.io/hbamr/}}
 #'
 #' @docType package
 #' @name hbamr-package

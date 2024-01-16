@@ -22,7 +22,7 @@ This is an R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM
 -   Models of FBAM-type now allow users to specify key priors.
 -   Most models have been revised to offer faster and better sampling.
 
-See [NEWS.md](https://github.com/jbolstad/hbamr/blob/55367671a61eded9e69fcda458845ab0d6845fd6/NEWS.md) for a full list of updates.
+See the [changelog](https://jbolstad.github.io/hbamr/news/index.html) for a full list of updates.
 
 ### Installation
 
@@ -36,7 +36,7 @@ This is the easiest and fastest way to install the package, as the binaries on C
 
 ### Vignette
 
-A vignette showing how to use all key functions in the package is available [here](https://cran.r-project.org/web/packages/hbamr/vignettes/hbamr.html). It can also be viewed locally, after installing the package:
+A vignette showing how to use all key functions in the package is available [here](https://jbolstad.github.io/hbamr/articles/hbamr.html). It can also be viewed locally, after installing the package:
 
 ``` r
 vignette("hbamr")

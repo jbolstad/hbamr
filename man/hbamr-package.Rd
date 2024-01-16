@@ -15,7 +15,7 @@ Fit hierarchical Bayesian Aldrich-McKelvey (HBAM) models using a form of Hamilto
 }
 }
 \seealso{
-\itemize{\item \url{https://github.com/jbolstad/hbamr/}}
+\itemize{\item \url{https://jbolstad.github.io/hbamr/}}
 }
 \author{
 Jørgen Bølstad
