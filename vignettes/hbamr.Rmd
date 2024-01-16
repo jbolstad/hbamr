@@ -7,6 +7,15 @@ vignette: >
   %\VignetteIndexEntry{Hierarchical Bayesian Aldrich-McKelvey Scaling in R via Stan}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+resource_files:
+  - p_stim.svg
+  - p_resp.svg
+  - p_trace_theta.svg
+  - p_lambda.svg
+  - p_eta.svg
+  - p_chi.svg
+  - p_alpha.svg
+  - p_abs_beta.svg
 ---
 
 ```{r, include = FALSE}
@@ -20,7 +29,7 @@ library("dplyr")
 <!-- avoid border around images -->
 <style> img { border: 0; } </style>
 ```
-The goal of the **hbamr** package is to enable users to efficiently perform Hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling in R. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using ideological survey data [@aldrich:1977]. The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for all respondent positions and in terms of recovering true respondent positions in simulations. The default model is described in an [open access article](https://doi.org/10.1017/pan.2023.18) [@boelstad:2023].
+The goal of the **hbamr** package is to enable users to efficiently perform Hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling in R. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using ideological survey data [@aldrich:1977]. The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for all respondent positions and in terms of recovering true respondent positions in simulations. The original version of the default model is described in an [open access article](https://doi.org/10.1017/pan.2023.18) [@boelstad:2023].
 
 The package mainly fits models via the NUTS algorithm in **rstan** -- a Markov chain Monte Carlo (MCMC) algorithm. However, it also offers a simplified model that can be fit using optimization to analyze large data sets quickly.
 
@@ -70,7 +79,7 @@ Users who want to keep other covariates for subsequent analysis, may find it use
 
 This package provides several alternative models that can be selected using the names below. Users who are unsure which model to use are advised to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI may provide a useful alternative.
 
-**HBAM** is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in @boelstad:2023, this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of the self-placements and the individual-level parameters. This makes the model considerably faster, while yielding very similar results.
+**HBAM** is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in @boelstad:2023, this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of self-placements, individual-level parameters, and simulated errors. This makes the model considerably faster, while yielding very similar results. The model simulates errors in the self-placements of the same magnitude as that with which the respondent in question places the stimulus with the smallest errors. All models in the package use this approach.
 
 **HBAM_MULTI** is a version that models differences between groups defined by the user. It requires an integer vector identifying the groups to be supplied as the argument `group_id`. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called `mu_alpha` and `mu_beta` and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments `sigma_mu_alpha` and `sigma_mu_beta`. The default values are B / 5 and .3, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements (appropriately transformed) as `group_id`, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
 
@@ -90,8 +99,6 @@ This package provides several alternative models that can be selected using the 
 
 **BAM** is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by @hare:2015. This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions [@boelstad:2023].
 
-**HBAM_MAX** treats the latent respondent positions as parameters -- in contrast to all other models in this package. The advantage of doing so is that the uncertainty of the respondent positions may be estimated more accurately. A key disadvantage is the model takes longer to fit. Another potential disadvantage is that the hierarchical prior on the respondent positions shrinks them toward their common mean, which may be undesirable if the distances between respondents and stimuli are of interest.
-
 **HBAM_2** is deprecated and replaced by the more general HBAM_MULTI model.
 
 These models can also be used in situations where self-placements are not available and the only goal is to estimate stimulus positions. This can be achieved by supplying a vector of zeros (or random data) instead of real self-placements: `self = rep(0, nrow(stimuli))`.
@@ -102,29 +109,28 @@ To see the Stan code for any of the models, use the `show_code()` function:
 show_code("HBAM_MULTI")
 ```
 
-## Summary of Model Features
+### Summary of Model Features
 
-|                               | HBAM<br>  | HBAM<br>MULTI | HBAM<br>NF | HBAM<br>MULTI_NF | HBAM<br>MINI | HBAM<br>MAX |
-|-------------------------|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|
-| Hierarchical priors           |     X     |       X       |     X      |        X         |      X       |      X      |
-| Scale flipping                |     X     |       X       |            |                  |      X       |      X      |
-| Group-differences             |           |       X       |            |        X         |              |             |
-| Heteroskedastic errors        |     X     |       X       |     X      |        X         |              |      X      |
-| Respondent pos. as parameters |           |               |            |                  |              |      X      |
+|                        | HBAM<br>  | HBAM<br>MULTI | HBAM<br>NF | HBAM<br>MULTI_NF | HBAM<br>MINI |
+|---------------------------|:------------:|:------------:|:------------:|:------------:|:------------:|
+| Hierarchical priors    |     X     |       X       |     X      |        X         |      X       |
+| Scale flipping         |     X     |       X       |            |                  |      X       |
+| Group-differences      |           |       X       |            |        X         |              |
+| Heteroskedastic errors |     X     |       X       |     X      |        X         |              |
 
 : Recommended models for fitting via MCMC
 
-|                                     | FBAM<br>MINI | FBAM<br>MULTI | FBAM<br>MULTI_NF | HBAM<br>R_MINI | BAM<br>  |
-|-------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|
-| Hierarchical priors                 |              |               |                  |       X        |          |
-| User-defined priors (optional)      |      X       |       X       |        X         |                |          |
-| Scale flipping                      |      X       |       X       |                  |       X        |    X     |
-| Group-differences                   |              |       X       |        X         |                |          |
-| Heteroskedastic errors              |              |               |                  |                |    X     |
-| Preference-based rationalization    |              |               |                  |       X        |          |
-| Fitting via optimization (optional) |      X       |       X       |        X         |                |          |
+|                            | FBAM<br>MINI | FBAM<br>MULTI | FBAM<br>MULTI_NF | HBAM<br>R_MINI | BAM<br>  |
+|---------------------------|:------------:|:------------:|:------------:|:------------:|:------------:|
+| Hierarchical priors        |              |               |                  |       X        |          |
+| User-defined priors\*      |      X       |       X       |        X         |                |          |
+| Scale flipping             |      X       |       X       |                  |       X        |    X     |
+| Group-differences          |              |       X       |        X         |                |          |
+| Heteroskedastic errors     |              |               |                  |                |    X     |
+| Rationalization            |              |               |                  |       X        |          |
+| Fitting via optimization\* |      X       |       X       |        X         |                |          |
 
-: Non-hierarchical, specialized, and historical models
+: Non-hierarchical, specialized, and historical models ("\*" marks optional features)
 
 ## Fitting
 
@@ -165,7 +171,7 @@ fit_fbam_multi <- hbam(self, stimuli, model = "FBAM_MULTI", group_id = self,
 
 `hbam()` uses `rstan::sampling()`, and any additional arguments to `hbam()` will be passed on to the sampling function. By default, `hbam()` will run 4 chains and detect the number of available CPU cores. If possible, `hbam()` will use as many cores as there are chains. The other sampling defaults are: `warmup = 1000` and `iter = 2000`. These settings can all be overridden in the `hbam()` call.
 
-## Fitting via Optimization
+### Fitting via Optimization
 
 For very large data sets, optimization can be a useful and much faster alternative to MCMC. However, the optimization feature provided in this package only provides maximum a posteriori (MAP) point estimates.
 
@@ -175,20 +181,24 @@ The `fbam()` function fits FBAM models using `rstan::optimizing()`. The `fbam()`
 fit_fbam <- fbam(self, stimuli)
 ```
 
-## Execution Times
+### Execution Times
 
 Models of the kind included in the **hbamr** package face an inevitable trade-off between nuance (i.e. model complexity) and execution times. For small data sets (like ANES 1980), all models provide reasonable running times, but for large data sets (like ANES 2012), more complex models tend to get slow. In these cases, the HBAM_MINI model may be a useful alternative. For very large data sets, fitting the FBAM_MINI model via optimization may be the best alternative.
 
-|                      | HBAM <br>iter = 2000 | HBAM_NF <br>iter = 2000 | HBAM_MINI <br>iter = 2000 | FBAM_MINI<br>iter = 2000 | FBAM_MINI <br>optimization |
-|-----------------------|:------------:|:------------:|:------------:|:------------:|:------------:|
-| ANES 1980 (N = 643)  |          5m          |         1m 20s          |          3m 30s           |          3m 45s          |             3s             |
-| ANES 2012 (N = 4949) |          1h          |           15m           |            35m            |           40m            |            21s             |
+|                                   | HBAM <br>iter=2000 | HBAM_NF <br>iter=2000 | HBAM_MINI <br>iter=2000 | FBAM_MINI<br>iter=2000 | FBAM_MINI <br>optimization |
+|--------------|:----------:|:----------:|:----------:|:----------:|:----------:|
+| **ANES 1980** <br>  (N=643, J=6)  |          5m          |         1m 20s          |          3m 30s           |          3m 45s          |             3s             |
+| **ANES 2012** <br>  (N=4949, J=4) |          1h          |           15m           |            35m            |           40m            |            21s             |
 
 : Execution times on an Intel Core i5 2.0-3.8 GHz CPU
 
 ## Plotting
 
-The **hbamr** package uses **ggplot2** for plotting (which means ggplot-themes can be added to the plots). The function `plot_stimuli()` plots the marginal posterior distributions of all stimuli in the data. By default, it will fill the distributions with shades from blue to red depending on the position on the scale. The argument `rev_color = TRUE` will reverse the order of the colors.
+The **hbamr** package contains several functions for creating presentable plots of the results. The package uses **ggplot2**, which means ggplot-themes can be added to the plots. 
+
+### Stimuli Positions
+
+The function `plot_stimuli()` plots the marginal posterior distributions of all stimuli in the data. By default, it will fill the distributions with shades from blue to red depending on the position on the scale. The argument `rev_color = TRUE` will reverse the order of the colors.
 
 ```{r, include = TRUE, eval = FALSE, fig.align = "center", fig.asp = .4, fig.width = 8, out.width = "100%"}
 plot_stimuli(fit_hbam)
@@ -199,6 +209,8 @@ knitr::include_graphics("p_stim.svg")
 ```
 
 In this example, we see that John B. Anderson -- the former Republican who ran as an independent candidate -- gets a wider posterior distribution, suggesting that voters were more uncertain about where to place him relative to the others.
+
+### Respondent Positions
 
 The function `plot_respondents()` plots the distribution of estimated respondent positions. It illustrates the uncertainty of the estimates by calculating the population density for each of a set of posterior draws. The default is to use 15 draws for each respondent, but this can be altered by specifying the argument `n_draws`. The `plot_respondents()` function also plots the estimated stimulus positions by default, but this behavior can be turned off by adding the argument `inc_stimuli = FALSE`.
 
@@ -216,19 +228,15 @@ Users who want to customize the plots further can obtain the underlying data by 
 get_plot_data(fit_hbam)
 ```
 
-The function `plot_over_self()` plots the distributions of key parameter estimates over the respondents' self-placements. In addition to a `stanfit` object produced by `hbam()`, this function requires the list of data produced by `prep_data()`. The function also takes the argument `par`, which can be either of the following: `"alpha"`, `"beta"`, `"abs_beta"`, `"lambda"`, `"chi"`, and `"eta"`. `"abs_beta"` calls for the absolute value of beta to be used. By default, the function uses posterior median estimates, but this can be changed by specifying `estimate = "mean"`.
+### Individual Parameters over Self-Placements
 
-This function can, for instance, be used to assess the accuracy of respondents' answers. In particular, when the argument `par = "eta"` is specified, the plotting function will display $\sqrt{\eta_i} / J$, which equals the average error for each individual (the mean of $\sigma_{ij}$ for each $i$ across $j$). The point estimates will still be calculated using the posterior median, unless the argument `estimate = "mean"` is added. (This plot is not available for the homoskedastic variants of the model (such as HBAM_MINI) as these do not estimate individual $\eta$ parameters.)
+The function `plot_over_self()` plots the distributions of key parameter estimates over the respondents' self-placements. The function will accept either a single `stanfit` object produced by `hbam()`, results from `fbam()`, or a list of such objects. In addition, the function requires the list of data that was produced by `prep_data()` before fitting the model(s). 
 
-```{r plot_eta, include = TRUE, eval = FALSE, echo = TRUE, fig.asp = .67, fig.width = 4.25, fig.align = "center", out.width = "50%"}
-plot_over_self(fit_hbam, dat, "eta")
-```
+The user specifies which parameter to show via the argument `par`. This can be either of the following: `"alpha"`, `"beta"`, `"abs_beta"`, `"lambda"`, or `"chi"`, where `"abs_beta"` calls for the absolute value of beta to be used. By default, the function uses posterior median estimates, but this can be changed by specifying `estimate = "mean"`.
 
-```{r, echo = FALSE, fig.align = "center", fig.asp = .67, fig.width = 4.25, fig.align = "center", out.width = "50%"}
-knitr::include_graphics("p_eta.svg")
-```
+#### Shifting
 
-The `plot_over_self()` function may also be used to compare results from several models by supplying the model fits as a list. To compare the distributions of estimated shift parameters from the HBAM and HBAM_MINI models, we would run:
+To compare the distributions of estimated shift parameters from the HBAM and HBAM_MINI models, we would run:
 
 ```{r plot_alpha, include = TRUE, eval = FALSE, echo = TRUE, fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
 plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "alpha")
@@ -238,7 +246,9 @@ plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "alpha")
 knitr::include_graphics("p_alpha.svg")
 ```
 
-For these models, the draws for $\beta$ combine the separate parameters for each flipping-state. The absolute value of $\beta$ may therefore be better suited for examining the extent to which each individual stretches the ideological space. To inspect the distribution of these values across self-placements, we would run:
+#### Stretching
+
+For models that allow for scale flipping, the draws for $\beta$ combine the separate parameters for each flipping-state. The absolute value of $\beta$ may therefore be better suited for examining the extent to which each individual stretches the ideological space. To inspect the distribution of these values across self-placements, we would run:
 
 ```{r plot_beta, include = TRUE, eval = FALSE, echo = TRUE, fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
 plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "abs_beta")
@@ -250,6 +260,22 @@ knitr::include_graphics("p_abs_beta.svg")
 
 The pattern above, where respondents with more extreme self-placements have more extreme $\beta$ parameters, is exactly the kind of differential item functioning that the models in this package are intended to correct for: These respondents tend to place both stimuli and themselves further out on the scale than others do, thus appearing more extreme in comparison.
 
+#### Flipping
+
+To see whether the $\beta$ parameters are likely to be positive or negative, we can look at the expectations of the flipping parameters, $\lambda$. These parameters represent each respondent's probability of *not* flipping the scale:
+
+```{r plot_lambda, include = TRUE, eval = FALSE, echo = TRUE, fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
+plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "lambda")
+```
+
+```{r, echo = FALSE, fig.align = "center", fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
+knitr::include_graphics("p_lambda.svg")
+```
+
+In this example, flipping is uncommon, but respondents who place themselves in the middle have a somewhat higher flipping-probability. This may suggest that some of these respondents are less informed about politics and provide less accurate answers.
+
+#### Respondent Positions
+
 It may also be useful to inspect the distribution of the scaled respondent positions over the self-placements. This illustrates the extent to which the model has transformed the original data. In this example, the impact of the models is generally modest, although a few respondents have been detected as having flipped the scale, and thus have had their self-placement flipped back.
 
 ```{r plot_chi, include = TRUE, eval = FALSE, echo = TRUE, fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
@@ -258,6 +284,21 @@ plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "chi")
 
 ```{r, echo = FALSE, fig.align = "center", fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
 knitr::include_graphics("p_chi.svg")
+```
+
+#### Additional Parameters
+
+Other individual-level parameters like `"eta"` can also be plotted if these have been passed to `hbam()` via the argument `extra_pars` when fitting the model. Parameters like $\eta$ are not stored in the `hbam()` results by default, as this would increase the post-processing time as well as the size of the model fits. (Note also that homoskedastic models have no `"eta"` parameters and "NF"-type models have no `"lambda"` or `"kappa"` parameters.) 
+
+The estimated $\eta$ parameters yield information about the accuracy of respondents' answers. When the argument `par = "eta"` is specified, the plotting function will display $\sqrt{\eta_i} / J$, which equals the average error for each individual (the mean of $\sigma_{ij}$ for each $i$ across $j$). The point estimates will still be calculated using the posterior median, unless the argument `estimate = "mean"` is added.
+
+```{r plot_eta, include = TRUE, eval = FALSE, echo = TRUE, fig.asp = .67, fig.width = 4.25, fig.align = "center", out.width = "50%"}
+fit_hbam <- hbam(data = dat, extra_pars = "eta")
+plot_over_self(fit_hbam, dat, "eta")
+```
+
+```{r, echo = FALSE, fig.align = "center", fig.asp = .67, fig.width = 4.25, fig.align = "center", out.width = "50%"}
+knitr::include_graphics("p_eta.svg")
 ```
 
 ## Posterior Summaries
@@ -282,20 +323,6 @@ get_est(fit_hbam, "chi")
 
 ```{r, echo = FALSE}
 est_chi
-```
-
-## Diagnostics
-
-The `rstan::sampling()` function that `hbam()` uses automatically performs a number of key diagnostic checks after sampling and issues warnings when a potential issue is detected. The authors of **rstan** emphasize diagnostics and careful model development, and users of **rstan** will more frequently encounter warnings than users of **rjags**. One warning users of this package may encounter is that the Bulk or Tail Effective Sample Size (ESS) is too low (see <https://mc-stan.org/misc/warnings.html>). The most straightforward solution to this issue is to increase the number of posterior draws, using the `iter` argument. However, this increases the computational load, and users should consider carefully what level of accuracy they need.
-
-Because the `hbam()` function returns a `stanfit` object, the model fit can be examined using the full range of diagnostic tools from the **rstan** package. Users should consult the **rstan** documentation for details on the various diagnostic tests and plots that are available. One example of the available tools is `traceplot()`:
-
-```{r traceplot_code, eval = FALSE, include = TRUE}
-rstan::traceplot(fit_hbam, pars = "theta")
-```
-
-```{r, echo = FALSE, fig.align = "center", fig.asp = .5, fig.width = 8, fig.align = "center", out.width = "100%", warning = FALSE, message = FALSE}
-knitr::include_graphics("p_trace_theta.svg")
 ```
 
 ## Cross-Validation
@@ -349,7 +376,21 @@ The estimated ELPD is notably higher for this model compared to its heteroskedas
 
 Modeling the heteroskedasticity increases prediction accuracy, but it should be noted that this does not necessarily translate into much more accurate estimates of key model outputs. As shown in section on plotting, the results for the HBAM and HBAM_MINI models are very similar. In fact, their estimated respondent positions correlate at .97 and .99, depending on whether we use the posterior means or medians. Their estimated stimulus positions also correlate at .99, but this masks the fact that the HBAM_MINI model places the less well known candidate John B. Anderson further to the left than the HBAM model does. This illustrates that there are some subtle differences that users should be aware of, even if these models tend to produce very similar results.
 
-## Limits to Exact Replication
+## Diagnostics
+
+The `rstan::sampling()` function that `hbam()` uses automatically performs a number of key diagnostic checks after sampling and issues warnings when a potential issue is detected. The authors of **rstan** emphasize diagnostics and careful model development, and users of **rstan** will more frequently encounter warnings than users of **rjags**. One warning users of this package may encounter is that the Bulk or Tail Effective Sample Size (ESS) is too low (see <https://mc-stan.org/misc/warnings.html>). The most straightforward solution to this issue is to increase the number of posterior draws, using the `iter` argument. However, this increases the computational load, and users should consider carefully what level of accuracy they need.
+
+Because the `hbam()` function returns a `stanfit` object, the model fit can be examined using the full range of diagnostic tools from the **rstan** package. Users should consult the **rstan** documentation for details on the various diagnostic tests and plots that are available. One example of the available tools is `traceplot()`:
+
+```{r traceplot_code, eval = FALSE, include = TRUE}
+rstan::traceplot(fit_hbam, pars = "theta")
+```
+
+```{r, echo = FALSE, fig.align = "center", fig.asp = .5, fig.width = 8, fig.align = "center", out.width = "100%", warning = FALSE, message = FALSE}
+knitr::include_graphics("p_trace_theta.svg")
+```
+
+### Limits to Exact Replication
 
 The functions in this package accept a seed argument for all operations that involve a random number generator. Supplying a seed is sufficient to get the exact same results in repeated runs on the same system, but it does not ensure exact replication across systems or software versions. The [Stan Reference Manual](https://mc-stan.org/docs/reference-manual/reproducibility.html) explains why:
 
