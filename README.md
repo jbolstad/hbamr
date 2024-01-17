@@ -14,7 +14,7 @@ This is an R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM
 
 **Version 2.1.0**:
 
--   All models now simulate errors in respondents' self-placements to yield realistic levels of uncertainty in estimated respondent positions, while offering faster sampling.
+-   All models now simulate errors in respondents' self-placements to yield realistic levels of uncertainty in estimated respondent positions while offering faster sampling.
 
 **Version 2.0.1**:
 
@@ -22,7 +22,7 @@ This is an R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM
 -   Models of FBAM-type now allow users to specify key priors.
 -   Most models have been revised to offer faster and better sampling.
 
-See the [changelog](https://jbolstad.github.io/hbamr/news/index.html) for a full list of updates.
+See the [changelog](https://jbolstad.github.io/hbamr/news/index.html) for a more comprehensive discussion of the updates.
 
 ### Installation
 
@@ -77,7 +77,7 @@ Plot the estimated stimuli positions:
 plot_stimuli(fit_hbam)
 ```
 
-<img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_stim.svg?raw=true" width="850px"/>
+<img src="https://raw.githubusercontent.com/jbolstad/hbamr/main/vignettes/p_stim.svg" width="850px"/>
 
 Plot the distribution of estimated respondent positions:
 
@@ -85,7 +85,7 @@ Plot the distribution of estimated respondent positions:
 plot_respondents(fit_hbam)
 ```
 
-<img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_resp.svg?raw=true" width="850px"/>
+<img src="https://raw.githubusercontent.com/jbolstad/hbamr/main/vignettes/p_resp.svg" width="850px"/>
 
 Plot the estimated scale-stretching parameters over respondents' self-placements:
 
@@ -94,7 +94,7 @@ dat <- prep_data(self, stimuli)
 plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "abs_beta")
 ```
 
-<img src="https://github.com/jbolstad/hbamr/blob/f2ddbcac26b56e59b8fad22a898a6fee145f06c5/vignettes/p_abs_beta.svg?raw=true" width="850px"/>
+<img src="https://raw.githubusercontent.com/jbolstad/hbamr/main/vignettes/p_abs_beta.svg" width="850px"/>
 
 ### References
 
