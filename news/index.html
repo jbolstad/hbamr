@@ -48,7 +48,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.1.0" id="hbamr-210">hbamr 2.1.0<a class="anchor" aria-label="anchor" href="#hbamr-210"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.1.0" id="hbamr-210">hbamr 2.1.0<a class="anchor" aria-label="anchor" href="#hbamr-210"></a></h2><p class="text-muted">CRAN release: 2024-01-17</p>
 <div class="section level4">
 <h4 id="revisions-to-existing-models-2-1-0">Revisions to existing models<a class="anchor" aria-label="anchor" href="#revisions-to-existing-models-2-1-0"></a></h4>
 <ul><li>All models in the package now simulate errors in respondents’ self-placements. In the original HBAM model, respondents’ latent positions were treated as parameters, which had several consequences: It yielded a realistic level of uncertainty in the estimated positions, but also led to slower sampling. Furthermore, the hierarchical prior on the latent respondent positions shrunk them toward zero, which was undesirable in most applications as it affected the distances between respondents and stimuli. Finally, the original approach led to a more nuanced posterior distribution where combinations of individual-level parameter values that would lead to implausible values for the respondent positions were weighted down. However, the model’s log-normal prior on the stretch parameters is by itself sufficient to yield meaningful respondent positions estimates, so there is no significant cost to not treating the latent respondent positions as parameters. The current versions of the model instead simulate errors in the self-placements to yield the same level of uncertainty as the original model, while sampling considerably faster.</li>
