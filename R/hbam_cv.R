@@ -15,7 +15,7 @@
 #' @param group_id Integer vector of length N identifying which group each respondent belongs to. The supplied vector should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with "MULTI" in their name and will be ignored when fitting other models.
 #' @param K An integer above 2, specifying the number of folds to use in the analysis. Defaults to 10.
 #' @param chains A positive integer specifying the number of Markov chains to use for each model fit. Defaults to 2.
-#' @param cores The number of cores to use when executing the Markov chains in parallel. Defaults to `parallel::detectCores(logical = FALSE)`. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously to save time.
+#' @param cores The number of cores to use when executing the Markov chains in parallel. Defaults to 1 because parallelization only works on non-Windows machines. On other systems, the user could set `cores` equal to the number of physical cores. Specifying a higher number of cores than chains will run chains for different folds simultaneously to save time.
 #' @param warmup A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than `iter`.
 #' @param iter A positive integer specifying the number of iterations for each chain (including warmup).
 #' @param thin A positive integer specifying the period for saving samples.
@@ -37,16 +37,16 @@
 #' stimuli <- LC1980[1:50, -1]
 #'
 #' # Performing 10-fold cross-validation for the HBAM_MINI model:
-#'   # NOTE: You normally want to use ALL cores for this, not just 2.
+#'   # NOTE: You normally want to use ALL physical cores for this, not just 1.
 #' cv_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI",
-#'                         cores = 2, warmup = 500, iter = 1000)
+#'                         chains = 1, cores = 1, warmup = 500, iter = 1000)
 #' cv_hbam_mini
 #' }
 
 hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                     allow_miss = 0, req_valid = NA, req_unique = 2,
                     prefs = NULL, group_id = NULL, prep_data = TRUE, data = NULL, K = 10,
-                    chains = 2, cores = parallel::detectCores(logical = FALSE),
+                    chains = 2, cores = 1,
                     warmup = 1000, iter = 3000,
                     thin = 1, seed = 1,
                     sigma_alpha = NULL, sigma_beta = .35,

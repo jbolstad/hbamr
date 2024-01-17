@@ -333,7 +333,7 @@ The **rstan** and **loo** packages contain functions for estimating ELPDs by per
 
 The **hbamr** package therefore includes model codes and functions to perform *K*-fold cross-validation. The function `hbam_cv()` is similar to `hbam()` and takes the same arguments, but will perform a *K*-fold cross-validation for the chosen model. In contrast to `hbam()`, the default for `hbam_cv()` is to not allow respondents to have any missing values (`allow_miss = 0`). The reason is that the cross-validation essentially creates missing values by excluding some data from each run.
 
-A key choice when performing cross-validation is to set *K* (the number of folds to use), and the default in this package is 10. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously. To preserve memory, the function extracts the summaries of the log-likelihoods for the held-out data and drops the stanfit objects once this is done. The memory requirements of the function is therefore similar to running a single analysis with one chain per core. The function that splits the data into *K* folds uses a default seed to produce the same folds each time, unless a different seed is specified.
+A key choice when performing cross-validation is to set *K* (the number of folds to use), and the default in this package is 10. The function is parallelized via `parallel::mclapply()` so that users on non-Windows systems can specify a higher number of cores than chains and run chains for different folds simultaneously. To preserve memory, the function extracts the summaries of the log-likelihoods for the held-out data and drops the stanfit objects once this is done. The memory requirements of the function is therefore similar to running a single analysis with one chain per core. The function that splits the data into *K* folds uses a default seed to produce the same folds each time, unless a different seed is specified.
 
 To perform 10-fold cross-validation for a selection of models, we could run:
 
@@ -342,9 +342,9 @@ load("elpds.rda")
 ```
 
 ```{r run_cv_new, eval = FALSE}
-elpd_hbam <- hbam_cv(self, stimuli, model = "HBAM")
-elpd_hbam_nf <- hbam_cv(self, stimuli, model = "HBAM_NF")
-elpd_bam <- hbam_cv(self, stimuli, model = "BAM")
+elpd_hbam <- hbam_cv(self, stimuli, model = "HBAM", cores = 4)
+elpd_hbam_nf <- hbam_cv(self, stimuli, model = "HBAM_NF", cores = 4)
+elpd_bam <- hbam_cv(self, stimuli, model = "BAM", cores = 4)
 ```
 
 Rather than returning stanfit objects, the function returns a data frame containing the estimated ELPD and its standard error. To compare results across models, we could run:
@@ -364,7 +364,7 @@ We see that the unpooled BAM model is worse at predicting out-of-sample data tha
 We could also perform cross-validation for a model that does not account for heteroskedastic errors:
 
 ```{r, eval = FALSE}
-elpd_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI")
+elpd_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI", cores = 4)
 elpd_hbam_mini
 ```
 

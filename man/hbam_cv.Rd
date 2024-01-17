@@ -17,7 +17,7 @@ hbam_cv(
   data = NULL,
   K = 10,
   chains = 2,
-  cores = parallel::detectCores(logical = FALSE),
+  cores = 1,
   warmup = 1000,
   iter = 3000,
   thin = 1,
@@ -54,7 +54,7 @@ hbam_cv(
 
 \item{chains}{A positive integer specifying the number of Markov chains to use for each model fit. Defaults to 2.}
 
-\item{cores}{The number of cores to use when executing the Markov chains in parallel. Defaults to \code{parallel::detectCores(logical = FALSE)}. The function is parallelized so that users can specify a higher number of cores than chains and run chains for different folds simultaneously to save time.}
+\item{cores}{The number of cores to use when executing the Markov chains in parallel. Defaults to 1 because parallelization only works on non-Windows machines. On other systems, the user could set \code{cores} equal to the number of physical cores. Specifying a higher number of cores than chains will run chains for different folds simultaneously to save time.}
 
 \item{warmup}{A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than \code{iter}.}
 
@@ -91,9 +91,9 @@ self <- LC1980[1:50, 1]
 stimuli <- LC1980[1:50, -1]
 
 # Performing 10-fold cross-validation for the HBAM_MINI model:
-  # NOTE: You normally want to use ALL cores for this, not just 2.
+  # NOTE: You normally want to use ALL physical cores for this, not just 1.
 cv_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI",
-                        cores = 2, warmup = 500, iter = 1000)
+                        chains = 1, cores = 1, warmup = 500, iter = 1000)
 cv_hbam_mini
 }
 }
