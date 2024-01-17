@@ -37,7 +37,7 @@
 #'
 #' **HBAM_MINI** is a version of the HBAM model that assumes the prediction errors in the stimuli placements to be homoskedastic. This model tends to sample faster faster than the standard HBAM model while yielding very similar point estimates. For large datasets, this model may provide a reasonable compromise between model complexity and estimation speed.
 #'
-#' **FBAM_MINI** is a version of the HBAM_MINI model with fixed hyperparameters to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. This model allows the user to specify the scales of the priors for the shift and (logged) stretch parameters via the arguments `sigma_alpha` and `sigma_beta`. The default values are B / 4 and .35, respectively. These defaults are intended to be realistic and weakly informative. As with the other models, the default values of the scale-dependent priors are automatically adjusted to the length of the survey scale. Users who want to control the degree of shrinkage of the individual-level parameters may find it useful to fit this model (or other FBAM models) via either MCMC or optimization.
+#' **FBAM_MINI** is a version of the HBAM_MINI model with fixed hyperparameters to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. This model allows the user to specify the scales of the priors for the shift and (logged) stretch parameters via the arguments `sigma_alpha` and `sigma_beta`. The default values are B / 4 and .35, respectively. These defaults are intended to be realistic and weakly informative. Users who want to control the degree of shrinkage of the individual-level parameters may find it useful to fit this model -- or other FBAM models -- via either MCMC or optimization.
 #'
 #' **FBAM_MULTI** is a version of the FBAM_MINI model that shares the group-modeling features of the HBAM_MULTI model. It allows the user to set the scales of the priors for the shift and stretch parameters via the arguments `sigma_alpha` and `sigma_beta`, and set the scales of the priors on `mu_alpha` and `mu_beta` via the arguments `sigma_mu_alpha` and `sigma_mu_beta`.
 #'
@@ -101,8 +101,16 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
                  sigma_mu_alpha = NULL, sigma_mu_beta = .3, ...) {
   if (!model %in% names(stanmodels)) { stop(paste(model, "is not a valid model choice.")) }
   if (!is.null(data) & (!is.null(self) | !is.null(stimuli))) { message("Note: When pre-prepared data are supplied, other data arguments will be ignored.") }
-  if (is.null(data) & (is.null(self) | is.null(stimuli))) { message("Note: Required data not supplied.") }
-  if (is.null(data)) { dat <- hbamr::prep_data(self, stimuli, prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id) } else { dat <- data }
+  if (is.null(data) & (is.null(self) | is.null(stimuli))) { stop("Required data not supplied.") }
+  if (is.null(data)) { dat <- hbamr::prep_data(self, stimuli, prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id) } else {
+    if (inherits(data, "hbam_data")) {
+      dat <- data
+    } else {
+      stop("Supplied data is not of hbam_data class. Please use the prep_data() function to prepare the data.")
+    }
+  }
+  if (hasArg(prep_data)) { message("Note: The prep_data argument has been deprecated - please remove it. If a data argument is supplied, the data will not be further prepared before fitting (and vice versa).")
+ }
   if (grepl("MULTI", model) & is.null(dat$gg)) { stop("No group_id supplied for MULTI-type model.") }
   if (!grepl("MULTI", model) & !is.null(dat$gg)) { message("Note: The supplied group_id will not be used as the chosen model is not a MULTI-type model.") }
   if (model == "BAM" | grepl("_NF", model)) { pars = c("alpha", "beta", "chi", "theta") }
@@ -117,7 +125,21 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
 
   set.seed(seed)
   init_ll <- lapply(1:chains, function(id) inits[[model]](id, dat))
-  out <- rstan::sampling(stanmodels[[model]], data = dat, init = init_ll,
-                         chains = chains, cores = cores, warmup = warmup, iter = iter, seed = seed, pars = pars, include = include, ...)
+
+  arglist <- list(...)
+  arglist$prep_data <- NULL
+  arglist$object <- stanmodels[[model]]
+  arglist$data = dat
+  arglist$init = init_ll
+  arglist$chains = chains
+  arglist$cores = cores
+  arglist$warmup = warmup
+  arglist$iter = iter
+  arglist$seed = seed
+  arglist$pars = pars
+  arglist$include = include
+
+  out <- do.call(rstan::sampling, arglist)
+
   return(out)
 }
