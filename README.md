@@ -1,4 +1,4 @@
-# hbamr: Hierarchical Bayesian Aldrich-McKelvey Scaling in R via Stan
+# hbamr <a href="https://jbolstad.github.io/hbamr/"><img src="man/figures/logo.png" align="right" height="139" alt="hbamr website" /></a>
 
 <!-- badges: start -->
 
@@ -6,7 +6,7 @@
 
 <!-- badges: end -->
 
-### Overview
+### Hierarchical Bayesian Aldrich-McKelvey Scaling
 
 This is an R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling using Hamiltonian Monte Carlo simulations via Stan. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using positional survey data (Aldrich & McKelvey 1977). The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for respondent positions and in terms of recovering true respondent positions in simulations ([Bølstad 2024](https://doi.org/10.1017/pan.2023.18)). The package contains functions for preparing data, fitting models, extracting estimates, plotting key results, and comparing models using cross-validation.
 
