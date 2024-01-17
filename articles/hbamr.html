@@ -237,11 +237,9 @@ specify the scales of the priors for the shift and (logged) stretch
 parameters via the arguments <code>sigma_alpha</code> and
 <code>sigma_beta</code>. The default values are B / 4 and .35,
 respectively. These defaults are intended to be realistic and weakly
-informative. As with the other models, the default values of the
-scale-dependent priors are automatically adjusted to the length of the
-survey scale. Users who want to control the degree of shrinkage of the
-individual-level parameters may find it useful to fit this model (or
-other FBAM models) via either MCMC or optimization.</p>
+informative. Users who want to control the degree of shrinkage of the
+individual-level parameters may find it useful to fit this model – or
+other FBAM models – via either MCMC or optimization.</p>
 <p><strong>FBAM_MULTI</strong> is a version of the FBAM_MINI model that
 shares the group-modeling features of the HBAM_MULTI model. It allows
 the user to set the scales of the priors for the shift and stretch
@@ -278,10 +276,10 @@ of real self-placements: <code>self = rep(0, nrow(stimuli))</code>.</p>
 <div class="section level3">
 <h3 id="summary-of-model-features">Summary of Model Features<a class="anchor" aria-label="anchor" href="#summary-of-model-features"></a>
 </h3>
-<table style="width:100%;" class="table">
+<table class="table">
 <caption>Recommended models for fitting via MCMC</caption>
 <colgroup>
-<col width="27%">
+<col width="29%">
 <col width="14%">
 <col width="14%">
 <col width="14%">
@@ -331,11 +329,11 @@ of real self-placements: <code>self = rep(0, nrow(stimuli))</code>.</p>
 </tr>
 </tbody>
 </table>
-<table style="width:100%;" class="table">
+<table class="table">
 <caption>Non-hierarchical, specialized, and historical models (“*” marks
 optional features)</caption>
 <colgroup>
-<col width="27%">
+<col width="29%">
 <col width="14%">
 <col width="14%">
 <col width="14%">
