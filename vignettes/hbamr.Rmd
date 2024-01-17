@@ -112,7 +112,7 @@ show_code("HBAM_MULTI")
 ### Summary of Model Features
 
 |                        | HBAM<br>  | HBAM<br>MULTI | HBAM<br>NF | HBAM<br>MULTI_NF | HBAM<br>MINI |
-|---------------------------|:------------:|:------------:|:------------:|:------------:|:------------:|
+|-----------------------------|:------------:|:------------:|:------------:|:------------:|:------------:|
 | Hierarchical priors    |     X     |       X       |     X      |        X         |      X       |
 | Scale flipping         |     X     |       X       |            |                  |      X       |
 | Group-differences      |           |       X       |            |        X         |              |
@@ -121,7 +121,7 @@ show_code("HBAM_MULTI")
 : Recommended models for fitting via MCMC
 
 |                            | FBAM<br>MINI | FBAM<br>MULTI | FBAM<br>MULTI_NF | HBAM<br>R_MINI | BAM<br>  |
-|---------------------------|:------------:|:------------:|:------------:|:------------:|:------------:|
+|-----------------------------|:------------:|:------------:|:------------:|:------------:|:------------:|
 | Hierarchical priors        |              |               |                  |       X        |          |
 | User-defined priors\*      |      X       |       X       |        X         |                |          |
 | Scale flipping             |      X       |       X       |                  |       X        |    X     |
