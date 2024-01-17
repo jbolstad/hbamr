@@ -15,6 +15,12 @@
     results, and comparing models using cross-validation. The original version of the default 
     model is described in Bølstad (2024) &lt;doi:10.1017/pan.2023.18&gt;.">
 <title>Hierarchical Bayesian Aldrich-McKelvey Scaling via Stan • hbamr</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -29,6 +35,7 @@
     contains functions for preparing data, fitting models, extracting estimates, plotting key 
     results, and comparing models using cross-validation. The original version of the default 
     model is described in Bølstad (2024) &lt;doi:10.1017/pan.2023.18&gt;.">
+<meta property="og:image" content="https://jbolstad.github.io/hbamr/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -42,7 +49,7 @@
     
     <a class="navbar-brand me-2" href="index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,13 +87,16 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="hbamr-hierarchical-bayesian-aldrich-mckelvey-scaling-in-r-via-stan">hbamr: Hierarchical Bayesian Aldrich-McKelvey Scaling in R via Stan<a class="anchor" aria-label="anchor" href="#hbamr-hierarchical-bayesian-aldrich-mckelvey-scaling-in-r-via-stan"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="hbamr-">hbamr 
+<a class="anchor" aria-label="anchor" href="#hbamr-"></a>
+</h1>
+</div>
 <!-- badges: start -->
 
 <!-- badges: end -->
 <div class="section level3">
-<h3 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+<h3 id="hierarchical-bayesian-aldrich-mckelvey-scaling">Hierarchical Bayesian Aldrich-McKelvey Scaling<a class="anchor" aria-label="anchor" href="#hierarchical-bayesian-aldrich-mckelvey-scaling"></a>
 </h3>
 <p>This is an R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling using Hamiltonian Monte Carlo simulations via Stan. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using positional survey data (Aldrich &amp; McKelvey 1977). The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for respondent positions and in terms of recovering true respondent positions in simulations (<a href="https://doi.org/10.1017/pan.2023.18" class="external-link">Bølstad 2024</a>). The package contains functions for preparing data, fitting models, extracting estimates, plotting key results, and comparing models using cross-validation.</p>
 </div>
