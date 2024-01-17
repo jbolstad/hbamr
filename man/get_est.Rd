@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_est.R
 \name{get_est}
 \alias{get_est}
-\title{Extract summaries of marginal posterior distributions from an HBAM model or point estimates from an FBAM model}
+\title{Extract point estimates or other summaries of marginal posterior distributions}
 \usage{
 get_est(
   object,

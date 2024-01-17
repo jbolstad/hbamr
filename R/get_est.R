@@ -1,4 +1,4 @@
-#' Extract summaries of marginal posterior distributions from an HBAM model or point estimates from an FBAM model
+#' Extract point estimates or other summaries of marginal posterior distributions
 #'
 #' For objects produced by `hbam`, this function is a wrapper for `rstan::summary`. For objects produced by `fbam` it offers a way to extract point estimates.
 #'
