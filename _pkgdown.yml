@@ -2,3 +2,5 @@ url: https://jbolstad.github.io/hbamr/
 template:
   bootstrap: 5
 
+development:
+  mode: release
