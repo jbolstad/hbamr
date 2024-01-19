@@ -48,13 +48,20 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.1.1" id="hbamr-211">hbamr 2.1.1<a class="anchor" aria-label="anchor" href="#hbamr-211"></a></h2>
+<div class="section level4">
+<h4 id="minor-edit-2-1-1">Minor edit<a class="anchor" aria-label="anchor" href="#minor-edit-2-1-1"></a></h4>
+<ul><li>In the <code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> function for k-fold cross-validation, the default number of CPU cores to use has been set to 1 as parallelization via <code><a href="https://rdrr.io/r/parallel/mclapply.html" class="external-link">parallel::mclapply</a></code> does not work on Windows systems. Users on non-Windows systems should set the <code>cores</code> argument higher (typically equal to the number of physical cores) to run cross-validation as efficiently as possible.</li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.0" id="hbamr-210">hbamr 2.1.0<a class="anchor" aria-label="anchor" href="#hbamr-210"></a></h2><p class="text-muted">CRAN release: 2024-01-17</p>
 <div class="section level4">
 <h4 id="revisions-to-existing-models-2-1-0">Revisions to existing models<a class="anchor" aria-label="anchor" href="#revisions-to-existing-models-2-1-0"></a></h4>
 <ul><li>All models in the package now simulate errors in respondents’ self-placements. In the original HBAM model, respondents’ latent positions were treated as parameters, which had several consequences: It yielded a realistic level of uncertainty in the estimated positions, but also led to slower sampling. Furthermore, the hierarchical prior on the latent respondent positions shrunk them toward zero, which was undesirable in most applications as it affected the distances between respondents and stimuli. Finally, the original approach led to a more nuanced posterior distribution where combinations of individual-level parameter values that would lead to implausible values for the respondent positions were weighted down. However, the model’s log-normal prior on the stretch parameters is by itself sufficient to yield meaningful respondent positions estimates, so there is no significant cost to not treating the latent respondent positions as parameters. The current versions of the model instead simulate errors in the self-placements to yield the same level of uncertainty as the original model, while sampling considerably faster.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="deprecated-models-2-1-0">Deprecated models<a class="anchor" aria-label="anchor" href="#deprecated-models-2-1-0"></a></h4>
+<h4 id="discontinued-model-2-1-0">Discontinued model<a class="anchor" aria-label="anchor" href="#discontinued-model-2-1-0"></a></h4>
 <ul><li>
 <strong>HBAM_MAX</strong> has been removed as it offered little extra after the other models were revised to simulate errors in respondents’ self-placements.</li>
 </ul></div>
@@ -91,7 +98,7 @@
 <li>All HBAM models that allow for scale flipping have been given a logit-normal prior on the mixing proportions, lambda (i.e. the expectations of the latent discrete flipping parameters, kappa). This replaces the original beta prior, which could trigger divergent transitions.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="deprecated-models-2-0-1">Deprecated models<a class="anchor" aria-label="anchor" href="#deprecated-models-2-0-1"></a></h4>
+<h4 id="discontinued-models-2-0-1">Discontinued models<a class="anchor" aria-label="anchor" href="#discontinued-models-2-0-1"></a></h4>
 <ul><li>
 <strong>HBAM_2</strong> has been replaced by the more general HBAM_MULTI model.</li>
 <li>

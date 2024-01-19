@@ -189,7 +189,7 @@
 <p><strong>FBAM_MULTI_NF</strong> is a version of the FBAM_MULTI model that does not allow for scale flipping.</p>
 <p><strong>HBAM_R_MINI</strong> is a version of the HBAM_MINI model that incorporates the rationalization component of the ISR model by Bølstad (2020). This model requires additional data to be supplied as the argument <code>pref</code>: An N × J matrix of stimuli ratings from the respondents. The rationalization part of the model is simplified relative to the original ISR model: The direction in which respondents move disfavored stimuli is estimated as a common expectation for each possible self-placement on the scale.</p>
 <p><strong>BAM</strong> is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by Hare et al. (2015). This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions (see Bølstad 2024).</p>
-<p><strong>HBAM_2</strong> is deprecated and replaced by the more general HBAM_MULTI model.</p>
+<p><strong>HBAM_2</strong> has been replaced by the more general HBAM_MULTI model.</p>
 <p>These models can also be used in situations where self-placements are not available and the only goal is to estimate stimulus positions. This can be achieved by supplying a vector of zeros (or random data) instead of real self-placements: <code>self = rep(0, nrow(stimuli))</code>.</p>
 <p>See the <code>hbamr</code> vignette for a table summarizing the key characteristics of the available models.</p>
 <p>To see the code for any of the models, use the <code><a href="show_code.html">show_code()</a></code> function.</p>
@@ -217,12 +217,6 @@
 <span class="r-in"><span><span class="co"># Fitting the HBAM_MINI model, obtaining 1000 draws:</span></span></span>
 <span class="r-in"><span><span class="va">fit_hbam_mini</span> <span class="op">&lt;-</span> <span class="fu">hbam</span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_MINI"</span>,</span></span>
 <span class="r-in"><span>                   warmup <span class="op">=</span> <span class="fl">500</span>, iter <span class="op">=</span> <span class="fl">1000</span>, chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Preparing the data before fitting, requiring complete responses:</span></span></span>
 <span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="prep_data.html">prep_data</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, allow_miss <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
@@ -231,6 +225,9 @@
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Obtaining posterior summaries for the latent stimulus positions:</span></span></span>
 <span class="r-in"><span><span class="va">theta_est</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_est.html">get_est</a></span><span class="op">(</span><span class="va">fit_hbam_mini</span>, par <span class="op">=</span> <span class="st">"theta"</span><span class="op">)</span></span></span>
