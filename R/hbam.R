@@ -47,7 +47,7 @@
 #'
 #' **BAM** is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by Hare et al. (2015). This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions (see Bølstad 2024).
 #'
-#' **HBAM_2** is deprecated and replaced by the more general HBAM_MULTI model.
+#' **HBAM_2** has been replaced by the more general HBAM_MULTI model.
 #'
 #' These models can also be used in situations where self-placements are not available and the only goal is to estimate stimulus positions. This can be achieved by supplying a vector of zeros (or random data) instead of real self-placements: `self = rep(0, nrow(stimuli))`.
 #'
