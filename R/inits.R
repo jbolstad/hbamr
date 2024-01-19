@@ -15,9 +15,6 @@ inits_HBAM <- function(chain_id = 1, dat) {
     rho = rdirichlet(1, rep(50, dat$J)),
     logit_lambda = rnorm(dat$N, 0, .2),
     psi = exp(rnorm(1, 1.4, .1)),
-    # For HBAM_ORIG:
-    delta = runif(1, 2.05, 2.1),
-    psi_old = runif(1, .875, .925),
     # For HBAM_MULTI:
     mu_alpha_raw = rdirichlet(1, rep(500, dat$G)),
     mu_beta_raw = rdirichlet(1, rep(500, dat$G)),
@@ -64,13 +61,8 @@ inits_BAM <- function(chain_id = 1, dat) {
 # Collecting all inits-functions:
 inits <- list(
   HBAM = inits_HBAM,
-  #HBAM_ORIG = inits_HBAM,
-  #HBAM_MAX = inits_HBAM,
-  # HBAM_2 = inits_HBAM,
-  # HBAM_HM = inits_HBAM,
   HBAM_MINI = inits_HBAM,
   HBAM_MULTI = inits_HBAM,
-  # HBAM_R = inits_HBAM,
   HBAM_R_MINI = inits_HBAM,
   FBAM_MINI = inits_HBAM,
   FBAM_MULTI = inits_HBAM,
@@ -88,6 +80,6 @@ rdirichlet <- function (n, alpha) {
   x <- matrix(rgamma(l * n, alpha), ncol = l, byrow = TRUE)
   sm <- x %*% rep(1, l)
   out <- x / as.vector(sm)
-  if (n == 1) { out <- c(out) }
+  if (n == 1) { out <- as.numeric(out) }
   return(out)
 }
