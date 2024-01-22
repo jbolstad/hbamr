@@ -93,7 +93,7 @@ stimuli <- LC1980[1:50, -1]
 future::plan(future::multisession, workers = 2)
 
 # Performing 10-fold cross-validation for the HBAM_MINI model:
-  # Note: You would typically want to obtain more draws than this.
+  # Note: You would typically want to run the chains for more iterations.
 cv_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI",
                         chains = 1, warmup = 500, iter = 1000)
 
@@ -104,5 +104,8 @@ cv_fbam_mini <- hbam_cv(self, stimuli, model = "FBAM_MINI",
 # Comparing the results using the loo package:
 loo::loo_compare(list(HBAM_MINI = cv_hbam_mini,
                  FBAM_MINI = cv_fbam_mini))
+
+# Stop the cluster of parallel sessions:
+future::plan(future::sequential)
 }
 }
