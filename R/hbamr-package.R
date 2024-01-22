@@ -16,7 +16,6 @@
 #' @importFrom matrixStats colLogSumExps
 #' @importFrom plyr llply
 #' @importFrom dplyr bind_cols
-#' @importFrom pbmcapply pbmclapply
 #' @importFrom rlang .data
 #' @importFrom RcppParallel RcppParallelLibs
 #' @importFrom rstantools rstan_config

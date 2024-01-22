@@ -1,6 +1,6 @@
 #' Perform K-fold cross-validation
 #'
-#' This function performs a K-fold cross-validation for an HBAM or FBAM model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
+#' This function performs K-fold cross-validation for an HBAM or FBAM model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD). Multiple chains for one or more folds can be run in parallel using the `future` package.
 #'
 #' @export
 #' @param self A numerical vector of N ideological self-placements. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the `prep_data` function.
@@ -14,18 +14,18 @@
 #' @param prefs An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the HBAM_R and HBAM_R_MINI models and will be ignored when fitting other models.
 #' @param group_id Integer vector of length N identifying which group each respondent belongs to. The supplied vector should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with "MULTI" in their name and will be ignored when fitting other models.
 #' @param K An integer above 2, specifying the number of folds to use in the analysis. Defaults to 10.
-#' @param chains A positive integer specifying the number of Markov chains to use for each model fit. Defaults to 2.
-#' @param cores The number of cores to use when executing the Markov chains in parallel. Defaults to 1 because parallelization only works on non-Windows machines. On other systems, the user could set `cores` equal to the number of physical cores. Specifying a higher number of cores than chains will run chains for different folds simultaneously to save time.
-#' @param warmup A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than `iter`.
-#' @param iter A positive integer specifying the number of iterations for each chain (including warmup).
-#' @param thin A positive integer specifying the period for saving samples.
+#' @param chains A positive integer specifying the number of Markov chains to use per fold. Defaults to 2.
+#' @param warmup A positive integer specifying the number of warmup (aka burn-in) iterations per chain. It defaults to 1000. The number of warmup iterations should be smaller than `iter`.
+#' @param iter A positive integer specifying the number of iterations for each chain (including warmup). It defaults to 3000 as running fewer chains for longer is a more efficient way to obtain a certain number of draws (and cross-validation can be computationally expensive).
 #' @param seed An integer passed on to `set.seed` before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument `prep_data` is `TRUE`. The supplied `seed` argument is also used to generate seeds for the sampling algorithm.
 #' @param sigma_alpha A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM_MINI model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.
 #' @param sigma_beta A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM_MINI model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.
 #' @param sigma_mu_alpha A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 5.
 #' @param sigma_mu_beta A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .3.
 #' @param ... Arguments passed to `rstan::sampling`.
-#' @return A data frame containing the estimated ELPD and its standard error.
+#' @return A list of classes `kfold` and `loo`, which contains the following named elements:
+#'    * `"estimates"`: A `1x2` matrix containing the ELPD estimate and its standard error. The columns have names `"Estimate"` and `"SE"`.
+#'    * `"pointwise"`: A `Nx1` matrix with column name `"elpd_kfold"` containing the pointwise contributions for each data point.
 #' @examples
 #' \donttest{
 #' # Loading and re-coding ANES 1980 data:
@@ -36,19 +36,30 @@
 #' self <- LC1980[1:50, 1]
 #' stimuli <- LC1980[1:50, -1]
 #'
+#' # Preparing to run chains in parallel using 2 cores via the future package:
+#'   # Note: You would normally want to use all physical cores for this.
+#' future::plan(future::multisession, workers = 2)
+#'
 #' # Performing 10-fold cross-validation for the HBAM_MINI model:
-#'   # NOTE: You normally want to use ALL physical cores for this, not just 1.
+#'   # Note: You would typically want to obtain more draws than this.
 #' cv_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI",
-#'                         chains = 1, cores = 1, warmup = 500, iter = 1000)
-#' cv_hbam_mini
+#'                         chains = 1, warmup = 500, iter = 1000)
+#'
+#' # Performing 10-fold cross-validation for the FBAM_MINI model:
+#' cv_fbam_mini <- hbam_cv(self, stimuli, model = "FBAM_MINI",
+#'                         chains = 1, warmup = 500, iter = 1000)
+#'
+#' # Comparing the results using the loo package:
+#' loo::loo_compare(list(HBAM_MINI = cv_hbam_mini,
+#'                  FBAM_MINI = cv_fbam_mini))
 #' }
 
 hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                     allow_miss = 0, req_valid = NA, req_unique = 2,
                     prefs = NULL, group_id = NULL, prep_data = TRUE, data = NULL, K = 10,
-                    chains = 2, cores = 1,
+                    chains = 2,
                     warmup = 1000, iter = 3000,
-                    thin = 1, seed = 1,
+                    seed = 1,
                     sigma_alpha = NULL, sigma_beta = .35,
                     sigma_mu_alpha = NULL, sigma_mu_beta = .3, ...){
 
@@ -75,29 +86,38 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
     dat_l[[k]]$sigma_mu_beta <- sigma_mu_beta
   }
 
-  # Run all chains in parallel and store only the log-likelihoods for held-out data to save memory:
-  pointwise_ll_list <-
-    pbmcapply::pbmclapply(1:(n_fold * chains),
-                          function(i){
-                            k <- ceiling(i / chains) # Fold number
-                            # Generate inits
-                            set.seed(seed + i)
-                            init_l <- list(inits[[model]](chain_id = i, dat = dat_l[[k]]))
-                            # Obtain chain:
-                            s <- rstan::sampling(stanmodels[[model]], data = dat_l[[k]], init = init_l, pars = "log_lik",
-                                                 chains = 1, cores = 1, warmup = warmup, iter = iter, thin = thin, chain_id = i, seed = seed + i, ...)
-                            # Calculate expected value of log-likelihood for each held-out observation:
-                            log_lik <- loo::extract_log_lik(s)
-                            draws <- dim(log_lik)[1]
-                            N_obs <- dim(log_lik)[2]
-                            heldout <- matrix(rep(dat_l[[k]]$holdout, each = draws), nrow = draws)
-                            log_lik_heldout <- log_lik * NA
-                            log_lik_heldout[heldout == 1] <- log_lik[heldout == 1]
-                            pointwise <-  matrix(logColMeansExp(log_lik_heldout), ncol= 1)
+  RNGkind("L'Ecuyer-CMRG")
+  set.seed(seed)
 
-                            return(pointwise)
-                          },
-                          mc.cores = cores)
+  # Function to run all chains and store only the log-likelihoods for held-out data to save memory:
+  get_ll_list <- function() {
+    p <- progressr::progressor(n_fold * chains)
+    future.apply::future_lapply(1:(n_fold * chains),
+                                function(i){
+                                  k <- ceiling(i / chains) # Fold number
+                                  init_l <- list(inits[[model]](chain_id = i, dat = dat_l[[k]]))
+                                  # Obtain chain:
+                                  s <- rstan::sampling(stanmodels[[model]], data = dat_l[[k]], init = init_l, pars = "log_lik",
+                                                       chains = 1, cores = 1, warmup = warmup, iter = iter, chain_id = i, seed = seed + i, refresh = 0, ...)
+                                  # Calculate expected value of log-likelihood for each held-out observation:
+                                  log_lik <- loo::extract_log_lik(s)
+                                  draws <- dim(log_lik)[1]
+                                  N_obs <- dim(log_lik)[2]
+                                  heldout <- matrix(rep(dat_l[[k]]$holdout, each = draws), nrow = draws)
+                                  log_lik_heldout <- log_lik * NA
+                                  log_lik_heldout[heldout == 1] <- log_lik[heldout == 1]
+                                  pointwise <-  matrix(logColMeansExp(log_lik_heldout), ncol= 1)
+
+                                  p()
+
+                                  return(pointwise)
+                                },
+                                future.seed = .Random.seed)
+
+  }
+
+  # Run all chains and show progress bar:
+  pointwise_ll_list <- progressr::with_progress(get_ll_list())
 
   # Combine log-likelihoods from different chains by averaging, then combine values from different folds in a common vector:
   pointwise_ll <- vector()
@@ -107,10 +127,26 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
     pointwise_ll[dat_l[[k]]$holdout == 1] <- logColMeansExp(pointwise_ll_mat)[dat_l[[k]]$holdout == 1]
   }
 
-  out <- data.frame(
-    ELPD = round(sum(pointwise_ll, na.rm = T), digits = 1),
-    SE = round(as.numeric(sqrt(length(pointwise_ll) * var(pointwise_ll))), digits = 1))
-  rownames(out) <- model
+  #out <- data.frame(
+  #  ELPD = round(sum(pointwise_ll, na.rm = T), digits = 1),
+  #  SE = round(as.numeric(sqrt(length(pointwise_ll) * var(pointwise_ll))), digits = 1))
+  #rownames(out) <- model
+
+  estimates = matrix(
+    c(round(sum(pointwise_ll, na.rm = T), digits = 1),
+      round(as.numeric(sqrt(length(pointwise_ll) * var(pointwise_ll))), digits = 1)),
+    nrow = 1)
+  rownames(estimates) <- "elpd_kfold"
+  colnames(estimates) <- c("Estimate", "SE")
+
+  pointwise_ll <- matrix(as.numeric(pointwise_ll), nrow = length(as.numeric(pointwise_ll)), ncol = 1)
+  colnames(pointwise_ll) <- "elpd_kfold"
+
+  out <- list("estimates" = estimates,
+              "pointwise" = pointwise_ll)
+
+  class(out) <- c("kfold", "loo")
 
   return(out)
 }
+

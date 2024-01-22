@@ -17,10 +17,8 @@ hbam_cv(
   data = NULL,
   K = 10,
   chains = 2,
-  cores = 1,
   warmup = 1000,
   iter = 3000,
-  thin = 1,
   seed = 1,
   sigma_alpha = NULL,
   sigma_beta = 0.35,
@@ -52,15 +50,11 @@ hbam_cv(
 
 \item{K}{An integer above 2, specifying the number of folds to use in the analysis. Defaults to 10.}
 
-\item{chains}{A positive integer specifying the number of Markov chains to use for each model fit. Defaults to 2.}
+\item{chains}{A positive integer specifying the number of Markov chains to use per fold. Defaults to 2.}
 
-\item{cores}{The number of cores to use when executing the Markov chains in parallel. Defaults to 1 because parallelization only works on non-Windows machines. On other systems, the user could set \code{cores} equal to the number of physical cores. Specifying a higher number of cores than chains will run chains for different folds simultaneously to save time.}
+\item{warmup}{A positive integer specifying the number of warmup (aka burn-in) iterations per chain. It defaults to 1000. The number of warmup iterations should be smaller than \code{iter}.}
 
-\item{warmup}{A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than \code{iter}.}
-
-\item{iter}{A positive integer specifying the number of iterations for each chain (including warmup).}
-
-\item{thin}{A positive integer specifying the period for saving samples.}
+\item{iter}{A positive integer specifying the number of iterations for each chain (including warmup). It defaults to 3000 as running fewer chains for longer is a more efficient way to obtain a certain number of draws (and cross-validation can be computationally expensive).}
 
 \item{seed}{An integer passed on to \code{set.seed} before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument \code{prep_data} is \code{TRUE}. The supplied \code{seed} argument is also used to generate seeds for the sampling algorithm.}
 
@@ -75,10 +69,14 @@ hbam_cv(
 \item{...}{Arguments passed to \code{rstan::sampling}.}
 }
 \value{
-A data frame containing the estimated ELPD and its standard error.
+A list of classes \code{kfold} and \code{loo}, which contains the following named elements:
+\itemize{
+\item \code{"estimates"}: A \verb{1x2} matrix containing the ELPD estimate and its standard error. The columns have names \code{"Estimate"} and \code{"SE"}.
+\item \code{"pointwise"}: A \code{Nx1} matrix with column name \code{"elpd_kfold"} containing the pointwise contributions for each data point.
+}
 }
 \description{
-This function performs a K-fold cross-validation for an HBAM or FBAM model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD).
+This function performs K-fold cross-validation for an HBAM or FBAM model in order to estimate the expected log pointwise predictive density for a new dataset (ELPD). Multiple chains for one or more folds can be run in parallel using the \code{future} package.
 }
 \examples{
 \donttest{
@@ -90,10 +88,21 @@ LC1980[LC1980 == 0 | LC1980 == 8 | LC1980 == 9] <- NA
 self <- LC1980[1:50, 1]
 stimuli <- LC1980[1:50, -1]
 
+# Preparing to run chains in parallel using 2 cores via the future package:
+  # Note: You would normally want to use all physical cores for this.
+future::plan(future::multisession, workers = 2)
+
 # Performing 10-fold cross-validation for the HBAM_MINI model:
-  # NOTE: You normally want to use ALL physical cores for this, not just 1.
+  # Note: You would typically want to obtain more draws than this.
 cv_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI",
-                        chains = 1, cores = 1, warmup = 500, iter = 1000)
-cv_hbam_mini
+                        chains = 1, warmup = 500, iter = 1000)
+
+# Performing 10-fold cross-validation for the FBAM_MINI model:
+cv_fbam_mini <- hbam_cv(self, stimuli, model = "FBAM_MINI",
+                        chains = 1, warmup = 500, iter = 1000)
+
+# Comparing the results using the loo package:
+loo::loo_compare(list(HBAM_MINI = cv_hbam_mini,
+                 FBAM_MINI = cv_fbam_mini))
 }
 }

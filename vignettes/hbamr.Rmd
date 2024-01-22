@@ -327,13 +327,18 @@ est_chi
 
 ## Cross-Validation
 
-A useful way to compare alternative models is to estimate their out-of-sample prediction accuracy. More specifically, we can estimate their expected log pointwise predictive density for a new data set (ELPD). It is most straightforward to do so for the stimuli placements, and this is informative because these form the basis for estimating most individual level parameters. A similar analysis for the self-placement data is generally not possible, as the models require these placements to estimate the corresponding latent respondent positions. This section therefore focuses on estimating the ELPD for stimulus placements.
+A useful way to compare alternative models is to estimate their out-of-sample prediction accuracy. More specifically, we can estimate their expected log pointwise predictive density for a new data set (ELPD). The **rstan** and **loo** packages contain functions for estimating ELPDs by performing approximate leave-one-out (LOO) cross-validation using Pareto smoothed importance sampling (PSIS). However, PSIS-LOO only works when all Pareto *k* values are sufficiently low, or when the number of high values is so low that moment matching can be used on the problematic cases. This is often not the case for the models in this package. 
 
-The **rstan** and **loo** packages contain functions for estimating ELPDs by performing approximate leave-one-out (LOO) cross-validation using Pareto smoothed importance sampling (PSIS). However, PSIS-LOO only works when all Pareto *k* values are sufficiently low, or when the number of high values is so low that moment matching can be used on the problematic cases. In practice, this is not always the case, and it rarely seems to be the case with the BAM model.
+The **hbamr** package therefore allows users to perform *K*-fold cross-validation. The function `hbam_cv()` is similar to `hbam()` and takes the same arguments, but will perform a *K*-fold cross-validation for the chosen model. In contrast to `hbam()`, the default for `hbam_cv()` is to not allow respondents to have any missing values (`allow_miss = 0`). The reason is that the cross-validation essentially creates missing values by excluding some data from each run. 
 
-The **hbamr** package therefore includes model codes and functions to perform *K*-fold cross-validation. The function `hbam_cv()` is similar to `hbam()` and takes the same arguments, but will perform a *K*-fold cross-validation for the chosen model. In contrast to `hbam()`, the default for `hbam_cv()` is to not allow respondents to have any missing values (`allow_miss = 0`). The reason is that the cross-validation essentially creates missing values by excluding some data from each run.
+A key choice when performing cross-validation is to set *K* (the number of folds to use), and the default in this package is 10. To preserve memory, the function extracts the summaries of the log-likelihoods for the held-out data and drops the stanfit objects once this is done. The memory requirements of the function is therefore similar to running a single analysis with one chain per core. The function that splits the data into *K* folds uses a default seed to produce the same folds each time, unless a different seed is specified.
 
-A key choice when performing cross-validation is to set *K* (the number of folds to use), and the default in this package is 10. The function is parallelized via `parallel::mclapply()` so that users on non-Windows systems can specify a higher number of cores than chains and run chains for different folds simultaneously. To preserve memory, the function extracts the summaries of the log-likelihoods for the held-out data and drops the stanfit objects once this is done. The memory requirements of the function is therefore similar to running a single analysis with one chain per core. The function that splits the data into *K* folds uses a default seed to produce the same folds each time, unless a different seed is specified.
+The `hbam_cv()` function is written to allow parallel computation via the `future` package to minimize execution time. The `future` package offers several computational strategies, of which "multisession" works on all operating systems. It most settings, it is advisable to use all physical CPU cores when performing cross-validation. To set up parallel computation using 4 cores via the `future` package, we could run:
+
+```{r, eval = FALSE}
+library(future)
+plan(multisession, workers = 4)
+```
 
 To perform 10-fold cross-validation for a selection of models, we could run:
 
@@ -342,39 +347,48 @@ load("elpds.rda")
 ```
 
 ```{r run_cv_new, eval = FALSE}
-elpd_hbam <- hbam_cv(self, stimuli, model = "HBAM", cores = 4)
-elpd_hbam_nf <- hbam_cv(self, stimuli, model = "HBAM_NF", cores = 4)
-elpd_bam <- hbam_cv(self, stimuli, model = "BAM", cores = 4)
+kfold_bam <- hbam_cv(self, stimuli, model = "BAM")
+kfold_hbam <- hbam_cv(self, stimuli, model = "HBAM")
+kfold_hbam_nf <- hbam_cv(self, stimuli, model = "HBAM_NF")
+kfold_hbam_multi <- hbam_cv(self, stimuli, group_id = self, 
+                            model = "HBAM_MULTI")
 ```
 
-Rather than returning stanfit objects, the function returns a data frame containing the estimated ELPD and its standard error. To compare results across models, we could run:
-
-```{r elpd_ill, eval = FALSE, include = TRUE}
-elpds <- rbind(elpd_bam, elpd_hbam, elpd_hbam_nf)
-elpds[order(elpds$ELPD), ]
-```
-
-```{r, echo = FALSE, include = TRUE}
-elpds <- rbind(elpd_bam, elpd_hbam, elpd_hbam_nf)
-elpds[order(elpds$ELPD), ]
-```
-
-We see that the unpooled BAM model is worse at predicting out-of-sample data than the other models, suggesting it overfits the data. The HBAM_NF model -- which does not allow for scale flipping -- also performs worse, suggesting it is too restrictive and underfits. The HBAM model outperforms the other two models in this case.
-
-We could also perform cross-validation for a model that does not account for heteroskedastic errors:
+The `hbam_cv()` function returns an object of classes `kfold` and `loo`, which can be further processed using the `loo` package. To compare the estimated ELPDs, we could run:
 
 ```{r, eval = FALSE}
-elpd_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI", cores = 4)
-elpd_hbam_mini
+print(loo::loo_compare(list(BAM = kfold_bam, 
+                            HBAM = kfold_hbam, 
+                            HBAM_NF = kfold_hbam_nf, 
+                            HBAM_MULTI = kfold_hbam_multi)), simplify = FALSE)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(loo)
+print(loo1, simplify = FALSE)
+```
+
+We see that the unpooled BAM model is worse at predicting out-of-sample data than the other models, suggesting it overfits the data. The HBAM_NF model -- which does not allow for scale flipping -- also performs worse, suggesting it is too restrictive and underfits. The HBAM and HBAM_MULTI models outperform the other two models in this case. The HBAM_MULTI model -- with self-placements as `group_id` -- may have a slight edge, but the default HBAM model performs about equally well. 
+
+We could also perform cross-validation for a couple of models that do not account for heteroskedastic errors:
+
+```{r, eval = FALSE}
+kfold_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI")
+kfold_fbam_mini <- hbam_cv(self, stimuli, model = "FBAM_MINI")
+```
+
+```{r, eval = FALSE}
+print(loo::loo_compare(list(HBAM_MINI = kfold_hbam_mini, 
+                            FBAM_MINI = kfold_fbam_mini)), simplify = FALSE)
 ```
 
 ```{r, echo = FALSE}
-elpd_hbam_mini
+print(loo2, simplify = FALSE)
 ```
 
-The estimated ELPD is notably higher for this model compared to its heteroskedastic counterpart. This suggest there is a considerable degree of heteroskedasticity in the data -- which is not surprising.
+The ELPD for the FBAM_MINI model is lower than that of the HBAM_MINI model, which suggests that the priors of the FBAM model are too wide to yield optimal results for these data. While the ELPD for the HBAM_MINI model is higher than that of the FBAM model, it is still notably lower than that of its heteroskedastic counterpart (HBAM). This suggest there is a considerable degree of heteroskedasticity in the data -- which is not surprising.
 
-Modeling the heteroskedasticity increases prediction accuracy, but it should be noted that this does not necessarily translate into much more accurate estimates of key model outputs. As shown in section on plotting, the results for the HBAM and HBAM_MINI models are very similar. In fact, their estimated respondent positions correlate at .97 and .99, depending on whether we use the posterior means or medians. Their estimated stimulus positions also correlate at .99, but this masks the fact that the HBAM_MINI model places the less well known candidate John B. Anderson further to the left than the HBAM model does. This illustrates that there are some subtle differences that users should be aware of, even if these models tend to produce very similar results.
+Modeling the heteroskedasticity increases prediction accuracy, but it should be noted that this does not necessarily translate into much more accurate estimates of key model outputs. As shown in section on plotting, the results for the HBAM and HBAM_MINI models are very similar. In fact, their estimated respondent positions correlate at .97 and .99, depending on whether we use the posterior means or medians. Their estimated stimulus positions also correlate at .99, but this masks the fact that the HBAM_MINI model places the less well known candidate John B. Anderson further to the left than the HBAM model does. There are some subtle differences that users should be aware of, even if these models tend to produce very similar results.
 
 ## Diagnostics
 
