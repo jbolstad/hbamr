@@ -11,7 +11,7 @@ run_para_sims <- function(nreps = 1, J_vals = 4, psi_vals = .89, tau_vals = .65,
 
   # Run simulations in parallel
   res_list <-
-    pbmcapply::pbmclapply(1:nrow(vecs), mc.cores = parallel::detectCores(logical = FALSE),
+    future.apply::future_lapply(1:nrow(vecs),
              function(i){
                results <- try(run_sim(tau = vecs$tau[i], J = vecs$J[i], psi = vecs$psi[i],
                                   chains = 1, it = it, warm = warm, draws = draws,
