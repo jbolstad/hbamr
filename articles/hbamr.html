@@ -734,71 +734,89 @@ follows:</p>
 <p>A useful way to compare alternative models is to estimate their
 out-of-sample prediction accuracy. More specifically, we can estimate
 their expected log pointwise predictive density for a new data set
-(ELPD). It is most straightforward to do so for the stimuli placements,
-and this is informative because these form the basis for estimating most
-individual level parameters. A similar analysis for the self-placement
-data is generally not possible, as the models require these placements
-to estimate the corresponding latent respondent positions. This section
-therefore focuses on estimating the ELPD for stimulus placements.</p>
-<p>The <strong>rstan</strong> and <strong>loo</strong> packages contain
-functions for estimating ELPDs by performing approximate leave-one-out
-(LOO) cross-validation using Pareto smoothed importance sampling (PSIS).
-However, PSIS-LOO only works when all Pareto <em>k</em> values are
-sufficiently low, or when the number of high values is so low that
-moment matching can be used on the problematic cases. In practice, this
-is not always the case, and it rarely seems to be the case with the BAM
-model.</p>
-<p>The <strong>hbamr</strong> package therefore includes model codes and
-functions to perform <em>K</em>-fold cross-validation. The function
-<code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> is similar to <code><a href="../reference/hbam.html">hbam()</a></code> and takes the
-same arguments, but will perform a <em>K</em>-fold cross-validation for
-the chosen model. In contrast to <code><a href="../reference/hbam.html">hbam()</a></code>, the default for
-<code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> is to not allow respondents to have any missing
-values (<code>allow_miss = 0</code>). The reason is that the
-cross-validation essentially creates missing values by excluding some
-data from each run.</p>
+(ELPD). The <strong>rstan</strong> and <strong>loo</strong> packages
+contain functions for estimating ELPDs by performing approximate
+leave-one-out (LOO) cross-validation using Pareto smoothed importance
+sampling (PSIS). However, PSIS-LOO only works when all Pareto <em>k</em>
+values are sufficiently low, or when the number of high values is so low
+that moment matching can be used on the problematic cases. This is often
+not the case for the models in this package.</p>
+<p>The <strong>hbamr</strong> package therefore allows users to perform
+<em>K</em>-fold cross-validation. The function <code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> is
+similar to <code><a href="../reference/hbam.html">hbam()</a></code> and takes the same arguments, but will
+perform a <em>K</em>-fold cross-validation for the chosen model. In
+contrast to <code><a href="../reference/hbam.html">hbam()</a></code>, the default for <code><a href="../reference/hbam_cv.html">hbam_cv()</a></code>
+is to not allow respondents to have any missing values
+(<code>allow_miss = 0</code>). The reason is that the cross-validation
+essentially creates missing values by excluding some data from each
+run.</p>
 <p>A key choice when performing cross-validation is to set <em>K</em>
-(the number of folds to use), and the default in this package is 10. The
-function is parallelized via <code><a href="https://rdrr.io/r/parallel/mclapply.html" class="external-link">parallel::mclapply()</a></code> so that
-users on non-Windows systems can specify a higher number of cores than
-chains and run chains for different folds simultaneously. To preserve
-memory, the function extracts the summaries of the log-likelihoods for
-the held-out data and drops the stanfit objects once this is done. The
-memory requirements of the function is therefore similar to running a
-single analysis with one chain per core. The function that splits the
-data into <em>K</em> folds uses a default seed to produce the same folds
-each time, unless a different seed is specified.</p>
+(the number of folds to use), and the default in this package is 10. To
+preserve memory, the function extracts the summaries of the
+log-likelihoods for the held-out data and drops the stanfit objects once
+this is done. The memory requirements of the function is therefore
+similar to running a single analysis with one chain per core. The
+function that splits the data into <em>K</em> folds uses a default seed
+to produce the same folds each time, unless a different seed is
+specified.</p>
+<p>The <code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> function is written to allow parallel
+computation via the <code>future</code> package to minimize execution
+time. The <code>future</code> package offers several computational
+strategies, of which “multisession” works on all operating systems. It
+most settings, it is advisable to use all physical CPU cores when
+performing cross-validation. To set up parallel computation using 4
+cores via the <code>future</code> package, we could run:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <p>To perform 10-fold cross-validation for a selection of models, we
 could run:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">elpd_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM"</span>, cores <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="va">elpd_hbam_nf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_NF"</span>, cores <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="va">elpd_bam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"BAM"</span>, cores <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<p>Rather than returning stanfit objects, the function returns a data
-frame containing the estimated ELPD and its standard error. To compare
-results across models, we could run:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">elpds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">elpd_bam</span>, <span class="va">elpd_hbam</span>, <span class="va">elpd_hbam_nf</span><span class="op">)</span></span>
-<span><span class="va">elpds</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">elpds</span><span class="op">$</span><span class="va">ELPD</span><span class="op">)</span>, <span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">##            ELPD   SE</span></span>
-<span><span class="co">## BAM     -5835.7 58.6</span></span>
-<span><span class="co">## HBAM_NF -5766.9 51.2</span></span>
-<span><span class="co">## HBAM    -5524.6 48.6</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">kfold_bam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"BAM"</span><span class="op">)</span></span>
+<span><span class="va">kfold_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM"</span><span class="op">)</span></span>
+<span><span class="va">kfold_hbam_nf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_NF"</span><span class="op">)</span></span>
+<span><span class="va">kfold_hbam_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, group_id <span class="op">=</span> <span class="va">self</span>, </span>
+<span>                            model <span class="op">=</span> <span class="st">"HBAM_MULTI"</span><span class="op">)</span></span></code></pre></div>
+<p>The <code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> function returns an object of classes
+<code>kfold</code> and <code>loo</code>, which can be further processed
+using the <code>loo</code> package. To compare the estimated ELPDs, we
+could run:</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">loo</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/loo/reference/loo_compare.html" class="external-link">loo_compare</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>BAM <span class="op">=</span> <span class="va">kfold_bam</span>, </span>
+<span>                            HBAM <span class="op">=</span> <span class="va">kfold_hbam</span>, </span>
+<span>                            HBAM_NF <span class="op">=</span> <span class="va">kfold_hbam_nf</span>, </span>
+<span>                            HBAM_MULTI <span class="op">=</span> <span class="va">kfold_hbam_multi</span><span class="op">)</span><span class="op">)</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##            elpd_diff se_diff elpd_kfold se_elpd_kfold</span></span>
+<span><span class="co">## HBAM_MULTI     0.0       0.0 -5503.3       49.2      </span></span>
+<span><span class="co">## HBAM          -8.6       8.8 -5511.9       49.3      </span></span>
+<span><span class="co">## HBAM_NF     -255.5      27.7 -5758.7       51.3      </span></span>
+<span><span class="co">## BAM         -331.5      38.4 -5834.8       58.7</span></span></code></pre>
 <p>We see that the unpooled BAM model is worse at predicting
 out-of-sample data than the other models, suggesting it overfits the
 data. The HBAM_NF model – which does not allow for scale flipping – also
 performs worse, suggesting it is too restrictive and underfits. The HBAM
-model outperforms the other two models in this case.</p>
-<p>We could also perform cross-validation for a model that does not
-account for heteroskedastic errors:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">elpd_hbam_mini</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_MINI"</span>, cores <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="va">elpd_hbam_mini</span></span></code></pre></div>
-<pre><code><span><span class="co">##              ELPD   SE</span></span>
-<span><span class="co">## HBAM_MINI -5889.4 47.1</span></span></code></pre>
-<p>The estimated ELPD is notably higher for this model compared to its
-heteroskedastic counterpart. This suggest there is a considerable degree
-of heteroskedasticity in the data – which is not surprising.</p>
+and HBAM_MULTI models outperform the other two models in this case. The
+HBAM_MULTI model – with self-placements as <code>group_id</code> – may
+have a slight edge, but the default HBAM model performs about equally
+well.</p>
+<p>We could also perform cross-validation for a couple of models that do
+not account for heteroskedastic errors:</p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">kfold_hbam_mini</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_MINI"</span><span class="op">)</span></span>
+<span><span class="va">kfold_fbam_mini</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"FBAM_MINI"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">loo</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/loo/reference/loo_compare.html" class="external-link">loo_compare</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>HBAM_MINI <span class="op">=</span> <span class="va">kfold_hbam_mini</span>, </span>
+<span>                            FBAM_MINI <span class="op">=</span> <span class="va">kfold_fbam_mini</span><span class="op">)</span><span class="op">)</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##           elpd_diff se_diff elpd_kfold se_elpd_kfold</span></span>
+<span><span class="co">## HBAM_MINI     0.0       0.0 -5882.0       48.6      </span></span>
+<span><span class="co">## FBAM_MINI  -158.7      22.9 -6040.7       46.0</span></span></code></pre>
+<p>The ELPD for the FBAM_MINI model is lower than that of the HBAM_MINI
+model, which suggests that the priors of the FBAM model are too wide to
+yield optimal results for these data. While the ELPD for the HBAM_MINI
+model is higher than that of the FBAM model, it is still notably lower
+than that of its heteroskedastic counterpart (HBAM). This suggest there
+is a considerable degree of heteroskedasticity in the data – which is
+not surprising.</p>
 <p>Modeling the heteroskedasticity increases prediction accuracy, but it
 should be noted that this does not necessarily translate into much more
 accurate estimates of key model outputs. As shown in section on
@@ -807,9 +825,9 @@ similar. In fact, their estimated respondent positions correlate at .97
 and .99, depending on whether we use the posterior means or medians.
 Their estimated stimulus positions also correlate at .99, but this masks
 the fact that the HBAM_MINI model places the less well known candidate
-John B. Anderson further to the left than the HBAM model does. This
-illustrates that there are some subtle differences that users should be
-aware of, even if these models tend to produce very similar results.</p>
+John B. Anderson further to the left than the HBAM model does. There are
+some subtle differences that users should be aware of, even if these
+models tend to produce very similar results.</p>
 </div>
 <div class="section level2">
 <h2 id="diagnostics">Diagnostics<a class="anchor" aria-label="anchor" href="#diagnostics"></a>
@@ -832,7 +850,7 @@ full range of diagnostic tools from the <strong>rstan</strong> package.
 Users should consult the <strong>rstan</strong> documentation for
 details on the various diagnostic tests and plots that are available.
 One example of the available tools is <code>traceplot()</code>:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">rstan</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstan/reference/stanfit-method-traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">fit_hbam</span>, pars <span class="op">=</span> <span class="st">"theta"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p_trace_theta.svg" width="100%" style="display: block; margin: auto;"></p>
 <div class="section level3">

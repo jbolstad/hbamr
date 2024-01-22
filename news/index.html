@@ -50,8 +50,9 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.1" id="hbamr-211">hbamr 2.1.1<a class="anchor" aria-label="anchor" href="#hbamr-211"></a></h2>
 <div class="section level4">
-<h4 id="minor-edit-2-1-1">Minor edit<a class="anchor" aria-label="anchor" href="#minor-edit-2-1-1"></a></h4>
-<ul><li>In the <code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> function for k-fold cross-validation, the default number of CPU cores to use has been set to 1 as parallelization via <code><a href="https://rdrr.io/r/parallel/mclapply.html" class="external-link">parallel::mclapply</a></code> does not work on Windows systems. Users on non-Windows systems should set the <code>cores</code> argument higher (typically equal to the number of physical cores) to run cross-validation as efficiently as possible.</li>
+<h4 id="improved-cross-validation-function-2-1-1">Improved cross-validation function<a class="anchor" aria-label="anchor" href="#improved-cross-validation-function-2-1-1"></a></h4>
+<ul><li>The <code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> function no longer uses <code><a href="https://rdrr.io/r/parallel/mclapply.html" class="external-link">parallel::mclapply</a></code> for parallel computation as the latter relies on forking, which is not available on Windows. <code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> has been revised to work with the <code>future</code> package, where the user decides the computational strategy and options are available for parallel computation on all systems.</li>
+<li>The return value of <code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> has been changed to comply with the standards of the <code>loo</code> package. The function now returns a list with classes <code>kfold</code> and <code>loo</code>. This allows the user to compare estimated ELPDs and obtain standard errors for their differences via <code><a href="https://mc-stan.org/loo/reference/loo_compare.html" class="external-link">loo::loo_compare()</a></code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
