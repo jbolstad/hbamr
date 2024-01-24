@@ -10,13 +10,14 @@ data {
   array[N_obs] int<lower = -B, upper = B> Y; // reported stimuli positions
   vector<lower = -B, upper = B>[N] V;     // reported self-placements
   int<lower = 0, upper = 1> CV;           // indicator of cross-validation
-  array[N_obs] int<lower = 0, upper = 1> holdout; // holdout for cross-validation
+  vector<lower = 0, upper = 1>[N_obs] holdout; // holdout for cross-validation
   real<lower = 0> sigma_alpha;            // sd of prior on alpha
   real<lower = 0> sigma_beta;             // sd of prior on log(beta)
 }
 
 transformed data {
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
+  vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
 }
 
 parameters {
@@ -61,20 +62,12 @@ model {
   if(CV == 0)
     target += sum(log_lik);
   else
-    for (n in 1:N_obs) {
-      if(holdout[n] == 0)
-        target += log_lik[n];
-    }
+    target += sum(log_lik .* not_holdout);
 }
 
 generated quantities {
-  matrix[N, 2] chi0;                      // latent respondent positions, split
-  vector[N] chi;                          // latent respondent positions, combined
   vector[N] kappa = to_vector(round(lambda)); // Rounding to MAP instead of sampling
   vector[N] alpha = (kappa .* alpha0[, 1]) + ((1 - kappa) .* alpha0[, 2]);
   vector[N] beta = (kappa .* beta0[, 1]) + ((1 - kappa) .* beta0[, 2]);
-  vector[N] V_error = to_vector(normal_rng(0, rep_vector(tau, N)));
-  chi0[, 1] = ((V - V_error - alpha0[, 1]) ./ beta0[, 1]);
-  chi0[, 2] = ((V - V_error - alpha0[, 2]) ./ beta0[, 2]);
-  chi = (kappa .* chi0[, 1]) + ((1 - kappa) .* chi0[, 2]);
+  vector[N] chi = (V - to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
 }

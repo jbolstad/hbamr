@@ -12,7 +12,7 @@ data {
   array[N_obs] int<lower = -B, upper = B> Y; // reported stimuli positions
   vector<lower = -B, upper = B>[N] V;     // reported self-placements
   int<lower = 0, upper = 1> CV;           // indicator of cross-validation
-  array[N_obs] int<lower = 0, upper = 1> holdout; // holdout for cross-validation
+  vector<lower = 0, upper = 1>[N_obs] holdout; // holdout for cross-validation
   real<lower = 0> sigma_alpha;            // sd of prior on alpha
   real<lower = 0> sigma_beta;             // sd of prior on log(beta)
   real<lower = 0> sigma_mu_alpha;         // sd of prior on mu_alpha
@@ -21,6 +21,7 @@ data {
 
 transformed data {
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
+  vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
   real mean_mu_simplexes = 1.0 / G;       // for later scaling of simplexes
   real sd_mu_simplexes = sqrt(mean_mu_simplexes * (1 - mean_mu_simplexes) / (50 * G + 1));
 }
@@ -69,10 +70,7 @@ model {
   if(CV == 0)
     target += sum(log_lik);
   else
-    for (n in 1:N_obs) {
-      if(holdout[n] == 0)
-        target += log_lik[n];
-    }
+    target += sum(log_lik .* not_holdout);
 }
 
 generated quantities {

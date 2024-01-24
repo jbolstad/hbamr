@@ -10,11 +10,12 @@ data {
   array[N_obs] int<lower = -B, upper = B> Y; // reported stimuli positions
   vector<lower = -B, upper = B>[N] V;     // reported self-placements
   int<lower = 0, upper = 1> CV;           // indicator of cross-validation
-  array[N_obs] int<lower = 0, upper = 1> holdout; // holdout for cross-validation
+  vector<lower = 0, upper = 1>[N_obs] holdout; // holdout for cross-validation
 }
 
 transformed data {
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
+  vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
 }
 
 parameters {
@@ -56,10 +57,7 @@ model {
   if(CV == 0)
     target += sum(log_lik);
   else
-    for (n in 1:N_obs) {
-      if(holdout[n] == 0)
-        target += log_lik[n];
-    }
+    target += sum(log_lik .* not_holdout);
 }
 
 generated quantities {

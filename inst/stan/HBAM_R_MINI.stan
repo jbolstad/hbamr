@@ -11,12 +11,13 @@ data {
   array[N_obs] real<lower = 0, upper = 1> U; // reported voter preferences
   array[N] int<lower = -B, upper = B> V;  // reported voter positions
   int<lower=0, upper=1> CV;               // indicator of cross-validation
-  array[N_obs] int<lower = 0, upper = 1> holdout; // holdout for cross-validation
+  vector<lower = 0, upper = 1>[N_obs] holdout; // holdout for cross-validation
 }
 
 transformed data {
   real<lower = 0> sigma_alpha_prior_rate = (2 - 1) / (B / 5.0);
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
+  vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
   vector<lower = -B, upper = B>[N] Vvec = to_vector(V);
   array[2, N_obs] real<lower = -B, upper = B> p;
   for (n in 1:N_obs) {
@@ -92,20 +93,12 @@ model {
   if(CV == 0)
     target += sum(log_lik);
   else
-    for (n in 1:N_obs) {
-      if(holdout[n] == 0)
-        target += log_lik[n];
-    }
+    target += sum(log_lik .* not_holdout);
 }
 
 generated quantities {
-  matrix[N, 2] chi0;                      // latent respondent positions, split
-  vector[N] chi;                          // latent respondent positions, combined
   vector[N] kappa = to_vector(bernoulli_rng(lambda));
   vector[N] alpha = (kappa .* alpha0[, 1]) + ((1 - kappa) .* alpha0[, 2]);
   vector[N] beta = (kappa .* beta0[, 1]) + ((1 - kappa) .* beta0[, 2]);
-  vector[N] V_error = to_vector(normal_rng(0, rep_vector(tau, N)));
-  chi0[, 1] = ((Vvec - V_error - alpha0[, 1]) ./ beta0[, 1]);
-  chi0[, 2] = ((Vvec - V_error - alpha0[, 2]) ./ beta0[, 2]);
-  chi = (kappa .* chi0[, 1]) + ((1 - kappa) .* chi0[, 2]);
+  vector[N] chi = (Vvec - to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
 }
