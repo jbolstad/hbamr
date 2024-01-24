@@ -188,7 +188,9 @@ unchanged by the functions in this package.)</p>
 <p>This package provides several alternative models that can be selected
 using the names below. Users who are unsure which model to use are
 advised to use the default HBAM model. If speed or sampling diagnostics
-are an issue, HBAM_MINI may provide a useful alternative.</p>
+are an issue, HBAM_MINI may provide a useful alternative. (See also the
+section on cross-validation for further discussion on the issue of model
+selection.)</p>
 <p><strong>HBAM</strong> is the default model, which allows for scale
 flipping and employs hierarchical priors on the shift and stretch
 parameters. It also models heteroskedastic errors that vary by both
@@ -337,8 +339,8 @@ of real self-placements: <code>self = rep(0, nrow(stimuli))</code>.</p>
 </tbody>
 </table>
 <table class="table">
-<caption>Non-hierarchical, specialized, and historical models (“*” marks
-optional features)</caption>
+<caption>Non-hierarchical and special purpose models (“*” marks optional
+features)</caption>
 <colgroup>
 <col width="29%">
 <col width="14%">
@@ -734,13 +736,20 @@ follows:</p>
 <p>A useful way to compare alternative models is to estimate their
 out-of-sample prediction accuracy. More specifically, we can estimate
 their expected log pointwise predictive density for a new data set
-(ELPD). The <strong>rstan</strong> and <strong>loo</strong> packages
-contain functions for estimating ELPDs by performing approximate
-leave-one-out (LOO) cross-validation using Pareto smoothed importance
-sampling (PSIS). However, PSIS-LOO only works when all Pareto <em>k</em>
-values are sufficiently low, or when the number of high values is so low
-that moment matching can be used on the problematic cases. This is often
-not the case for the models in this package.</p>
+(ELPD).</p>
+<p>The <strong>rstan</strong> and <strong>loo</strong> packages contain
+functions for estimating ELPDs by performing approximate leave-one-out
+(LOO) cross-validation using Pareto smoothed importance sampling (PSIS).
+These functions can be used on model fits from <code><a href="../reference/hbam.html">hbam()</a></code> if
+the argument <code>extra_pars = "log_lik"</code> is specified when
+fitting the model:</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span>, extra_pars <span class="op">=</span> <span class="st">"log_lik"</span><span class="op">)</span></span>
+<span><span class="va">loo_hbam</span> <span class="op">&lt;-</span> <span class="fu">loo</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/loo/reference/loo.html" class="external-link">loo</a></span><span class="op">(</span><span class="va">fit_hbam</span><span class="op">)</span></span></code></pre></div>
+<p>However, PSIS-LOO only works when all Pareto <em>k</em> values are
+sufficiently low, or when the number of high values is so low that
+moment matching can be used on the problematic cases. This is not always
+the case for the models in this package.</p>
 <p>The <strong>hbamr</strong> package therefore allows users to perform
 <em>K</em>-fold cross-validation. The function <code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> is
 similar to <code><a href="../reference/hbam.html">hbam()</a></code> and takes the same arguments, but will
@@ -766,12 +775,12 @@ strategies, of which “multisession” works on all operating systems. It
 most settings, it is advisable to use all physical CPU cores when
 performing cross-validation. To set up parallel computation using 4
 cores via the <code>future</code> package, we could run:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <p>To perform 10-fold cross-validation for a selection of models, we
 could run:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kfold_bam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"BAM"</span><span class="op">)</span></span>
 <span><span class="va">kfold_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM"</span><span class="op">)</span></span>
 <span><span class="va">kfold_hbam_nf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_NF"</span><span class="op">)</span></span>
@@ -781,7 +790,7 @@ could run:</p>
 <code>kfold</code> and <code>loo</code>, which can be further processed
 using the <code>loo</code> package. To compare the estimated ELPDs, we
 could run:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">loo</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/loo/reference/loo_compare.html" class="external-link">loo_compare</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>BAM <span class="op">=</span> <span class="va">kfold_bam</span>, </span>
 <span>                            HBAM <span class="op">=</span> <span class="va">kfold_hbam</span>, </span>
 <span>                            HBAM_NF <span class="op">=</span> <span class="va">kfold_hbam_nf</span>, </span>
@@ -801,22 +810,22 @@ have a slight edge, but the default HBAM model performs about equally
 well.</p>
 <p>We could also perform cross-validation for a couple of models that do
 not account for heteroskedastic errors:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kfold_hbam_mini</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_MINI"</span><span class="op">)</span></span>
 <span><span class="va">kfold_fbam_mini</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"FBAM_MINI"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">loo</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/loo/reference/loo_compare.html" class="external-link">loo_compare</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>HBAM_MINI <span class="op">=</span> <span class="va">kfold_hbam_mini</span>, </span>
 <span>                            FBAM_MINI <span class="op">=</span> <span class="va">kfold_fbam_mini</span><span class="op">)</span><span class="op">)</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##           elpd_diff se_diff elpd_kfold se_elpd_kfold</span></span>
 <span><span class="co">## HBAM_MINI     0.0       0.0 -5882.0       48.6      </span></span>
 <span><span class="co">## FBAM_MINI  -158.7      22.9 -6040.7       46.0</span></span></code></pre>
 <p>The ELPD for the FBAM_MINI model is lower than that of the HBAM_MINI
-model, which suggests that the priors of the FBAM model are too wide to
-yield optimal results for these data. While the ELPD for the HBAM_MINI
-model is higher than that of the FBAM model, it is still notably lower
-than that of its heteroskedastic counterpart (HBAM). This suggest there
-is a considerable degree of heteroskedasticity in the data – which is
-not surprising.</p>
+model, which suggests that the default priors of the FBAM model are too
+wide to yield optimal results for these data. While the ELPD for the
+HBAM_MINI model is higher than that of the FBAM model, it is still
+notably lower than that of its heteroskedastic counterpart (HBAM). This
+suggest there is a considerable degree of heteroskedasticity in the data
+– which is not surprising.</p>
 <p>Modeling the heteroskedasticity increases prediction accuracy, but it
 should be noted that this does not necessarily translate into much more
 accurate estimates of key model outputs. As shown in section on
@@ -850,7 +859,7 @@ full range of diagnostic tools from the <strong>rstan</strong> package.
 Users should consult the <strong>rstan</strong> documentation for
 details on the various diagnostic tests and plots that are available.
 One example of the available tools is <code>traceplot()</code>:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">rstan</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstan/reference/stanfit-method-traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">fit_hbam</span>, pars <span class="op">=</span> <span class="st">"theta"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p_trace_theta.svg" width="100%" style="display: block; margin: auto;"></p>
 <div class="section level3">

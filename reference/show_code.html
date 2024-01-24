@@ -86,11 +86,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   array[N_obs] int&lt;lower = -B, upper = B&gt; Y; // reported stimuli positions</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   vector&lt;lower = -B, upper = B&gt;[N] V;     // reported self-placements</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   int&lt;lower = 0, upper = 1&gt; CV;           // indicator of cross-validation</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   array[N_obs] int&lt;lower = 0, upper = 1&gt; holdout; // holdout for cross-validation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   vector&lt;lower = 0, upper = 1&gt;[N_obs] holdout; // holdout for cross-validation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> transformed data {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   real&lt;lower = 0&gt; sigma_alpha_prior_rate = (2 - 1) / (B / 5.0);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   real&lt;lower = 0&gt; tau_prior_rate = (2 - 1) / (B / 5.0);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   vector&lt;lower = 0, upper = 1&gt;[N_obs] not_holdout = 1 - holdout;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> parameters {</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   matrix[N, 2] alpha_raw;                 // shift parameter, split, raw</span>
@@ -146,22 +147,14 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   if(CV == 0)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     target += sum(log_lik);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   else</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     for (n in 1:N_obs) {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       if(holdout[n] == 0)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         target += log_lik[n];</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     }</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     target += sum(log_lik .* not_holdout);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> generated quantities {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   matrix[N, 2] chi0;                      // latent respondent positions, split</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   vector[N] chi;                          // latent respondent positions, combined</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   real&lt;lower = 0&gt; min_rho = min(rho);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   vector[N] kappa = to_vector(bernoulli_rng(lambda));</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   vector[N] alpha = (kappa .* alpha0[, 1]) + ((1 - kappa) .* alpha0[, 2]);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   vector[N] beta = (kappa .* beta0[, 1]) + ((1 - kappa) .* beta0[, 2]);</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   vector[N] V_error = to_vector(normal_rng(0, sqrt(eta) * min_rho));</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   chi0[, 1] = ((V - V_error - alpha0[, 1]) ./ beta0[, 1]);</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   chi0[, 2] = ((V - V_error - alpha0[, 2]) ./ beta0[, 2]);</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   chi = (kappa .* chi0[, 1]) + ((1 - kappa) .* chi0[, 2]);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   vector[N] chi = (V - to_vector(normal_rng(0, sqrt(eta) * min_rho)) - alpha) ./ beta;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> } </span>
 </code></pre></div>
     </div>
