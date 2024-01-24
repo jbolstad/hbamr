@@ -395,7 +395,7 @@ print(loo::loo_compare(list(HBAM_MINI = kfold_hbam_mini,
 print(loo2, simplify = FALSE)
 ```
 
-The ELPD for the FBAM_MINI model is lower than that of the HBAM_MINI model, which suggests that the priors of the FBAM model are too wide to yield optimal results for these data. While the ELPD for the HBAM_MINI model is higher than that of the FBAM model, it is still notably lower than that of its heteroskedastic counterpart (HBAM). This suggest there is a considerable degree of heteroskedasticity in the data -- which is not surprising.
+The ELPD for the FBAM_MINI model is lower than that of the HBAM_MINI model, which suggests that the default priors of the FBAM model are too wide to yield optimal results for these data. While the ELPD for the HBAM_MINI model is higher than that of the FBAM model, it is still notably lower than that of its heteroskedastic counterpart (HBAM). This suggest there is a considerable degree of heteroskedasticity in the data -- which is not surprising.
 
 Modeling the heteroskedasticity increases prediction accuracy, but it should be noted that this does not necessarily translate into much more accurate estimates of key model outputs. As shown in section on plotting, the results for the HBAM and HBAM_MINI models are very similar. In fact, their estimated respondent positions correlate at .97 and .99, depending on whether we use the posterior means or medians. Their estimated stimulus positions also correlate at .99, but this masks the fact that the HBAM_MINI model places the less well known candidate John B. Anderson further to the left than the HBAM model does. There are some subtle differences that users should be aware of, even if these models tend to produce very similar results.
 
