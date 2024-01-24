@@ -77,7 +77,7 @@ Users who want to keep other covariates for subsequent analysis, may find it use
 
 ## Models
 
-This package provides several alternative models that can be selected using the names below. Users who are unsure which model to use are advised to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI may provide a useful alternative.
+This package provides several alternative models that can be selected using the names below. Users who are unsure which model to use are advised to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI may provide a useful alternative. (See also the section on cross-validation for further discussion on the issue of model selection.)
 
 **HBAM** is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in @boelstad:2023, this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of self-placements, individual-level parameters, and simulated errors. This makes the model considerably faster, while yielding very similar results. The model simulates errors in the self-placements of the same magnitude as that with which the respondent in question places the stimulus with the smallest errors. All models in the package use this approach.
 
@@ -130,7 +130,7 @@ show_code("HBAM_MULTI")
 | Rationalization            |              |               |                  |       X        |          |
 | Fitting via optimization\* |      X       |       X       |        X         |                |          |
 
-: Non-hierarchical, specialized, and historical models ("\*" marks optional features)
+: Non-hierarchical and special purpose models ("\*" marks optional features)
 
 ## Fitting
 
@@ -327,7 +327,16 @@ est_chi
 
 ## Cross-Validation
 
-A useful way to compare alternative models is to estimate their out-of-sample prediction accuracy. More specifically, we can estimate their expected log pointwise predictive density for a new data set (ELPD). The **rstan** and **loo** packages contain functions for estimating ELPDs by performing approximate leave-one-out (LOO) cross-validation using Pareto smoothed importance sampling (PSIS). However, PSIS-LOO only works when all Pareto *k* values are sufficiently low, or when the number of high values is so low that moment matching can be used on the problematic cases. This is often not the case for the models in this package. 
+A useful way to compare alternative models is to estimate their out-of-sample prediction accuracy. More specifically, we can estimate their expected log pointwise predictive density for a new data set (ELPD). 
+
+The **rstan** and **loo** packages contain functions for estimating ELPDs by performing approximate leave-one-out (LOO) cross-validation using Pareto smoothed importance sampling (PSIS). These functions can be used on model fits from `hbam()` if the argument `extra_pars = "log_lik"` is specified when fitting the model:
+
+```{r, eval = FALSE}
+fit_hbam <- hbam(data = dat, extra_pars = "log_lik")
+loo_hbam <- loo::loo(fit_hbam)
+```
+
+However, PSIS-LOO only works when all Pareto *k* values are sufficiently low, or when the number of high values is so low that moment matching can be used on the problematic cases. This is not always the case for the models in this package. 
 
 The **hbamr** package therefore allows users to perform *K*-fold cross-validation. The function `hbam_cv()` is similar to `hbam()` and takes the same arguments, but will perform a *K*-fold cross-validation for the chosen model. In contrast to `hbam()`, the default for `hbam_cv()` is to not allow respondents to have any missing values (`allow_miss = 0`). The reason is that the cross-validation essentially creates missing values by excluding some data from each run. 
 
