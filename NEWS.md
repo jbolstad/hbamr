@@ -2,7 +2,7 @@
 
 ### Improved cross-validation function
 
--   The `hbam_cv()` function no longer uses `parallel::mclapply` for parallel computation as the latter relies on forking, which is not available on Windows. `hbam_cv()` has been revised to work with the `future` package, where the user decides the computational strategy and options are available for parallel computation on all systems. 
+-   The `hbam_cv()` function no longer uses `parallel::mclapply()` for parallel computation as the latter relies on forking, which is not available on Windows. `hbam_cv()` has been revised to work with the `future` package, where the user decides the computational strategy and options are available for parallel computation on all systems. 
 -   The return value of `hbam_cv()` has been changed to comply with the standards of the `loo` package. The function now returns a list with classes `kfold` and `loo`. This allows the user to compare estimated ELPDs and obtain standard errors for their differences via `loo::loo_compare()`. 
 
 # hbamr 2.1.0
