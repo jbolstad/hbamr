@@ -41,6 +41,13 @@ prep_data <- function(self, stimuli,
     stop("Supplied group_id is not a complete sequence of integers.")
   }
 
+  stimulicols <- apply(stimuli, 2, function(x) sum(!is.na(x))) > 0
+  stimuli <- stimuli[, stimulicols]
+
+  if (any_true_after_false(stimulicols)) {
+    warning("Some columns in the supplied stimuli data do not contain non-NA values and will be ignored. This changes the indexing of the stimuli in the output because at least one column containing data appears after the empty column(s) in the matrix. You may want to drop empty columns to avoid confusion.")
+  }
+
   # req_valid takes precedence over allow_miss they are not consistent:
   if (!is.na(req_valid)) { allow_miss <- ncol(stimuli) - req_valid }
 
@@ -126,5 +133,18 @@ complete_sequence_integers <- function(vec) {
     all(sorted_unique == expected_sequence)
 
   is_complete_sequence
+}
+
+any_true_after_false <- function(x) {
+  if (sum(!x) > 0) {
+    first_false_index <- which(!x)[1]
+    if (first_false_index < length(x)) {
+      any(x[(first_false_index + 1):length(x)])
+    } else {
+      FALSE
+    }
+  } else {
+    FALSE
+  }
 }
 
