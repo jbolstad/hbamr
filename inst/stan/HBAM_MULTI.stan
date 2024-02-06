@@ -89,7 +89,7 @@ model {
   logit_lambda ~ normal(0, 1);
   psi ~ lognormal(1.4, .5);
 
-  if(CV == 0)
+  if (CV == 0)
     target += sum(log_lik);
   else
     target += sum(log_lik .* not_holdout);

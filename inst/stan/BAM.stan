@@ -54,7 +54,7 @@ model {
   tau ~ gamma(2, 5 / (B * 1.0));
   rho ~ dirichlet(rep_vector(5, J));
 
-  if(CV == 0)
+  if (CV == 0)
     target += sum(log_lik);
   else
     target += sum(log_lik .* not_holdout);
