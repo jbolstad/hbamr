@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,6 +47,13 @@
       <small>Source: <a href="https://github.com/jbolstad/hbamr/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.1.2" id="hbamr-212">hbamr 2.1.2<a class="anchor" aria-label="anchor" href="#hbamr-212"></a></h2>
+<div class="section level4">
+<h4 id="revisions-to-existing-models-2-1-2">Revisions to existing models<a class="anchor" aria-label="anchor" href="#revisions-to-existing-models-2-1-2"></a></h4>
+<ul><li>The behavior of FBAM models now depends on whether they are fit via MCMC or optimization. When fit via MCMC, the models simulate errors in respondents’ self-placements and generate draws for the latent discrete flipping parameters, kappa, using a Bernoulli function – just like other models. When fit via optimization, there is no simulation of self-placement errors and lambda is rounded to yield a MAP estimate of kappa.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.1" id="hbamr-211">hbamr 2.1.1<a class="anchor" aria-label="anchor" href="#hbamr-211"></a></h2><p class="text-muted">CRAN release: 2024-01-25</p>
 <div class="section level4">
