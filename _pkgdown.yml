@@ -1,6 +1,8 @@
 url: https://jbolstad.github.io/hbamr/
 template:
   bootstrap: 5
+  params:
+    google_site_verification: 69MLv6UCy5t-k76w3j9fryUEcyWbdOd5t5QpYCoctoM
 
 development:
   mode: release
