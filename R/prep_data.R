@@ -45,7 +45,7 @@ prep_data <- function(self, stimuli,
   stimuli <- stimuli[, stimulicols]
 
   if (any_true_after_false(stimulicols)) {
-    warning("Some columns in the supplied stimuli data do not contain non-NA values and will be ignored. This changes the indexing of the stimuli in the output because at least one column containing data appears after the empty column(s) in the matrix. You may want to drop empty columns to avoid confusion.")
+    warning("Some columns in the supplied stimuli data do not contain any non-NA values and will be ignored. This affects the indexing of the stimuli in the output because at least one column containing data appears after the empty column(s). You may want to drop empty columns to avoid confusion.")
   }
 
   # req_valid takes precedence over allow_miss they are not consistent:
