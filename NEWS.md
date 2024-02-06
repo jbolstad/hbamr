@@ -1,3 +1,9 @@
+# hbamr 2.1.2
+
+### Revisions to existing models
+
+-   The behavior of FBAM models now depends on whether they are fit via MCMC or optimization. When fit via MCMC, the models simulate errors in respondents' self-placements and generate draws for the latent discrete flipping parameters, kappa, using a Bernoulli function -- just like other models. When fit via optimization, there is no simulation of self-placement errors and lambda is rounded to yield a MAP estimate of kappa.
+
 # hbamr 2.1.1
 
 ### Improved cross-validation function

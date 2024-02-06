@@ -17,6 +17,7 @@ data {
   real<lower = 0> sigma_beta;             // sd of prior on log(beta)
   real<lower = 0> sigma_mu_alpha;         // sd of prior on mu_alpha
   real<lower = 0> sigma_mu_beta;          // sd of prior on mu_beta
+  int<lower = 0, upper = 1> MCMC;         // indicator of fitting method
 }
 
 transformed data {
@@ -67,12 +68,16 @@ model {
   mu_beta_raw ~ dirichlet(rep_vector(50, G));
   tau ~ gamma(2, tau_prior_rate);
 
-  if(CV == 0)
+  if (CV == 0)
     target += sum(log_lik);
   else
     target += sum(log_lik .* not_holdout);
 }
 
 generated quantities {
-  vector[N] chi = (V - to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
+  vector[N] chi;
+  if (MCMC == 1)
+    chi = (V - to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
+  else
+    chi = (V - alpha) ./ beta;
 }

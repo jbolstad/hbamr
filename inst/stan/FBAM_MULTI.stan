@@ -17,6 +17,7 @@ data {
   real<lower = 0> sigma_beta;             // sd of prior on log(beta)
   real<lower = 0> sigma_mu_alpha;         // sd of prior on mu_alpha
   real<lower = 0> sigma_mu_beta;          // sd of prior on mu_beta
+  int<lower = 0, upper = 1> MCMC;         // indicator of fitting method
 }
 
 transformed data {
@@ -74,15 +75,23 @@ model {
   tau ~ gamma(2, tau_prior_rate);
   lambda ~ beta(2, 1);
 
-  if(CV == 0)
+  if (CV == 0)
     target += sum(log_lik);
   else
     target += sum(log_lik .* not_holdout);
 }
 
 generated quantities {
-  vector[N] kappa = to_vector(round(lambda)); // Rounding to MAP instead of sampling
+  vector[N] kappa;
+  vector[N] chi;
+  if (MCMC == 1)
+    kappa = to_vector(bernoulli_rng(lambda));
+  else
+    kappa = to_vector(round(lambda)); // Rounding to MAP instead of sampling
   vector[N] alpha = (kappa .* alpha0[, 1]) + ((1 - kappa) .* alpha0[, 2]);
   vector[N] beta = (kappa .* beta0[, 1]) + ((1 - kappa) .* beta0[, 2]);
-  vector[N] chi = (V - to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
+  if (MCMC == 1)
+    chi = (V - to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
+  else
+    chi = (V - alpha) ./ beta;
 }

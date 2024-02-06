@@ -122,6 +122,7 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
   dat$sigma_mu_alpha <- sigma_mu_alpha
   dat$sigma_beta <- sigma_beta
   dat$sigma_mu_beta <- sigma_mu_beta
+  dat$MCMC <- 1
 
   set.seed(seed)
   init_ll <- lapply(1:chains, function(id) inits[[model]](id, dat))

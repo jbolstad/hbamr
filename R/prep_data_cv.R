@@ -21,6 +21,7 @@
 
 prep_data_cv <- function(data, K = 10, seed = 1) {
   set.seed(seed)
+  data$MCMC <- 1
   hh <- loo::kfold_split_stratified(K = K, x = data$ii)
   holdout_k <- matrix(0, nrow = data$N_obs, ncol = K)
   for(i in 1:data$N_obs) holdout_k[i, hh[i]] <- 1

@@ -52,6 +52,7 @@ fbam <- function(self = NULL, stimuli = NULL, model = "FBAM_MINI", allow_miss = 
   dat$sigma_mu_alpha <- sigma_mu_alpha
   dat$sigma_beta <- sigma_beta
   dat$sigma_mu_beta <- sigma_mu_beta
+  dat$MCMC <- 0
 
   set.seed(seed)
   out <- rstan::optimizing(stanmodels[[model]], data = dat, init = inits[[model]](1, dat), seed = seed, ...)
