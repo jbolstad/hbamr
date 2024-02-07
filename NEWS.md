@@ -1,3 +1,9 @@
+# hbamr 2.1.3
+
+### Minor improvement of data preparation
+
+- The `prep_data()` function now allows missing values in the `group_id` vector and will drop respondents who do not have a valid `group_id`. Missing values would previously generate an uninformative error message. 
+
 # hbamr 2.1.2
 
 ### Revisions to existing models
