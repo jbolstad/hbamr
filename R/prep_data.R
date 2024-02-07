@@ -37,8 +37,20 @@ prep_data <- function(self, stimuli,
   #dimnames(stimuli) <- NULL
   #self <- as_numeric(self)
 
-  if(!is.null(group_id) && !complete_sequence_integers(group_id)) {
-    stop("Supplied group_id is not a complete sequence of integers.")
+  if (!is.null(group_id)) {
+    has_group_id <- !is.na(group_id)
+    self <- self[has_group_id]
+    stimuli <- stimuli[has_group_id, ]
+    group_id <- group_id[has_group_id]
+    if (!complete_sequence_integers(group_id)) {
+      stop("Supplied group_id does not form a complete sequence of integers.")
+    }
+    if (min(group_id) != 1) {
+      stop("Supplied group_id does not have 1 as its lowest value.")
+    }
+    if (!is.null(prefs)) {
+      prefs <- prefs[has_group_id, ]
+    }
   }
 
   stimulicols <- apply(stimuli, 2, function(x) sum(!is.na(x))) > 0
