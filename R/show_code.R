@@ -1,6 +1,6 @@
 #' Show the code for an HBAM or FBAM model
 #'
-#' Show the Stan code for one of the models in the package.
+#' Show Stan code for one of the models in the package.
 #'
 #' @export
 #' @param model Character: Name of the model to show. Defaults to "HBAM". See the documentation for the `hbam()` function for a list of the available models.

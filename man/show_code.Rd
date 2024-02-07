@@ -13,7 +13,7 @@ show_code(model = "HBAM")
 The function prints Stan code.
 }
 \description{
-Show the Stan code for one of the models in the package.
+Show Stan code for one of the models in the package.
 }
 \examples{
 show_code("HBAM")
