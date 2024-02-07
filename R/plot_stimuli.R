@@ -3,7 +3,7 @@
 #' Plot marginal posterior distributions of stimulus positions from an HBAM model
 #'
 #' @export
-#' @param object An instance of class `stanfit` produced by `hbam`.
+#' @param object An instance of class `stanfit` produced by `hbam()`.
 #' @param rev_color Logical: Display low positions as red and high positions as blue.
 #' @param alpha Number in \[0,1\]: Inverse level of transparency for fill color.
 #' @return A `ggplot` object.

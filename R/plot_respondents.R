@@ -3,7 +3,7 @@
 #' Plot the distribution of estimated respondent positions from an HBAM model.
 #'
 #' @export
-#' @param object An instance of class `stanfit` produced by `hbam`.
+#' @param object An instance of class `stanfit` produced by `hbam()`.
 #' @param inc_stimuli Logical: Should estimated stimulus positions also be shown?
 #' @param n_draws Integer specifying the number of posterior draws to use when illustrating the uncertainty of the population distribution. Defaults to 15.
 #' @param color Color of lines illustrating uncertainty.

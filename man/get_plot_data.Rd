@@ -7,7 +7,7 @@
 get_plot_data(object, n_draws = 15, seed = 1)
 }
 \arguments{
-\item{object}{An instance of class \code{stanfit} produced by \code{hbam} or a list produced by \code{fbam}.}
+\item{object}{An instance of class \code{stanfit} produced by \code{hbam()} or a list produced by \code{fbam()}.}
 
 \item{n_draws}{Integer specifying the number of posterior draws to use when illustrating the uncertainty of the population distribution. This only applies for \code{stanfit} objects.}
 

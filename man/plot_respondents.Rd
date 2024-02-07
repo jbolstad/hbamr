@@ -16,7 +16,7 @@ plot_respondents(
 )
 }
 \arguments{
-\item{object}{An instance of class \code{stanfit} produced by \code{hbam}.}
+\item{object}{An instance of class \code{stanfit} produced by \code{hbam()}.}
 
 \item{inc_stimuli}{Logical: Should estimated stimulus positions also be shown?}
 

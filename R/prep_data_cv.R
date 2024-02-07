@@ -1,9 +1,9 @@
 #' Prepare data for a K-fold cross-validation of an HBAM model
 #'
-#' This function turns data prepared for `hbam` into a list of K versions, where each version includes a different vector identifying holdout-data.
+#' This function turns data prepared for `hbam()` into a list of K versions, where each version includes a different vector identifying holdout-data.
 #'
 #' @export
-#' @param data A list of data produced by `prep_data`.
+#' @param data A list of data produced by `prep_data()`.
 #' @param K An integer above 2, specifying the number of folds to use in the analysis. Defaults to 10.
 #' @param seed An integer passed on to `set.seed` before creating the folds to increase reproducibility. Defaults to 1.
 #' @return A list of K data objects where each version includes a different vector identifying holdout-data.

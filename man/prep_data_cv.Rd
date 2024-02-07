@@ -7,7 +7,7 @@
 prep_data_cv(data, K = 10, seed = 1)
 }
 \arguments{
-\item{data}{A list of data produced by \code{prep_data}.}
+\item{data}{A list of data produced by \code{prep_data()}.}
 
 \item{K}{An integer above 2, specifying the number of folds to use in the analysis. Defaults to 10.}
 
@@ -17,7 +17,7 @@ prep_data_cv(data, K = 10, seed = 1)
 A list of K data objects where each version includes a different vector identifying holdout-data.
 }
 \description{
-This function turns data prepared for \code{hbam} into a list of K versions, where each version includes a different vector identifying holdout-data.
+This function turns data prepared for \code{hbam()} into a list of K versions, where each version includes a different vector identifying holdout-data.
 }
 \examples{
 # Loading and re-coding ANES 1980 data:

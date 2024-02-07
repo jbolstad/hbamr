@@ -2,7 +2,7 @@
 % Please edit documentation in R/prep_data.R
 \name{prep_data}
 \alias{prep_data}
-\title{Prepare data to fit an HBAM model}
+\title{Prepare data to fit an HBAM or FBAM model}
 \usage{
 prep_data(
   self,
@@ -22,7 +22,7 @@ prep_data(
 
 \item{prefs}{An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the \code{"HBAM_R"} and \code{"HBAM_R_MINI"} models and will be ignored when fitting other models.}
 
-\item{allow_miss}{Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the \code{prep_data} function. Defaults to 2.}
+\item{allow_miss}{Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function. Defaults to 2.}
 
 \item{req_valid}{Integer specifying how many valid observations to require for a respondent to be included in the analysis. The default is \code{req_valid = J - allow_miss}, but if specified, \code{req_valid} takes precedence.}
 
@@ -33,10 +33,10 @@ prep_data(
 \item{group_id}{Integer vector of length N identifying which group each respondent belongs to. The supplied id-variable should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with \code{"MULTI"} in their name and will be ignored when fitting other models.}
 }
 \value{
-A list of data to be used by \code{hbam}. The returned list includes the logical vector \code{keep}, which identifies the rows in the original data that have been kept for further analysis. The stimuli data are stored in a vector as a long-form sparse matrix. If the stimuli data include column-names, these will be preserved for later use.
+A list of data to be used by \code{hbam()} or \code{fbam()}. The returned list includes the logical vector \code{keep}, which identifies the rows in the original data that have been kept for further analysis. The stimuli data are stored in a vector as a long-form sparse matrix. If the stimuli data include column-names, these will be preserved for later use.
 }
 \description{
-This function prepares data to fit a hierarchical Bayesian Aldrich-McKelvey (HBAM) model. It can be run ahead of fitting the models, or it can be run implicitly as part of a single function call to fit the models using \code{hbam}. It applies a set of inclusion criteria, performs any necessary data transformation, and returns a list of data suited for sampling in \code{rstan}. The data provided to \code{prep_data} can be centered, but they do not have to be: The function will detect un-centered data and attempt to center these automatically, assuming that the highest and lowest observed values in the data mark the extremes of the scale.
+This function prepares data to fit a hierarchical Bayesian Aldrich-McKelvey (HBAM) model. It can be run ahead of fitting the models, or it can be run implicitly as part of a single function call to fit the models using \code{hbam()} or \code{fbam()}. It applies a set of inclusion criteria, performs any necessary data transformation, and returns a list of data suited for sampling in \code{rstan}. The data provided to \code{prep_data()} can be centered, but they do not have to be: The function will detect un-centered data and attempt to center these automatically, assuming that the highest and lowest observed values in the data mark the extremes of the scale.
 }
 \examples{
 # Loading and re-coding ANES 1980 data:

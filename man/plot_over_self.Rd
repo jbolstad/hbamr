@@ -21,7 +21,7 @@ plot_over_self(
 )
 }
 \arguments{
-\item{object}{An object of class \code{stanfit} produced by \code{hbam}, a list produced by \code{fbam}, or a \code{list} of such objects, which will produce a faceted plot.}
+\item{object}{An object of class \code{stanfit} produced by \code{hbam()}, a list produced by \code{fbam()}, or a \code{list} of such objects, which will produce a faceted plot.}
 
 \item{data}{The list of data that was used to produce the object(s).}
 

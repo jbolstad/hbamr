@@ -7,7 +7,7 @@
 plot_stimuli(object, rev_color = FALSE, alpha = 0.55)
 }
 \arguments{
-\item{object}{An instance of class \code{stanfit} produced by \code{hbam}.}
+\item{object}{An instance of class \code{stanfit} produced by \code{hbam()}.}
 
 \item{rev_color}{Logical: Display low positions as red and high positions as blue.}
 
