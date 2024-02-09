@@ -66,6 +66,9 @@ prep_data <- function(self = NULL, stimuli,
 
   if (any_true_after_false(stimulicols)) {
     warning("Some columns in the supplied stimuli data do not contain any non-NA values and will be ignored. This affects the indexing of the stimuli in the output because at least one column containing data appears after the empty column(s). You may want to drop empty columns to avoid confusion.")
+    have_warned_on_missing_cols <- TRUE
+  } else {
+    have_warned_on_missing_cols <- FALSE
   }
 
   # req_valid takes precedence over allow_miss they are not consistent:
@@ -108,6 +111,14 @@ prep_data <- function(self = NULL, stimuli,
   stimuli <- stimuli[keep, ]
   self <- self[keep]
   if(!is.null(group_id)) { group_id <- group_id[keep] }
+
+  stimulicols2 <- apply(stimuli, 2, function(x) sum(!is.na(x))) > 0
+  stimuli <- stimuli[, stimulicols2]
+
+  if (any_true_after_false(stimulicols2) & !have_warned_on_missing_cols) {
+    warning(paste0("Some columns in the supplied stimuli data do not contain any non-NA values after inclusion criteria have been applied. This affects the indexing of the stimuli in the output because at least one column containing data appears after the empty column(s). Using more liberal inclusion criteria (e.g. a higher allow_miss argument) may avoid this issue. Alternatively, you may want to remove the following stimuli from the data to avoid confusion: ", paste(which(!stimulicols2), collapse = ", "), "."))
+  }
+
   mean_spos <- apply(stimuli, 2, mean, na.rm = T)
 
   # Coding Y as a long-form sparse matrix:
