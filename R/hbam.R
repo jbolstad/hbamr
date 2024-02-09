@@ -3,7 +3,7 @@
 #' Fit a Hierarchical Bayesian Aldrich-McKelvey model using automatically tuned Hamiltonian Monte Carlo sampling (NUTS) via `rstan`.
 #'
 #' @export
-#' @param self A numerical vector of N ideological self-placements. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the `prep_data()` function.
+#' @param self An optional numerical vector of N ideological self-placements. Any missing data must be coded as NA. If this argument is not supplied (either here or in a previous call to `prep_data()`), respondent positions will not be estimated. If the data have been prepared in advance via the `prep_data()` function, the argument supplied here will be ignored.
 #' @param stimuli An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the `prep_data()` function.
 #' @param model Character: Name of the model to be used. Defaults to HBAM. The available models are described under Details.
 #' @param allow_miss Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the `prep_data()` function. Defaults to 2.
@@ -109,12 +109,17 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
       stop("Supplied data is not of hbam_data class. Please use the prep_data() function to prepare the data.")
     }
   }
-  if (hasArg(prep_data)) { message("Note: The prep_data argument has been deprecated - please remove it. If a data argument is supplied, the data will not be further prepared before fitting (and vice versa).")
- }
+  if (hasArg(prep_data)) { message("Note: The prep_data argument has been deprecated - please remove it. If a data argument is supplied, the data will not be further prepared before fitting (and vice versa).") }
   if (grepl("MULTI", model) & is.null(dat$gg)) { stop("No group_id supplied for MULTI-type model.") }
   if (!grepl("MULTI", model) & !is.null(dat$gg)) { message("Note: The supplied group_id will not be used as the chosen model is not a MULTI-type model.") }
   if (model == "BAM" | grepl("_NF", model)) { pars = c("alpha", "beta", "chi", "theta") }
   if (!is.null(extra_pars)) {pars = c(pars, extra_pars) }
+  if (!dat$V_supplied) {
+    pars <- pars[pars != "chi"]
+    if (model == "HBAM_R_MINI") {
+      stop("The HBAM_R_MINI model requires self-placement data.")
+    }
+  }
 
   if (is.null(sigma_alpha)) { sigma_alpha <- dat$B / 4.0 }
   if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat$B / 5.0 }

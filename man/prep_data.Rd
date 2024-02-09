@@ -5,7 +5,7 @@
 \title{Prepare data to fit an HBAM or FBAM model}
 \usage{
 prep_data(
-  self,
+  self = NULL,
   stimuli,
   prefs = NULL,
   allow_miss = 2,
@@ -16,7 +16,7 @@ prep_data(
 )
 }
 \arguments{
-\item{self}{A numerical vector of N ideological self-placements. Any missing data must be coded as NA.}
+\item{self}{An optional numerical vector of N ideological self-placements. Any missing data must be coded as NA. If this argument is not supplied, respondent positions will not be estimated.}
 
 \item{stimuli}{An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA.}
 

@@ -22,7 +22,7 @@ fbam(
 )
 }
 \arguments{
-\item{self}{A numerical vector of N ideological self-placements. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function.}
+\item{self}{An optional numerical vector of N ideological self-placements. Any missing data must be coded as NA. If this argument is not supplied (either here or in a previous call to \code{prep_data()}), respondent positions will not be estimated. If the data have been prepared in advance via the \code{prep_data()} function, the argument supplied here will be ignored.}
 
 \item{stimuli}{An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function.}
 

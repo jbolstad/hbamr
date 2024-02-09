@@ -1,8 +1,9 @@
 # hbamr 2.1.3
 
-### Minor improvement of data preparation
+### Improvements of existing functions
 
-- The `prep_data()` function now allows missing values in the `group_id` vector and will drop respondents who do not have a valid `group_id`. Missing values would previously generate an uninformative error message. 
+-   The `prep_data()`, `hbam()`, and `fbam()` functions now allow users to not supply self-placements. In this case, no meaningful respondent positions will be estimated, but all other parameters are unaffected.
+-   The `prep_data()` function now allows missing values in the `group_id` vector and will drop respondents who do not have a valid `group_id`. Missing values would previously generate an uninformative error message. 
 
 # hbamr 2.1.2
 

@@ -3,7 +3,7 @@
 #' This function prepares data to fit a hierarchical Bayesian Aldrich-McKelvey (HBAM) model. It can be run ahead of fitting the models, or it can be run implicitly as part of a single function call to fit the models using `hbam()` or `fbam()`. It applies a set of inclusion criteria, performs any necessary data transformation, and returns a list of data suited for sampling in `rstan`. The data provided to `prep_data()` can be centered, but they do not have to be: The function will detect un-centered data and attempt to center these automatically, assuming that the highest and lowest observed values in the data mark the extremes of the scale.
 #'
 #' @export
-#' @param self A numerical vector of N ideological self-placements. Any missing data must be coded as NA.
+#' @param self An optional numerical vector of N ideological self-placements. Any missing data must be coded as NA. If this argument is not supplied, respondent positions will not be estimated.
 #' @param stimuli An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA.
 #' @param prefs An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the `"HBAM_R"` and `"HBAM_R_MINI"` models and will be ignored when fitting other models.
 #' @param allow_miss Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the `prep_data()` function. Defaults to 2.
@@ -29,13 +29,21 @@
 #' self2 <- self[dat2$keep]
 #' stimuli2 <- stimuli[dat2$keep, ]
 
-prep_data <- function(self, stimuli,
+prep_data <- function(self = NULL, stimuli,
                       prefs = NULL,
                       allow_miss = 2,
                       req_valid = NA, req_unique = 2, B = NULL, group_id = NULL) {
 
   #dimnames(stimuli) <- NULL
   #self <- as_numeric(self)
+
+  if (is.null(self)) {
+    V_supplied <- FALSE
+    self <- rep(0, nrow(stimuli))
+    message("Note: No self-placement data were supplied and respondent positions will therefore not be estimated.")
+  } else {
+    V_supplied <- TRUE
+  }
 
   if (!is.null(group_id)) {
     has_group_id <- !is.na(group_id)
@@ -121,7 +129,7 @@ prep_data <- function(self, stimuli,
   datlist <- list(J = ncol(stimuli), N = nrow(stimuli), B = B, N_obs = length(stimuli_vec),
        V = self, Y = stimuli_vec, U = prefs_vec, L = which.min(mean_spos), R = which.max(mean_spos),
        ii = ii, jj = jj, gg = group_id, G = length(unique(group_id)), mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
-       CV = 0, holdout = rep(0, length(stimuli_vec)))
+       CV = 0, holdout = rep(0, length(stimuli_vec)), V_supplied = V_supplied)
   class(datlist) <- c("list", "hbam_data")
 
   return(datlist)
