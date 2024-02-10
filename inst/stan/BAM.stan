@@ -9,6 +9,7 @@ data {
   int<lower = 1, upper = J> R;            // right pole
   vector<lower = -B, upper = B>[N_obs] Y; // reported stimuli positions
   vector<lower = -B, upper = B>[N] V;     // reported self-placements
+  vector[J] mean_spos;                    // average stimuli placements
   int<lower = 0, upper = 1> CV;           // indicator of cross-validation
   vector<lower = 0, upper = 1>[N_obs] holdout; // holdout for cross-validation
 }
@@ -21,8 +22,8 @@ transformed data {
 parameters {
   vector[N] alpha;                        // shift parameter
   vector[N] beta;                         // stretch parameter
-  real<lower = -1.1, upper = -.9> thetal; // left pole stimuli
-  real<lower = .9, upper = 1.1> thetar;   // right pole stimuli
+  real<lower = mean_spos[L] - B / 50.0, upper = mean_spos[L]> thetal; // left pole stimuli
+  real<lower = mean_spos[R], upper = mean_spos[R] + B / 50.0> thetar; // right pole stimuli
   array[J] real theta_raw;                // remaining stimuli
   real<lower = 3, upper = 30> nu;         // concentration of etas
   real<lower = 0> tau;                    // scale of errors
@@ -46,9 +47,9 @@ transformed parameters {
 model {
   alpha ~ uniform(-100, 100);
   beta ~ uniform(-100, 100);
-  theta_raw ~ normal(0, 1);
-  thetal ~ normal(0, 1);
-  thetar ~ normal(0, 1);
+  theta_raw ~ normal(0, B);
+  thetal ~ normal(0, B);
+  thetar ~ normal(0, B);
   eta ~ scaled_inv_chi_square(nu, eta_scale);
   nu ~ gamma(25, 2.5);
   tau ~ gamma(2, 5 / (B * 1.0));

@@ -50,7 +50,8 @@ inits_BAM <- function(chain_id = 1, dat) {
   list (
     theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
     beta = rnorm(dat$N, 1, .5),
-    thetal = -1.05, thetar = 1.05,
+    thetal = dat$mean_spos[dat$L] - dat$B / 100.0,
+    thetar = dat$mean_spos[dat$R] + dat$B / 100.0,
     nu = 3 + rinvchisq(1, 100, 7),
     tau = rinvchisq(1, 500, (dat$B / 3)),
     eta = rinvchisq(dat$N, 100, dat$J^2 * (dat$B / 3)^2),
