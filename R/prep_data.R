@@ -121,6 +121,18 @@ prep_data <- function(self = NULL, stimuli,
 
   mean_spos <- apply(stimuli, 2, mean, na.rm = T)
 
+  if (sum(stimuli < 0, na.rm = T) > 0) {
+    L <- which.max(apply(stimuli < 0, 2, sum, na.rm = T))
+  } else {
+    L <- which.min(mean_spos)
+  }
+
+  if (sum(stimuli > 0, na.rm = T) > 0) {
+    R <- which.max(apply(stimuli > 0, 2, sum, na.rm = T))
+  } else {
+    R <- which.max(mean_spos)
+  }
+
   # Coding Y as a long-form sparse matrix:
   stimuli_vec <- as.numeric(as.matrix(stimuli))
   if (!is.null(prefs)) {
@@ -142,7 +154,7 @@ prep_data <- function(self = NULL, stimuli,
   }
 
   datlist <- list(J = ncol(stimuli), N = nrow(stimuli), B = B, N_obs = length(stimuli_vec),
-       V = self, Y = stimuli_vec, U = prefs_vec, L = which.min(mean_spos), R = which.max(mean_spos),
+       V = self, Y = stimuli_vec, U = prefs_vec, L = L, R = R,
        ii = ii, jj = jj, gg = group_id, G = length(unique(group_id)), mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
        CV = 0, holdout = rep(0, length(stimuli_vec)), V_supplied = V_supplied)
   class(datlist) <- c("list", "hbam_data")
