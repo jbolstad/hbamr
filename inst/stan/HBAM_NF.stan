@@ -7,7 +7,7 @@ data {
   int<lower = 1> B;                       // length of scale -1 / 2
   int<lower = 1, upper = J> L;            // left pole
   int<lower = 1, upper = J> R;            // right pole
-  array[N_obs] int<lower = -B, upper = B> Y; // reported stimuli positions
+  vector<lower = -B, upper = B>[N_obs] Y; // reported stimuli positions
   vector<lower = -B, upper = B>[N] V;     // reported self-placements
   int<lower = 0, upper = 1> CV;           // indicator of cross-validation
   vector<lower = 0, upper = 1>[N_obs] holdout; // holdout for cross-validation
