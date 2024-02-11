@@ -11,7 +11,7 @@
 #' @param req_unique Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is `req_unique = 2`. This argument will not be used if the data have been prepared in advance via the `prep_data()` function.
 #' @param data List of data that have been prepared in advance via the `prep_data()` function. Not required if the arguments `self` and `stimuli` are provided.
 #' @param prefs An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the HBAM_R_MINI model and will be ignored when fitting other models.
-#' @param group_id Integer vector of length N identifying which group each respondent belongs to. The supplied vector should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with "MULTI" in their name and will be ignored when fitting other models.
+#' @param group_id Vector of length N identifying which group each respondent belongs to. The format can be factor, character, integer, or numeric. Respondents with NAs on `group_id` will be dropped when `group_id` is supplied. These data are only required by models with `"MULTI"` in their name and will be ignored when fitting other models.
 #' @param pars A vector of character strings specifying parameters of interest. If `include = TRUE`, only samples for parameters named in pars are stored in the fitted results. Conversely, if `include = FALSE`, samples for all parameters except those named in pars are stored in the fitted results. The default is to store results for "alpha", "beta", "chi", "lambda", and "theta".
 #' @param extra_pars A vector of character strings specifying parameters to be added to `pars`. This makes it easy to add one or several additional parameters of interest, without having to repeat the default `pars` vector. The default is `NULL`.
 #' @param include Logical scalar defaulting to `TRUE` indicating whether to include or exclude the parameters given by the pars argument. If `FALSE`, only entire multidimensional parameters can be excluded, rather than particular elements of them.
@@ -29,7 +29,7 @@
 #'
 #' **HBAM** is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in Bølstad (2024), this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of self-placements, individual-level parameters, and simulated errors. This makes the model considerably faster, while yielding very similar results. The model simulates errors in the self-placements of the same magnitude as that with which the respondent in question places the stimulus with the smallest errors. All models in the package use this approach.
 #'
-#' **HBAM_MULTI** is a version that models differences between groups defined by the user. It requires an integer vector identifying the groups to be supplied as the argument `group_id`. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called `mu_alpha` and `mu_beta` and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments `sigma_mu_alpha` and `sigma_mu_beta`. The default values are B / 5 and .3, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements (appropriately transformed) as `group_id`, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
+#' **HBAM_MULTI** is a version that models differences between groups defined by the user. It requires an integer vector identifying the groups to be supplied as the argument `group_id`. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called `mu_alpha` and `mu_beta` and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments `sigma_mu_alpha` and `sigma_mu_beta`. The default values are B / 5 and .3, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements as `group_id`, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
 #'
 #' **HBAM_NF** (formerly HBAM_0) is a version of the HBAM model that does not allow for scale flipping. This may be useful if there are truly zero cases of scale flipping in the data. Such scenarios can be created artificially, but may also arise in real data. For example, expert surveys appear unlikely to contain many instances of scale flipping. For data that contain zero cases of flipping, models that allow for flipping contain superfluous parameters that lead to inefficient sampling. Models that do not allow for flipping will sample faster and typically yield slightly more accurate estimates. Such models are therefore preferable when no flipping is present.
 #'
@@ -49,7 +49,7 @@
 #'
 #' **HBAM_2** has been replaced by the more general HBAM_MULTI model.
 #'
-#' These models can also be used in situations where self-placements are not available and the only goal is to estimate stimulus positions. This can be achieved by supplying a vector of zeros (or random data) instead of real self-placements: `self = rep(0, nrow(stimuli))`.
+#' These models can also be used in situations where self-placements are not available and the only goal is to estimate stimulus positions or respondents' shift and stretch parameters. While the latent respondent positions will not be estimated, all other parameters are unaffected if the argument `self` is dropped when calling `prep_data()` or `hbam()`.
 #'
 #' See the `hbamr` vignette for a table summarizing the key characteristics of the available models.
 #'
@@ -85,7 +85,6 @@
 #' theta_est <- get_est(fit_hbam_mini, par = "theta")
 #'
 #' # Fitting the FBAM_MULTI_NF model with self-placements as group_id:
-#'   # Note: This works because the self-placements in this case are positive integers.
 #' fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF",
 #'                        warmup = 500, iter = 1000, chains = 2)
 #' }
@@ -115,7 +114,7 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
   if (model == "BAM" | grepl("_NF", model)) { pars = c("alpha", "beta", "chi", "theta") }
   if (!is.null(extra_pars)) {pars = c(pars, extra_pars) }
   if (!dat$V_supplied) {
-    pars <- pars[pars != "chi"]
+    # pars <- pars[pars != "chi"]
     if (model == "HBAM_R_MINI") {
       stop("The HBAM_R_MINI model requires self-placement data.")
     }

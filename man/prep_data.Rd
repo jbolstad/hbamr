@@ -30,7 +30,7 @@ prep_data(
 
 \item{B}{Integer specifying the upper bound of the survey scale after centering. If not supplied, this information will be inferred from the data.}
 
-\item{group_id}{Integer vector of length N identifying which group each respondent belongs to. The supplied id-variable should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with \code{"MULTI"} in their name and will be ignored when fitting other models.}
+\item{group_id}{Vector of length N identifying which group each respondent belongs to. The format can be factor, character, integer, or numeric. Respondents with NAs on \code{group_id} will be dropped when \code{group_id} is supplied. These data are only required by models with \code{"MULTI"} in their name and will be ignored when fitting other models.}
 }
 \value{
 A list of data to be used by \code{hbam()} or \code{fbam()}. The returned list includes the logical vector \code{keep}, which identifies the rows in the original data that have been kept for further analysis. The stimuli data are stored in a vector as a long-form sparse matrix. If the stimuli data include column-names, these will be preserved for later use.

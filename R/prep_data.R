@@ -10,7 +10,7 @@
 #' @param req_valid Integer specifying how many valid observations to require for a respondent to be included in the analysis. The default is `req_valid = J - allow_miss`, but if specified, `req_valid` takes precedence.
 #' @param req_unique Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is `req_unique = 2`.
 #' @param B Integer specifying the upper bound of the survey scale after centering. If not supplied, this information will be inferred from the data.
-#' @param group_id Integer vector of length N identifying which group each respondent belongs to. The supplied id-variable should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with `"MULTI"` in their name and will be ignored when fitting other models.
+#' @param group_id Vector of length N identifying which group each respondent belongs to. The format can be factor, character, integer, or numeric. Respondents with NAs on `group_id` will be dropped when `group_id` is supplied. These data are only required by models with `"MULTI"` in their name and will be ignored when fitting other models.
 #' @return A list of data to be used by `hbam()` or `fbam()`. The returned list includes the logical vector `keep`, which identifies the rows in the original data that have been kept for further analysis. The stimuli data are stored in a vector as a long-form sparse matrix. If the stimuli data include column-names, these will be preserved for later use.
 #' @examples
 #' # Loading and re-coding ANES 1980 data:
@@ -46,18 +46,14 @@ prep_data <- function(self = NULL, stimuli,
   }
 
   if (!is.null(group_id)) {
-    has_group_id <- !is.na(group_id)
+    has_group_id <- !is.na(group_id) & is.finite(group_id)
     self <- self[has_group_id]
     stimuli <- stimuli[has_group_id, ]
+    if (!is.null(prefs)) { prefs <- prefs[has_group_id, ] }
     group_id <- group_id[has_group_id]
+    group_id <- as.numeric(as.factor(group_id))
     if (!complete_sequence_integers(group_id)) {
-      stop("Supplied group_id does not form a complete sequence of integers.")
-    }
-    if (min(group_id) != 1) {
-      stop("Supplied group_id does not have 1 as its lowest value.")
-    }
-    if (!is.null(prefs)) {
-      prefs <- prefs[has_group_id, ]
+      stop("Did not succeed in converting the supplied group_id to a suitable index format. You could try transforming it to integers covering all values from 1 to the total number of groups.")
     }
   }
 

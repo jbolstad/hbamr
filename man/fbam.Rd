@@ -34,7 +34,7 @@ fbam(
 
 \item{req_unique}{Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is \code{req_unique = 2}. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function.}
 
-\item{group_id}{Integer vector of length N identifying which group each respondent belongs to. The supplied vector should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with "MULTI" in their name and will be ignored when fitting other models.}
+\item{group_id}{Vector of length N identifying which group each respondent belongs to. The format can be factor, character, integer, or numeric. Respondents with NAs on \code{group_id} will be dropped when \code{group_id} is supplied. These data are only required by models with \code{"MULTI"} in their name and will be ignored when fitting other models.}
 
 \item{data}{List of data that have been prepared in advance via the \code{prep_data()} function. Not required if the arguments \code{self} and \code{stimuli} are provided.}
 
