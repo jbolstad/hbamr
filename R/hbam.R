@@ -45,7 +45,7 @@
 #'
 #' **HBAM_R_MINI** is a version of the HBAM_MINI model that incorporates the rationalization component of the ISR model by Bølstad (2020). This model requires additional data to be supplied as the argument `pref`: An N × J matrix of stimuli ratings from the respondents. The rationalization part of the model is simplified relative to the original ISR model: The direction in which respondents move disfavored stimuli is estimated as a common expectation for each possible self-placement on the scale.
 #'
-#' **BAM** is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by Hare et al. (2015). This model is mainly provided to offer a baseline for model comparisons. While it is simple and fast, this model tends to overfit the data and produce invalid posterior distributions for some respondent positions (see Bølstad 2024).
+#' **BAM** is an unpooled model with wide uniform priors on the shift and stretch parameters. It is similar to the JAGS version introduced by Hare et al. (2015). However, the version included here has been adjusted to yield stretch parameters with an average of approximately one (and thus produce a scale similar to the other models in the package). While this model is simple and fast, it tends to overfit the data and produce invalid posterior distributions for some respondent positions (see Bølstad 2024). The model is therefore mainly provided to offer a baseline for model comparisons in situations where respondent positions are not of interest.
 #'
 #' **HBAM_2** has been replaced by the more general HBAM_MULTI model.
 #'
