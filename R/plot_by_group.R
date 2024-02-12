@@ -10,7 +10,7 @@
 #' @param fill Fill color. Passed on to `ggplot2::geom_density()`.
 #' @param color Color of outer lines. Passed on to `ggplot2::geom_density()`.
 #' @param alpha Number in \[0,1\]: Inverse level of transparency.
-#' @param ncol Number of columns. The default aims to have approximately ten subplots per column.
+#' @param ncol Number of columns. The default uses a formula to have approximately ten subplots per column.
 #' @param ascending Logical: Should the groups be placed in ascending order based on their posterior means (`TRUE`) or should they be ordered based on their names (`FALSE`)? Defaults to `TRUE`.
 #' @return A `ggplot` object.
 #'
