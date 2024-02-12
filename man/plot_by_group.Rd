@@ -33,7 +33,7 @@ plot_by_group(
 
 \item{ncol}{Number of columns. The default uses a formula to have approximately ten subplots per column.}
 
-\item{ascending}{Logical: Should the groups be placed in ascending order based on their posterior means (\code{TRUE}) or should they be ordered based on their names (\code{FALSE})? Defaults to \code{TRUE}.}
+\item{ascending_means}{Logical: Should the groups be placed in ascending order based on their posterior means (\code{TRUE}) or should they be ordered based on their names (\code{FALSE})? Defaults to \code{TRUE}.}
 }
 \value{
 A \code{ggplot} object.
