@@ -40,7 +40,7 @@ plot_by_group <- function(object, data, group_id, par = "abs_beta", fill = "#216
   means_long <- tidyr::pivot_longer(means, !group_id, names_to = "draw_no")
 
   lim <- quantile(means_long$value, probs = c(.001, .999))
-  plot <- ggplot2::ggplot(means_long, aes(x = value)) + ggplot2::geom_density(fill = fill, color = color, alpha = alpha) +
+  plot <- ggplot2::ggplot(means_long, aes(x = value)) + ggplot2::geom_density(fill = fill, color = color, alpha = alpha, na.rm = TRUE) +
     ggplot2::xlim(lim[1], lim[2]) + ggplot2::labs(x = par, y = "Posterior density") + ggplot2::facet_wrap(~group_id, ncol = ncol)
   return(plot)
 }
