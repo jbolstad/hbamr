@@ -20,6 +20,7 @@ get_plot_data <- function(object, n_draws = 15, seed = 1) {
     if (!is.null(names(attr(object@sim$samples[[1]], "args")$init_list$theta_raw))) {
       colnames(s_draws) <- names(attr(object@sim$samples[[1]], "args")$init_list$theta_raw) }
     s_draws <- pivot_longer(s_draws, everything())
+    s_draws$name <- factor(s_draws$name)
 
     label <- s_draws %>%
       dplyr::group_by(.data$name) %>%
