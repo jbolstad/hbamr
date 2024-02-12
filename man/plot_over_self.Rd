@@ -33,15 +33,15 @@ plot_over_self(
 
 \item{parlabel}{An optional character containing an alternative label for the parameter (will be parsed if passed as an expression).}
 
-\item{fill}{Fill color of boxes. Passed on to \code{geom_boxplot}.}
+\item{fill}{Fill color of boxes. Passed on to \code{ggplot2::geom_boxplot()}.}
 
-\item{color}{Color of outer lines. Passed on to \code{geom_boxplot}.}
+\item{color}{Color of outer lines. Passed on to \code{ggplot2::geom_boxplot()}.}
 
-\item{width}{Width of boxes. Passed on to \code{geom_boxplot}.}
+\item{width}{Width of boxes. Passed on to \code{ggplot2::geom_boxplot()}.}
 
-\item{alpha}{Number in [0,1]: Inverse level of transparency for fill color. Passed on to \code{geom_boxplot}.}
+\item{alpha}{Number in [0,1]: Inverse level of transparency for fill color.}
 
-\item{outlier.size}{Size of dots representing outliers. Passed on to \code{geom_boxplot}.}
+\item{outlier.size}{Size of dots representing outliers. Passed on to \code{ggplot2::geom_boxplot()}.}
 
 \item{median_color}{Color of solid line representing the median.}
 
@@ -51,5 +51,5 @@ plot_over_self(
 A \code{ggplot} object.
 }
 \description{
-Create a boxplot of individual parameter estimates from an HBAM model over self-placements
+Create a boxplot of individual parameter point estimates from an HBAM model over self-placements
 }

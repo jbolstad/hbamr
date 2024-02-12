@@ -24,7 +24,7 @@ plot_respondents <- function(object, inc_stimuli = TRUE, n_draws = 15, color = "
       ggplot2::labs(x = "Ideological scale", y = "Density")
   } else {
     p <- ggplot2::ggplot() + ggplot2::geom_density(data = pd$chi_draws, ggplot2::aes(.data$chi, by = .data$draw_no), color = ggplot2::alpha(color, alpha_color), fill = ggplot2::alpha(fill, alpha_fill), na.rm = TRUE) +
-      ggplot2::labs(x = "Ideological scale", y = "Density")
+      ggplot2::labs(x = "Ideological scale", y = "Posterior density")
   })
   lim <- max(abs(quantile(pd$chi_draws$chi, probs = c(.002, .998))))
   p <- p + xlim(-lim, lim)

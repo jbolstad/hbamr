@@ -1,6 +1,6 @@
 #' Plot individual parameter estimates over self-placements
 #'
-#' Create a boxplot of individual parameter estimates from an HBAM model over self-placements
+#' Create a boxplot of individual parameter point estimates from an HBAM model over self-placements
 #'
 #' @export
 #' @param object An object of class `stanfit` produced by `hbam()`, a list produced by `fbam()`, or a `list` of such objects, which will produce a faceted plot.
@@ -9,11 +9,11 @@
 #' @param estimate Character: Specifying which type of posterior point estimate to use. One of `"median"` and `"mean"`. Defaults to `"median"`. This only applies for `stanfit` objects.
 #' @param names An optional character vector of model names of same length as the supplied list of models.
 #' @param parlabel An optional character containing an alternative label for the parameter (will be parsed if passed as an expression).
-#' @param fill Fill color of boxes. Passed on to `geom_boxplot`.
-#' @param color Color of outer lines. Passed on to `geom_boxplot`.
-#' @param width Width of boxes. Passed on to `geom_boxplot`.
-#' @param alpha Number in \[0,1\]: Inverse level of transparency for fill color. Passed on to `geom_boxplot`.
-#' @param outlier.size Size of dots representing outliers. Passed on to `geom_boxplot`.
+#' @param fill Fill color of boxes. Passed on to `ggplot2::geom_boxplot()`.
+#' @param color Color of outer lines. Passed on to `ggplot2::geom_boxplot()`.
+#' @param width Width of boxes. Passed on to `ggplot2::geom_boxplot()`.
+#' @param alpha Number in \[0,1\]: Inverse level of transparency for fill color.
+#' @param outlier.size Size of dots representing outliers. Passed on to `ggplot2::geom_boxplot()`.
 #' @param median_color Color of solid line representing the median.
 #' @param median_lwd Thickness of solid line representing the median.
 #' @return A `ggplot` object.
