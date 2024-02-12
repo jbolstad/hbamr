@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,7 +48,17 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.1.2" id="hbamr-212">hbamr 2.1.2<a class="anchor" aria-label="anchor" href="#hbamr-212"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.1.3" id="hbamr-213">hbamr 2.1.3<a class="anchor" aria-label="anchor" href="#hbamr-213"></a></h2>
+<div class="section level4">
+<h4 id="improvements-of-existing-functions-2-1-3">Improvements of existing functions<a class="anchor" aria-label="anchor" href="#improvements-of-existing-functions-2-1-3"></a></h4>
+<ul><li>The <code><a href="../reference/prep_data.html">prep_data()</a></code>, <code><a href="../reference/hbam.html">hbam()</a></code>, and <code><a href="../reference/fbam.html">fbam()</a></code> functions now allow users to not supply self-placements. In this case, no meaningful respondent positions will be estimated, but all other parameters are unaffected.</li>
+<li>The <code><a href="../reference/prep_data.html">prep_data()</a></code> function now allows the <code>group_id</code> argument to take various forms, such as factor or character. It also allows missing values in the <code>group_id</code> vector and will drop respondents who do not have a valid <code>group_id</code>. Missing values would previously generate an uninformative error message.</li>
+<li>The models now accept even numbers of answering categories, but <code><a href="../reference/prep_data.html">prep_data()</a></code> will throw a warning.</li>
+<li>The <code><a href="../reference/prep_data.html">prep_data()</a></code> function now identifies the left and right poles for the BAM model as the stimuli with the most non-NA observations on each side of the center. This can be advantageous when analyzing datasets where some stimuli have a much higher number of valid observations than others.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.1.2" id="hbamr-212">hbamr 2.1.2<a class="anchor" aria-label="anchor" href="#hbamr-212"></a></h2><p class="text-muted">CRAN release: 2024-02-07</p>
 <div class="section level4">
 <h4 id="revisions-to-existing-models-2-1-2">Revisions to existing models<a class="anchor" aria-label="anchor" href="#revisions-to-existing-models-2-1-2"></a></h4>
 <ul><li>The behavior of FBAM models now depends on whether they are fit via MCMC or optimization. When fit via MCMC, the models simulate errors in respondents’ self-placements and generate draws for the latent discrete flipping parameters, kappa, using a Bernoulli function – just like other models. When fit via optimization, there is no simulation of self-placement errors and lambda is rounded to yield a MAP estimate of kappa.</li>

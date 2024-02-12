@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,11 +146,14 @@ This function can be run ahead of fitting the models, or it can be run
 implicitly as part of a single function call to fit the models (as shown
 below). The function takes a vector of <span class="math inline">\(N\)</span> ideological self-placements and an
 <span class="math inline">\(N \times J\)</span> matrix of stimulus
-placements. It applies a set of inclusion criteria, performs any
-necessary data transformation, and returns a list of data suited for
-sampling in <strong>rstan</strong>. The stimuli data are stored in a
-vector as a long-form sparse matrix. If the stimuli data include
-column-names, these will be preserved for later use.</p>
+placements. The self-placement vector is required to estimate respondent
+positions, but can be dropped if such data are not available or if the
+respondent positions are not of interest.</p>
+<p><code><a href="../reference/prep_data.html">prep_data()</a></code> applies a set of inclusion criteria,
+performs any necessary data transformation, and returns a list of data
+suited for sampling in <strong>rstan</strong>. The stimuli data are
+stored in a vector as a long-form sparse matrix. If the stimuli data
+include column-names, these will be preserved for later use.</p>
 <p>Any missing data must be set to <code>NA</code> before use. The
 <code><a href="../reference/prep_data.html">prep_data()</a></code> function allows the user to decide how many
 missing values should be permitted per respondent by specifying the
@@ -205,23 +208,22 @@ in the self-placements of the same magnitude as that with which the
 respondent in question places the stimulus with the smallest errors. All
 models in the package use this approach.</p>
 <p><strong>HBAM_MULTI</strong> is a version that models differences
-between groups defined by the user. It requires an integer vector
-identifying the groups to be supplied as the argument
-<code>group_id</code>. The model gives each group separate
-hyperparameters for the locations of the prior distributions for the
-shift and stretch parameters. Rather than shrinking the estimates toward
-the mode for the whole dataset, this model shrinks the estimates toward
-the mode for the group. The vectors of hyperparameters are called
-<code>mu_alpha</code> and <code>mu_beta</code> and are constructed to
-have means of 0. The scales of the priors on these hyperparameters can
-be set by the user via the arguments <code>sigma_mu_alpha</code> and
-<code>sigma_mu_beta</code>. The default values are B / 5 and .3,
-respectively. (Here, B measures the length of the survey scale as the
-number of possible placements on one side of the center.) One potential
-use for this model is to supply self-placements (appropriately
-transformed) as <code>group_id</code>, and thus give each self-placement
-group its own prior distribution for the shift and stretch
-parameters.</p>
+between groups defined by the user. It requires a vector identifying the
+groups to be supplied as the argument <code>group_id</code>. The model
+gives each group separate hyperparameters for the locations of the prior
+distributions for the shift and stretch parameters. Rather than
+shrinking the estimates toward the mode for the whole dataset, this
+model shrinks the estimates toward the mode for the group. The vectors
+of hyperparameters are called <code>mu_alpha</code> and
+<code>mu_beta</code> and are constructed to have means of 0. The scales
+of the priors on these hyperparameters can be set by the user via the
+arguments <code>sigma_mu_alpha</code> and <code>sigma_mu_beta</code>.
+The default values are B / 5 and .3, respectively. (Here, B measures the
+length of the survey scale as the number of possible placements on one
+side of the center.) One potential use for this model is to supply
+self-placements as <code>group_id</code>, and thus give each
+self-placement group its own prior distribution for the shift and
+stretch parameters.</p>
 <p><strong>HBAM_NF</strong> (formerly HBAM_0) is a version of the HBAM
 model that does not allow for scale flipping. This may be useful if
 there are truly zero cases of scale flipping in the data. Such scenarios
@@ -268,17 +270,24 @@ which respondents move disfavored stimuli is estimated as a common
 expectation for each possible self-placement on the scale.</p>
 <p><strong>BAM</strong> is an unpooled model with wide uniform priors on
 the shift and stretch parameters. It is similar to the JAGS version
-introduced by <span class="citation">Hare et al. (2015)</span>. This
-model is mainly provided to offer a baseline for model comparisons.
-While it is simple and fast, this model tends to overfit the data and
-produce invalid posterior distributions for some respondent positions
-<span class="citation">(Bølstad 2024)</span>.</p>
+introduced by <span class="citation">Hare et al. (2015)</span>, although
+the version included here has been adjusted to yield stretch parameters
+with an average of approximately one (and thus produce a scale similar
+to those of the other models in the package). Like the other models,
+this version of the BAM model also simulates errors in the
+self-placements to yield a realistic level of uncertainty. While this
+model is simple and fast, it tends to overfit the data and produce
+invalid posterior distributions for some respondent positions <span class="citation">(Bølstad 2024)</span>. However, it could potentially be
+useful as a baseline for model comparisons in situations where
+respondent positions are not of interest.</p>
 <p><strong>HBAM_2</strong> has been replaced by the more general
 HBAM_MULTI model.</p>
 <p>These models can also be used in situations where self-placements are
-not available and the only goal is to estimate stimulus positions. This
-can be achieved by supplying a vector of zeros (or random data) instead
-of real self-placements: <code>self = rep(0, nrow(stimuli))</code>.</p>
+not available and the only goal is to estimate stimulus positions or
+respondents’ shift and stretch parameters. While the latent respondent
+positions will not be estimated, all other parameters are unaffected if
+the argument <code>self</code> is dropped when calling
+<code><a href="../reference/prep_data.html">prep_data()</a></code> or <code><a href="../reference/hbam.html">hbam()</a></code>.</p>
 <p>To see the Stan code for any of the models, use the
 <code><a href="../reference/show_code.html">show_code()</a></code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -448,13 +457,11 @@ before fitting the model, we would supply output from
 <code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prep_data.html">prep_data</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, allow_miss <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> </span>
 <span><span class="va">fit_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 <p>To fit the HBAM_MULTI or FBAM_MULTI model, we would need to supply a
-vector identifying the groups of interest. One option would be to give
-each self-placement group their own prior distributions for the shift
-and stretch parameters. (Note that supplying the raw self-placements as
-<code>group_id</code> works in this case because the self-placements are
-stored as positive integers from 1 to 7 – otherwise they would have to
-be re-coded.) If we decided to fit the FBAM_MULTI model, we could also
-specify our own scales for the priors on key parameters:</p>
+vector identifying the groups of interest. One option would be to supply
+respondents’ self-placements as <code>group_id</code> and thus give each
+self-placement group their own prior distributions for the shift and
+stretch parameters. If we decided to fit the FBAM_MULTI model, we could
+also specify our own scales for the priors on key parameters:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_fbam_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"FBAM_MULTI"</span>, group_id <span class="op">=</span> <span class="va">self</span>, </span>
 <span>                       sigma_alpha <span class="op">=</span> <span class="fl">.8</span>, sigma_mu_alpha <span class="op">=</span> <span class="fl">.5</span>, </span>

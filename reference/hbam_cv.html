@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,11 +81,11 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>self</dt>
-<dd><p>A numerical vector of N ideological self-placements. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the <code>prep_data</code> function.</p></dd>
+<dd><p>A numerical vector of N ideological self-placements. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the <code><a href="prep_data.html">prep_data()</a></code> function.</p></dd>
 
 
 <dt>stimuli</dt>
-<dd><p>An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the <code>prep_data</code> function.</p></dd>
+<dd><p>An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the <code><a href="prep_data.html">prep_data()</a></code> function.</p></dd>
 
 
 <dt>model</dt>
@@ -93,15 +93,15 @@
 
 
 <dt>allow_miss</dt>
-<dd><p>Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the <code>prep_data</code> function. Defaults to 0.</p></dd>
+<dd><p>Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the <code><a href="prep_data.html">prep_data()</a></code> function. Defaults to 0.</p></dd>
 
 
 <dt>req_valid</dt>
-<dd><p>Integer specifying how many valid observations to require for a respondent to be included in the analysis. The default is <code>req_valid = J - allow_miss</code>, but if specified, <code>req_valid</code> takes precedence. This argument will not be used if the data have been prepared in advance via the <code>prep_data</code> function.</p></dd>
+<dd><p>Integer specifying how many valid observations to require for a respondent to be included in the analysis. The default is <code>req_valid = J - allow_miss</code>, but if specified, <code>req_valid</code> takes precedence. This argument will not be used if the data have been prepared in advance via the <code><a href="prep_data.html">prep_data()</a></code> function.</p></dd>
 
 
 <dt>req_unique</dt>
-<dd><p>Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is <code>req_unique = 2</code>. This argument will not be used if the data have been prepared in advance via the <code>prep_data</code> function.</p></dd>
+<dd><p>Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is <code>req_unique = 2</code>. This argument will not be used if the data have been prepared in advance via the <code><a href="prep_data.html">prep_data()</a></code> function.</p></dd>
 
 
 <dt>prefs</dt>
@@ -113,11 +113,11 @@
 
 
 <dt>prep_data</dt>
-<dd><p>Logical: Should the data be prepared before fitting the model? (Or have the data been prepared in advance by first running the <code>prep_data</code> and <code>prep_data_cv</code> functions)? If so, set <code>prep_data = FALSE</code>.) Defaults to <code>prep_data = TRUE</code>.</p></dd>
+<dd><p>Logical: Should the data be prepared before fitting the model? (Or have the data been prepared in advance by first running the <code><a href="prep_data.html">prep_data()</a></code> and <code><a href="prep_data_cv.html">prep_data_cv()</a></code> functions)? If so, set <code>prep_data = FALSE</code>.) Defaults to <code>prep_data = TRUE</code>.</p></dd>
 
 
 <dt>data</dt>
-<dd><p>A list of data produced by <code>prep_data</code> followed by <code>prep_data_cv</code>.</p></dd>
+<dd><p>A list of data produced by <code><a href="prep_data.html">prep_data()</a></code> followed by <code><a href="prep_data_cv.html">prep_data_cv()</a></code>.</p></dd>
 
 
 <dt>K</dt>
@@ -157,7 +157,7 @@
 
 
 <dt>...</dt>
-<dd><p>Arguments passed to <code><a href="https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html" class="external-link">rstan::sampling</a></code>.</p></dd>
+<dd><p>Arguments passed to <code><a href="https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html" class="external-link">rstan::sampling()</a></code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
