@@ -37,6 +37,8 @@ prep_data <- function(self = NULL, stimuli,
   #dimnames(stimuli) <- NULL
   #self <- as_numeric(self)
 
+  N_orig <- nrow(stimuli)
+
   if (is.null(self)) {
     V_supplied <- FALSE
     self <- rep(0, nrow(stimuli))
@@ -152,7 +154,7 @@ prep_data <- function(self = NULL, stimuli,
   datlist <- list(J = ncol(stimuli), N = nrow(stimuli), B = B, N_obs = length(stimuli_vec),
        V = self, Y = stimuli_vec, U = prefs_vec, L = L, R = R,
        ii = ii, jj = jj, gg = group_id, G = length(unique(group_id)), mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
-       CV = 0, holdout = rep(0, length(stimuli_vec)), V_supplied = V_supplied)
+       CV = 0, holdout = rep(0, length(stimuli_vec)), V_supplied = V_supplied, N_orig = N_orig)
   class(datlist) <- c("list", "hbam_data")
 
   return(datlist)
