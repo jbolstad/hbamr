@@ -31,7 +31,7 @@ plot_by_group(
 
 \item{alpha}{Number in [0,1]: Inverse level of transparency.}
 
-\item{ncol}{Number of columns. The default aims to have approximately ten subplots per column.}
+\item{ncol}{Number of columns. The default uses a formula to have approximately ten subplots per column.}
 
 \item{ascending}{Logical: Should the groups be placed in ascending order based on their posterior means (\code{TRUE}) or should they be ordered based on their names (\code{FALSE})? Defaults to \code{TRUE}.}
 }
