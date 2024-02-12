@@ -1,4 +1,4 @@
-#' Plot posterior densities of group averages of parameters
+#' Plot posterior densities of parameter averages by group
 #'
 #' Plot posterior densities of group summaries of individual parameters. The respondents can be grouped by any categorical variable and the function works whether the fitted model is of "MULTI"-type or not.
 #'

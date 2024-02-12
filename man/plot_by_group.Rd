@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_by_group.R
 \name{plot_by_group}
 \alias{plot_by_group}
-\title{Plot posterior densities of group averages of parameters}
+\title{Plot posterior densities of parameter averages by group}
 \usage{
 plot_by_group(
   object,
