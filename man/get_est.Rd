@@ -7,6 +7,8 @@
 get_est(
   object,
   par = "theta",
+  data = NULL,
+  format_orig = FALSE,
   probs = c(0.025, 0.5, 0.975),
   simplify = TRUE,
   ...
@@ -16,6 +18,10 @@ get_est(
 \item{object}{An instance of class \code{stanfit} produced by \code{hbam()}, or a list produced by \code{fbam()}.}
 
 \item{par}{Character: Name of the parameter type to be extracted. Typically \code{"theta"} (stimuli positions) or \code{"chi"} (respondent positions).}
+
+\item{data}{The list of data that was used to produce the object. Only required if \code{format_orig = TRUE} and if \code{par} is an individual-level parameter.}
+
+\item{format_orig}{Logical: Should individual-level parameters be mapped to the original dataset by returning rows of NAs for respondents who were not included in the analysis? Defaults to \code{FALSE}.}
 
 \item{probs}{A numeric vector of quantiles of interest for summarizing \code{stanfit} objects. The default is c(0.025, 0.50, 0.975).}
 

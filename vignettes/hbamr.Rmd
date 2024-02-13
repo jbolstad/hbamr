@@ -317,14 +317,14 @@ get_est(fit_hbam, "theta")
 est_theta
 ```
 
-The equivalent call for the respondent positions is:
+To get summaries of the respondent positions, we would specify `par = "chi"`. If we want the results to match the rows in the original dataset by reporting NAs for respondents who were not included in the analysis, we would need to supply the list of data produced by `prep_data()` as the argument `data` and specify `format_orig = TRUE`:
 
 ```{r get_est_v, include = TRUE, eval = FALSE}
-get_est(fit_hbam, "chi")
+get_est(fit_hbam, "chi", dat, format_orig = TRUE)
 ```
 
 ```{r, echo = FALSE}
-est_chi
+est_chi_orig
 ```
 
 ## Cross-Validation

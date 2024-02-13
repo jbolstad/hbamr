@@ -2,6 +2,7 @@
 
 ### Improvements of existing functions
 
+-   The `get_est()` function now takes the logical argument `format_orig`, which if `TRUE` makes the function return posterior summaries for individual-level parameters in a format that matches the rows in the original dataset.
 -   The `prep_data()`, `hbam()`, and `fbam()` functions now allow users to not supply self-placements. In this case, no meaningful respondent positions will be estimated, but all other parameters are unaffected.
 -   The `prep_data()` function now allows the `group_id` argument to take various forms, such as factor or character. It also allows missing values in the `group_id` vector and will drop respondents who do not have a valid `group_id`. Missing values would previously generate an uninformative error message.
 -   The models now accept even numbers of answering categories, but `prep_data()` will throw a warning.
