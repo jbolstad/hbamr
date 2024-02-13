@@ -85,7 +85,7 @@
 #' theta_est <- get_est(fit_hbam_mini, par = "theta")
 #'
 #' # Obtaining posterior summaries for the latent respondent positions
-#'   # in a format that matches the rows in the original dataset:
+#'   # in a format matching the rows in the original dataset:
 #' chi_est <- get_est(fit_hbam_mini, par = "chi", data = dat, format_orig = TRUE)
 #'
 #' # Fitting the FBAM_MULTI_NF model with self-placements as group_id:
