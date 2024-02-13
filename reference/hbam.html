@@ -229,6 +229,10 @@
 <span class="r-in"><span><span class="co"># Obtaining posterior summaries for the latent stimulus positions:</span></span></span>
 <span class="r-in"><span><span class="va">theta_est</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_est.html">get_est</a></span><span class="op">(</span><span class="va">fit_hbam_mini</span>, par <span class="op">=</span> <span class="st">"theta"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Obtaining posterior summaries for the latent respondent positions</span></span></span>
+<span class="r-in"><span>  <span class="co"># in a format matching the rows in the original dataset:</span></span></span>
+<span class="r-in"><span><span class="va">chi_est</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_est.html">get_est</a></span><span class="op">(</span><span class="va">fit_hbam_mini</span>, par <span class="op">=</span> <span class="st">"chi"</span>, data <span class="op">=</span> <span class="va">dat</span>, format_orig <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fitting the FBAM_MULTI_NF model with self-placements as group_id:</span></span></span>
 <span class="r-in"><span><span class="va">fit_fbam_multi_nf</span> <span class="op">&lt;-</span> <span class="fu">hbam</span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, group_id <span class="op">=</span> <span class="va">self</span>, model <span class="op">=</span> <span class="st">"FBAM_MULTI_NF"</span>,</span></span>
 <span class="r-in"><span>                       warmup <span class="op">=</span> <span class="fl">500</span>, iter <span class="op">=</span> <span class="fl">1000</span>, chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
