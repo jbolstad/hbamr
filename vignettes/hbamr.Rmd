@@ -136,9 +136,9 @@ show_code("HBAM_MULTI")
 
 ## Fitting
 
-The `hbam()` function can be used to fit all models in this package and it returns a `stanfit` object. The default model is HBAM, while other models can be specified via the argument `model`. For each model, `hbam()` selects a suitable function to produce initial values for the sampling algorithm.
+The `hbam()` function can be used to fit all models in this package and obtain a `stanfit` object. The default model is HBAM, while other models can be specified via the argument `model`. 
 
-Unless the user supplies pre-prepared data via the `data`-argument, `hbam()` will implicitly run `prep_data()`. It therefore takes the same arguments as the `prep_data()` function (i.e. `self`, `stimuli`, `allow_miss`, `req_valid`, and `req_unique`).
+Unless the user supplies pre-prepared data via the `data`-argument, `hbam()` will implicitly run `prep_data()`. It therefore takes the same arguments as the `prep_data()` function (i.e. `self`, `stimuli`, `group_id`, `allow_miss`, `req_valid`, and `req_unique`).
 
 To fit the HBAM model using the default settings, we would run:
 
