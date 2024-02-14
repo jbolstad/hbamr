@@ -6,24 +6,23 @@
 \usage{
 plot_by_group(
   object,
-  data,
-  group_id,
   par = "abs_beta",
+  group_id = NULL,
+  ascending_means = TRUE,
   fill = "#2166AC",
   color = "#053061",
   alpha = 0.5,
-  ncol = max(1, round(length(unique(group_id))/10)),
-  ascending_means = TRUE
+  ncol = max(1, round(length(unique(group_id))/10))
 )
 }
 \arguments{
 \item{object}{An instance of class \code{stanfit} produced by \code{hbam()}.}
 
-\item{data}{The list of data that was used to produce the object.}
-
-\item{group_id}{A vector that will be used to split the respondents into groups before plotting. The vector must either be as long as the number of rows in the original dataset, or as long as the number of respondents included in the analysis. The \code{group_id} supplied here can be the same as the \code{group_id} argument used when fitting a "MULTI"-type model, but it does not have to be.}
-
 \item{par}{Character: Name of the parameter to be plotted. One of the following: \code{"alpha"}, \code{"beta"}, \code{"abs_beta"}, \code{"lambda"}, or \code{"chi"}. Defaults to \code{"abs_beta"}, which means the absolute values of the draws for beta will be used. Further individual-level parameters like \code{"eta"} can be specified if these have been passed to \code{hbam()} via the argument \code{extra_pars} when fitting the model. (Note that homoskedastic models have no \code{"eta"} parameters and "NF"-type models have no \code{"lambda"} or \code{"kappa"} parameters.)}
+
+\item{group_id}{An optional vector that will be used to split the respondents into groups. The vector must either be as long as the number of rows in the original dataset, or as long as the number of respondents included in the analysis. If a \code{group_id} was previously supplied to \code{prep_data()} or \code{hbam()} and if no \code{group_id} is supplied here, the default is to use the existing \code{group_id}. If a \code{group_id} is supplied here, it will be used instead of any previously supplied vector. The \code{group_id} supplied here does not have to coincide with the \code{group_id} used to fit a "MULTI"-type model -- any vector that can be used to group the respondents is allowed.}
+
+\item{ascending_means}{Logical: Should the groups be placed in ascending order based on their posterior means (\code{TRUE}) or should they be ordered based on their names (\code{FALSE})? Defaults to \code{TRUE}.}
 
 \item{fill}{Fill color. Passed on to \code{ggplot2::geom_density()}.}
 
@@ -32,8 +31,6 @@ plot_by_group(
 \item{alpha}{Number in [0,1]: Inverse level of transparency.}
 
 \item{ncol}{Number of columns. The default uses a formula to have approximately ten subplots per column.}
-
-\item{ascending_means}{Logical: Should the groups be placed in ascending order based on their posterior means (\code{TRUE}) or should they be ordered based on their names (\code{FALSE})? Defaults to \code{TRUE}.}
 }
 \value{
 A \code{ggplot} object.

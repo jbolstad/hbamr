@@ -56,5 +56,6 @@ fbam <- function(self = NULL, stimuli = NULL, model = "FBAM_MINI", allow_miss = 
 
   set.seed(seed)
   out <- rstan::optimizing(stanmodels[[model]], data = dat, init = inits[[model]](1, dat), seed = seed, ...)
+  out$hbam_data <- dat
   return(out)
 }

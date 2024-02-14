@@ -232,7 +232,7 @@ get_plot_data(fit_hbam)
 
 ### Individual Parameters over Self-Placements
 
-The function `plot_over_self()` plots the distributions of key parameter estimates over the respondents' self-placements. The function will accept either a single `stanfit` object produced by `hbam()`, results from `fbam()`, or a list of such objects. In addition, the function requires the list of data that was produced by `prep_data()` before fitting the model(s). 
+The function `plot_over_self()` plots the distributions of key parameter estimates over the respondents' self-placements. The function will accept either a single `stanfit` object produced by `hbam()`, results from `fbam()`, or a list of such objects. 
 
 The user specifies which parameter to show via the argument `par`. This can be either of the following: `"alpha"`, `"beta"`, `"abs_beta"`, `"lambda"`, or `"chi"`, where `"abs_beta"` calls for the absolute value of beta to be used. By default, the function uses posterior median estimates, but this can be changed by specifying `estimate = "mean"`.
 
@@ -241,7 +241,7 @@ The user specifies which parameter to show via the argument `par`. This can be e
 To compare the distributions of estimated shift parameters from the HBAM and HBAM_MINI models, we would run:
 
 ```{r plot_alpha, include = TRUE, eval = FALSE, echo = TRUE, fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
-plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "alpha")
+plot_over_self(list(fit_hbam, fit_hbam_mini), "alpha")
 ```
 
 ```{r, echo = FALSE, fig.align = "center", fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
@@ -253,7 +253,7 @@ knitr::include_graphics("p_alpha.svg")
 For models that allow for scale flipping, the draws for $\beta$ combine the separate parameters for each flipping-state. The absolute value of $\beta$ may therefore be better suited for examining the extent to which each individual stretches the ideological space. To inspect the distribution of these values across self-placements, we would run:
 
 ```{r plot_beta, include = TRUE, eval = FALSE, echo = TRUE, fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
-plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "abs_beta")
+plot_over_self(list(fit_hbam, fit_hbam_mini), "abs_beta")
 ```
 
 ```{r, echo = FALSE, fig.align = "center", fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
@@ -267,7 +267,7 @@ The pattern above, where respondents with more extreme self-placements have more
 To see whether the $\beta$ parameters are likely to be positive or negative, we can look at the expectations of the flipping parameters, $\lambda$. These parameters represent each respondent's probability of *not* flipping the scale:
 
 ```{r plot_lambda, include = TRUE, eval = FALSE, echo = TRUE, fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
-plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "lambda")
+plot_over_self(list(fit_hbam, fit_hbam_mini), "lambda")
 ```
 
 ```{r, echo = FALSE, fig.align = "center", fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
@@ -281,7 +281,7 @@ In this example, flipping is uncommon, but respondents who place themselves in t
 It may also be useful to inspect the distribution of the scaled respondent positions over the self-placements. This illustrates the extent to which the model has transformed the original data. In this example, the impact of the models is generally modest, although a few respondents have been detected as having flipped the scale, and thus have had their self-placement flipped back.
 
 ```{r plot_chi, include = TRUE, eval = FALSE, echo = TRUE, fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
-plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "chi")
+plot_over_self(list(fit_hbam, fit_hbam_mini), "chi")
 ```
 
 ```{r, echo = FALSE, fig.align = "center", fig.asp = .37, fig.width = 8.5, fig.align = "center", out.width = "100%"}
@@ -296,7 +296,7 @@ The estimated $\eta$ parameters yield information about the accuracy of responde
 
 ```{r plot_eta, include = TRUE, eval = FALSE, echo = TRUE, fig.asp = .67, fig.width = 4.25, fig.align = "center", out.width = "50%"}
 fit_hbam <- hbam(data = dat, extra_pars = "eta")
-plot_over_self(fit_hbam, dat, "eta")
+plot_over_self(fit_hbam, "eta")
 ```
 
 ```{r, echo = FALSE, fig.align = "center", fig.asp = .67, fig.width = 4.25, fig.align = "center", out.width = "50%"}
@@ -317,10 +317,10 @@ get_est(fit_hbam, "theta")
 est_theta
 ```
 
-To get summaries of the respondent positions, we would specify `par = "chi"`. If we want the results to match the rows in the original dataset by reporting NAs for respondents who were not included in the analysis, we would need to supply the list of data produced by `prep_data()` as the argument `data` and specify `format_orig = TRUE`:
+To get summaries of the respondent positions, we would specify `par = "chi"`. If we want the results to match the rows in the original dataset by reporting rows of NAs for respondents who were not included in the analysis, we would add the argument `format_orig = TRUE`:
 
 ```{r get_est_v, include = TRUE, eval = FALSE}
-get_est(fit_hbam, "chi", dat, format_orig = TRUE)
+get_est(fit_hbam, "chi", format_orig = TRUE)
 ```
 
 ```{r, echo = FALSE}

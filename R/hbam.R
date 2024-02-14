@@ -86,7 +86,7 @@
 #'
 #' # Obtaining posterior summaries for the latent respondent positions
 #'   # in a format matching the rows in the original dataset:
-#' chi_est <- get_est(fit_hbam_mini, par = "chi", data = dat, format_orig = TRUE)
+#' chi_est <- get_est(fit_hbam_mini, par = "chi", format_orig = TRUE)
 #'
 #' # Fitting the FBAM_MULTI_NF model with self-placements as group_id:
 #' fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF",
@@ -149,6 +149,6 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
   arglist$include = include
 
   out <- do.call(rstan::sampling, arglist)
-
+  out@.MISC$hbam_data <- dat
   return(out)
 }

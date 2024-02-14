@@ -6,7 +6,6 @@
 \usage{
 plot_over_self(
   object,
-  data,
   par = "chi",
   estimate = "median",
   names = NULL,
@@ -22,8 +21,6 @@ plot_over_self(
 }
 \arguments{
 \item{object}{An object of class \code{stanfit} produced by \code{hbam()}, a list produced by \code{fbam()}, or a \code{list} of such objects, which will produce a faceted plot.}
-
-\item{data}{The list of data that was used to produce the object(s).}
 
 \item{par}{Character: Name of the parameter to be plotted. One of the following: \code{"alpha"}, \code{"beta"}, \code{"abs_beta"}, \code{"lambda"}, or \code{"chi"}. Defaults to \code{"chi"}. Further individual-level parameters like \code{"eta"} can be specified if these have been passed to \code{hbam()} via the argument \code{extra_pars} when fitting the model. (Note that homoskedastic models have no \code{"eta"} parameters and "NF"-type models have no \code{"lambda"} or \code{"kappa"} parameters.)}
 

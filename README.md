@@ -90,8 +90,7 @@ plot_respondents(fit_hbam)
 Plot the estimated scale-stretching parameters over respondents' self-placements:
 
 ``` r
-dat <- prep_data(self, stimuli)
-plot_over_self(list(fit_hbam, fit_hbam_mini), dat, "abs_beta")
+plot_over_self(list(fit_hbam, fit_hbam_mini), "abs_beta")
 ```
 
 <img src="https://raw.githubusercontent.com/jbolstad/hbamr/main/vignettes/p_abs_beta.svg" width="850px"/>

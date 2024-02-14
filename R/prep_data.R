@@ -53,7 +53,8 @@ prep_data <- function(self = NULL, stimuli,
     stimuli <- stimuli[has_group_id, ]
     if (!is.null(prefs)) { prefs <- prefs[has_group_id, ] }
     group_id <- group_id[has_group_id]
-    group_id <- as.numeric(as.factor(group_id))
+    group_id_fac <- as.factor(group_id)
+    group_id <- as.numeric(group_id_fac)
     if (!complete_sequence_integers(group_id)) {
       stop("Did not succeed in converting the supplied group_id to a suitable index format. You could try transforming it to integers covering all values from 1 to the total number of groups.")
     }
@@ -108,7 +109,10 @@ prep_data <- function(self = NULL, stimuli,
 
   stimuli <- stimuli[keep, ]
   self <- self[keep]
-  if(!is.null(group_id)) { group_id <- group_id[keep] }
+  if(!is.null(group_id)) {
+    group_id <- group_id[keep]
+    group_id_fac <- group_id_fac[keep]
+  }
 
   stimulicols2 <- apply(stimuli, 2, function(x) sum(!is.na(x))) > 0
   stimuli <- stimuli[, stimulicols2]
@@ -153,7 +157,7 @@ prep_data <- function(self = NULL, stimuli,
 
   datlist <- list(J = ncol(stimuli), N = nrow(stimuli), B = B, N_obs = length(stimuli_vec),
        V = self, Y = stimuli_vec, U = prefs_vec, L = L, R = R,
-       ii = ii, jj = jj, gg = group_id, G = length(unique(group_id)), mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
+       ii = ii, jj = jj, gg = group_id, G = length(unique(group_id)), ggfac = group_id_fac, mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
        CV = 0, holdout = rep(0, length(stimuli_vec)), V_supplied = V_supplied, N_orig = N_orig)
   class(datlist) <- c("list", "hbam_data")
 

@@ -4,7 +4,6 @@
 #'
 #' @export
 #' @param object An object of class `stanfit` produced by `hbam()`, a list produced by `fbam()`, or a `list` of such objects, which will produce a faceted plot.
-#' @param data The list of data that was used to produce the object(s).
 #' @param par Character: Name of the parameter to be plotted. One of the following: `"alpha"`, `"beta"`, `"abs_beta"`, `"lambda"`, or `"chi"`. Defaults to `"chi"`. Further individual-level parameters like `"eta"` can be specified if these have been passed to `hbam()` via the argument `extra_pars` when fitting the model. (Note that homoskedastic models have no `"eta"` parameters and "NF"-type models have no `"lambda"` or `"kappa"` parameters.)
 #' @param estimate Character: Specifying which type of posterior point estimate to use. One of `"median"` and `"mean"`. Defaults to `"median"`. This only applies for `stanfit` objects.
 #' @param names An optional character vector of model names of same length as the supplied list of models.
@@ -19,14 +18,14 @@
 #' @return A `ggplot` object.
 #'
 
-plot_over_self <- function(object, data, par = "chi", estimate = "median", names = NULL, parlabel = NULL,
+plot_over_self <- function(object, par = "chi", estimate = "median", names = NULL, parlabel = NULL,
                            fill = "#2166AC", color = "#053061", width = .7, alpha = .5, outlier.size = 0.3,
                            median_color = "black", median_lwd = .7) {
   if(is.null(parlabel)) { parlabel <- par}
   if((length(object) == 1 & inherits(object, "stanfit")) | is_fbam(object)) {
-    pd <- get_pd(object, data, par, estimate)
+    pd <- get_pd(object, par, estimate)
     p <- ggplot2::ggplot(pd, ggplot2::aes(.data$V, .data$parameter)) + ggplot2::geom_boxplot(fill = fill, color = color, width = width, alpha = alpha, outlier.size = outlier.size) +
-      xlab("Self-placement") + ylab(par)
+      ggplot2::xlab("Self-placement") + ggplot2::ylab(par)
     md <- ggplot2::ggplot_build(p)$data[[1]]
     p <- p + ggplot2::geom_segment(data = md, aes(x = .data$xmin, xend = .data$xmax,
                                    y = .data$middle, yend = .data$middle), colour = median_color, linewidth = median_lwd)
@@ -40,7 +39,8 @@ plot_over_self <- function(object, data, par = "chi", estimate = "median", names
           name <- paste0("Model ", m)
         }
       } else { name <- names[m] }
-      pd <- rbind(pd, dplyr::bind_cols(get_pd(object[[m]], data, par, estimate), model = rep(name, data$N)))
+      pd_temp <- get_pd(object[[m]], par, estimate)
+      pd <- rbind(pd, dplyr::bind_cols(pd_temp, model = rep(name, nrow(pd_temp))))
     }
       if (is.null(names)) {
         pd$model <- factor(pd$model, levels = unique(pd$model), labels = unique(pd$model)) } else {
@@ -56,8 +56,11 @@ plot_over_self <- function(object, data, par = "chi", estimate = "median", names
   return(p)
 }
 
-get_pd <- function(object, data, par, estimate){
+get_pd <- function(object, par, estimate){
   if (inherits(object, "stanfit")) {
+    data <- object@.MISC$hbam_data
+    if (is.null(data) || !inherits(data, "hbam_data")) {
+      stop("Could not find the data used for fitting within the supplied object. You need to supply an object produced by hbam() or fbam().") }
     if (par == "abs_beta") {
       draws <- as.matrix(rstan::extract(object, pars = "beta")$beta)
       param <- data.frame(
@@ -76,6 +79,9 @@ get_pd <- function(object, data, par, estimate){
     if (estimate == "mean") { pd <- dplyr::bind_cols(parameter = param$mean, V = as.ordered(data$V)) }
   } else {
     if (inherits(object, "list")) {
+      data <- object$hbam_data
+      if (is.null(data) || !inherits(data, "hbam_data")) {
+        stop("Could not find the data used for fitting within the supplied object. You need to supply an object produced by hbam() or fbam().") }
       if (par == "abs_beta") {
         param <- get_est(object, "beta")
         param <- abs(param)
