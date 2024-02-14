@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,10 +48,11 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.1.3" id="hbamr-213">hbamr 2.1.3<a class="anchor" aria-label="anchor" href="#hbamr-213"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.2.0" id="hbamr-220">hbamr 2.2.0<a class="anchor" aria-label="anchor" href="#hbamr-220"></a></h2>
 <div class="section level4">
-<h4 id="improvements-of-existing-functions-2-1-3">Improvements of existing functions<a class="anchor" aria-label="anchor" href="#improvements-of-existing-functions-2-1-3"></a></h4>
+<h4 id="improvements-of-existing-functions-2-2-0">Improvements of existing functions<a class="anchor" aria-label="anchor" href="#improvements-of-existing-functions-2-2-0"></a></h4>
 <ul><li>The <code><a href="../reference/get_est.html">get_est()</a></code> function now takes the logical argument <code>format_orig</code>, which if <code>TRUE</code> makes the function return posterior summaries for individual-level parameters in a format that matches the rows in the original dataset.</li>
+<li>The <code><a href="../reference/hbam.html">hbam()</a></code> and <code><a href="../reference/fbam.html">fbam()</a></code> functions now store the input data within the returned objects, which allows simplifying the interfaces for other functions like <code><a href="../reference/get_est.html">get_est()</a></code> and <code><a href="../reference/plot_over_self.html">plot_over_self()</a></code>. As a result, the <code><a href="../reference/plot_over_self.html">plot_over_self()</a></code> function no longer requires a data argument.</li>
 <li>The <code><a href="../reference/prep_data.html">prep_data()</a></code>, <code><a href="../reference/hbam.html">hbam()</a></code>, and <code><a href="../reference/fbam.html">fbam()</a></code> functions now allow users to not supply self-placements. In this case, no meaningful respondent positions will be estimated, but all other parameters are unaffected.</li>
 <li>The <code><a href="../reference/prep_data.html">prep_data()</a></code> function now allows the <code>group_id</code> argument to take various forms, such as factor or character. It also allows missing values in the <code>group_id</code> vector and will drop respondents who do not have a valid <code>group_id</code>. Missing values would previously generate an uninformative error message.</li>
 <li>The models now accept even numbers of answering categories, but <code><a href="../reference/prep_data.html">prep_data()</a></code> will throw a warning.</li>
