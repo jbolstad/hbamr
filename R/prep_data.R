@@ -58,6 +58,8 @@ prep_data <- function(self = NULL, stimuli,
     if (!complete_sequence_integers(group_id)) {
       stop("Did not succeed in converting the supplied group_id to a suitable index format. You could try transforming it to integers covering all values from 1 to the total number of groups.")
     }
+  } else {
+    group_id_fac <- NULL
   }
 
   stimulicols <- apply(stimuli, 2, function(x) sum(!is.na(x))) > 0

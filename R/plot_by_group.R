@@ -21,6 +21,9 @@ plot_by_group <- function(object, par = "abs_beta", group_id = NULL, ascending_m
   }
 
   if (is.null(group_id)) {
+    if (is.null(data$ggfac)) {
+      stop("You need to supply a group_id to plot_by_group() if no group_id was previously supplied to hbam() or prep_data().")
+    }
     group_id <- data$ggfac
   } else {
     if (!(length(group_id) == data$N_orig | length(group_id) == data$N)) {
