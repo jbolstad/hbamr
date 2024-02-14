@@ -14,8 +14,8 @@
 #' @param seed A positive integer specifying an optional seed for reproducibility. If this argument is not supplied, a random seed will be generated and the function will produce slightly different results on each run.
 #' @param sigma_alpha A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM_MINI model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.
 #' @param sigma_beta A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM_MINI model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.
-#' @param sigma_mu_alpha A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 5.
-#' @param sigma_mu_beta A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .3.
+#' @param sigma_mu_alpha A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 10.
+#' @param sigma_mu_beta A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .2.
 #' @param ... Arguments passed to `rstan::optimizing()`.
 #' @return A list produced by `rstan::optimizing()`.
 #'
@@ -38,7 +38,7 @@ fbam <- function(self = NULL, stimuli = NULL, model = "FBAM_MINI", allow_miss = 
                  req_unique = 2, group_id = NULL, data = NULL,
                  seed = sample.int(.Machine$integer.max, 1),
                  sigma_alpha = NULL, sigma_beta = .35,
-                 sigma_mu_alpha = NULL, sigma_mu_beta = .3, ...) {
+                 sigma_mu_alpha = NULL, sigma_mu_beta = .2, ...) {
   if (!model %in% c("FBAM_MINI", "FBAM_MULTI", "FBAM_MULTI_NF")) { stop(paste(model, "is not a valid model choice for optimization.")) }
   if (!is.null(data) & (!is.null(self) | !is.null(stimuli))) { message("Note: When pre-prepared data are supplied, other data arguments will be ignored.") }
   if (is.null(data) & (is.null(self) | is.null(stimuli))) { message("Note: Required data not supplied.") }
@@ -47,7 +47,7 @@ fbam <- function(self = NULL, stimuli = NULL, model = "FBAM_MINI", allow_miss = 
   if (!grepl("MULTI", model) & !is.null(dat$gg)) { message("Note: The supplied group_id will not be used as the chosen model is not a MULTI-type model.") }
 
   if (is.null(sigma_alpha)) { sigma_alpha <- dat$B / 4.0 }
-  if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat$B / 5.0 }
+  if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat$B / 10 }
   dat$sigma_alpha <- sigma_alpha
   dat$sigma_mu_alpha <- sigma_mu_alpha
   dat$sigma_beta <- sigma_beta

@@ -25,7 +25,7 @@ hbam(
   sigma_alpha = NULL,
   sigma_beta = 0.35,
   sigma_mu_alpha = NULL,
-  sigma_mu_beta = 0.3,
+  sigma_mu_beta = 0.2,
   ...
 )
 }
@@ -68,9 +68,9 @@ hbam(
 
 \item{sigma_beta}{A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM_MINI model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.}
 
-\item{sigma_mu_alpha}{A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 5.}
+\item{sigma_mu_alpha}{A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 10.}
 
-\item{sigma_mu_beta}{A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .3.}
+\item{sigma_mu_beta}{A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .2.}
 
 \item{...}{Arguments passed to \code{rstan::sampling()}.}
 }
@@ -85,7 +85,7 @@ This package provides several alternative models that can be selected using the 
 
 \strong{HBAM} is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in Bølstad (2024), this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of self-placements, individual-level parameters, and simulated errors. This makes the model considerably faster, while yielding very similar results. The model simulates errors in the self-placements of the same magnitude as that with which the respondent in question places the stimulus with the smallest errors. All models in the package use this approach.
 
-\strong{HBAM_MULTI} is a version that models differences between groups defined by the user. It requires a vector identifying the groups to be supplied as the argument \code{group_id}. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called \code{mu_alpha} and \code{mu_beta} and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments \code{sigma_mu_alpha} and \code{sigma_mu_beta}. The default values are B / 5 and .3, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements as \code{group_id}, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
+\strong{HBAM_MULTI} is a version that models differences between groups defined by the user. It requires a vector identifying the groups to be supplied as the argument \code{group_id}. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called \code{mu_alpha} and \code{mu_beta} and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments \code{sigma_mu_alpha} and \code{sigma_mu_beta}. The default values are B / 10 and .2, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements as \code{group_id}, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
 
 \strong{HBAM_NF} (formerly HBAM_0) is a version of the HBAM model that does not allow for scale flipping. This may be useful if there are truly zero cases of scale flipping in the data. Such scenarios can be created artificially, but may also arise in real data. For example, expert surveys appear unlikely to contain many instances of scale flipping. For data that contain zero cases of flipping, models that allow for flipping contain superfluous parameters that lead to inefficient sampling. Models that do not allow for flipping will sample faster and typically yield slightly more accurate estimates. Such models are therefore preferable when no flipping is present.
 

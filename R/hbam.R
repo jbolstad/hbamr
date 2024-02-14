@@ -22,14 +22,14 @@
 #' @param seed A positive integer specifying an optional seed for reproducibility. If this argument is not supplied, a random seed will be generated and the function will produce slightly different results on each run.
 #' @param sigma_alpha A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM_MINI model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.
 #' @param sigma_beta A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM_MINI model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.
-#' @param sigma_mu_alpha A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 5.
-#' @param sigma_mu_beta A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .3.
+#' @param sigma_mu_alpha A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 10.
+#' @param sigma_mu_beta A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .2.
 #' @param ... Arguments passed to `rstan::sampling()`.
 #' @details This package provides several alternative models that can be selected using the names below. Users who are unsure which model to use are advised to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI may provide a useful alternative.
 #'
 #' **HBAM** is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in Bølstad (2024), this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of self-placements, individual-level parameters, and simulated errors. This makes the model considerably faster, while yielding very similar results. The model simulates errors in the self-placements of the same magnitude as that with which the respondent in question places the stimulus with the smallest errors. All models in the package use this approach.
 #'
-#' **HBAM_MULTI** is a version that models differences between groups defined by the user. It requires a vector identifying the groups to be supplied as the argument `group_id`. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called `mu_alpha` and `mu_beta` and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments `sigma_mu_alpha` and `sigma_mu_beta`. The default values are B / 5 and .3, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements as `group_id`, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
+#' **HBAM_MULTI** is a version that models differences between groups defined by the user. It requires a vector identifying the groups to be supplied as the argument `group_id`. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called `mu_alpha` and `mu_beta` and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments `sigma_mu_alpha` and `sigma_mu_beta`. The default values are B / 10 and .2, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements as `group_id`, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.
 #'
 #' **HBAM_NF** (formerly HBAM_0) is a version of the HBAM model that does not allow for scale flipping. This may be useful if there are truly zero cases of scale flipping in the data. Such scenarios can be created artificially, but may also arise in real data. For example, expert surveys appear unlikely to contain many instances of scale flipping. For data that contain zero cases of flipping, models that allow for flipping contain superfluous parameters that lead to inefficient sampling. Models that do not allow for flipping will sample faster and typically yield slightly more accurate estimates. Such models are therefore preferable when no flipping is present.
 #'
@@ -101,7 +101,7 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
                  warmup = 1000, iter = 2000,
                  seed = sample.int(.Machine$integer.max, 1),
                  sigma_alpha = NULL, sigma_beta = .35,
-                 sigma_mu_alpha = NULL, sigma_mu_beta = .3, ...) {
+                 sigma_mu_alpha = NULL, sigma_mu_beta = .2, ...) {
   if (!model %in% names(stanmodels)) { stop(paste(model, "is not a valid model choice.")) }
   if (!is.null(data) & (!is.null(self) | !is.null(stimuli))) { message("Note: When pre-prepared data are supplied, other data arguments will be ignored.") }
   if (is.null(data) & (is.null(self) | is.null(stimuli))) { stop("Required data not supplied.") }
@@ -124,8 +124,8 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
     }
   }
 
-  if (is.null(sigma_alpha)) { sigma_alpha <- dat$B / 4.0 }
-  if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat$B / 5.0 }
+  if (is.null(sigma_alpha)) { sigma_alpha <- dat$B / 4 }
+  if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat$B / 10 }
   dat$sigma_alpha <- sigma_alpha
   dat$sigma_mu_alpha <- sigma_mu_alpha
   dat$sigma_beta <- sigma_beta
