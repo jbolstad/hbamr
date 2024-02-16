@@ -34,8 +34,7 @@ plot_by_group <- function(object, par = "abs_beta", group_id = NULL, ascending_m
   }
 
   if (par == "abs_beta") {
-    par <- "beta"
-    draws <- abs(rstan::extract(object, pars = par)[[par]])
+    draws <- abs(rstan::extract(object, pars = "beta")[["beta"]])
   } else {
     draws <- rstan::extract(object, pars = par)[[par]]
   }
