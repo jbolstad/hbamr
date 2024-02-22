@@ -14,7 +14,7 @@ data {
 }
 
 transformed data {
-  real<lower = 0> sigma_alpha_prior_rate = (2 - 1) / (B / 5.0);
+  real<lower = 0> sigma_alpha_prior_rate = (3 - 1) / (B / 10.0);
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
   vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
 }
@@ -54,9 +54,9 @@ model {
   theta_raw ~ normal(0, B);
   theta_lr ~ normal(0, B);
   alpha_raw ~ normal(0, 1);
-  sigma_alpha ~ gamma(2, sigma_alpha_prior_rate);
+  sigma_alpha ~ gamma(3, sigma_alpha_prior_rate);
   beta_raw ~ normal(0, 1);
-  sigma_beta ~ gamma(3, 10);
+  sigma_beta ~ gamma(9, 40);
   eta ~ scaled_inv_chi_square(nu, eta_scale);
   nu ~ gamma(25, 2.5);
   tau ~ gamma(2, tau_prior_rate);

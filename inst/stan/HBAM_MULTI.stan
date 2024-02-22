@@ -18,7 +18,7 @@ data {
 }
 
 transformed data {
-  real<lower = 0> sigma_alpha_prior_rate = (2 - 1) / (B / 5.0);
+  real<lower = 0> sigma_alpha_prior_rate = (3 - 1) / (B / 10.0);
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
   vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
   real mean_mu_simplexes = 1.0 / G;       // for later scaling of simplexes
@@ -76,10 +76,10 @@ model {
   theta_lr ~ normal(0, B);
   alpha_raw[, 1] ~ normal(0, 1);
   alpha_raw[, 2] ~ normal(0, 1);
-  sigma_alpha ~ gamma(2, sigma_alpha_prior_rate);
+  sigma_alpha ~ gamma(3, sigma_alpha_prior_rate);
   beta_raw[, 1] ~ normal(0, 1);
   beta_raw[, 2] ~ normal(0, 1);
-  sigma_beta ~ gamma(3, 10);
+  sigma_beta ~ gamma(9, 40);
   mu_alpha_raw ~ dirichlet(rep_vector(50, G));
   mu_beta_raw ~ dirichlet(rep_vector(50, G));
   eta ~ scaled_inv_chi_square(nu, eta_scale);
