@@ -85,7 +85,7 @@ model {
   eta ~ scaled_inv_chi_square(nu, eta_scale);
   nu ~ gamma(25, 2.5);
   tau ~ gamma(2, tau_prior_rate);
-  rho ~ dirichlet(rep_vector(5, J));
+  rho ~ dirichlet(rep_vector(20, J));
   logit_lambda ~ normal(0, 1);
   psi ~ lognormal(1.4, .5);
 

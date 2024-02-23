@@ -12,7 +12,7 @@ inits_HBAM <- function(chain_id = 1, dat) {
     nu = 3 + rinvchisq(1, 100, 7),
     tau = rinvchisq(1, 500, (dat$B / 3)),
     eta = rinvchisq(dat$N, 100, dat$J^2 * (dat$B / 3)^2),
-    rho = rdirichlet(1, rep(50, dat$J)),
+    rho = rdirichlet(1, rep(75, dat$J)),
     logit_lambda = rnorm(dat$N, 0, .2),
     psi = exp(rnorm(1, 1.4, .1)),
     # For HBAM_MULTI:
@@ -39,7 +39,7 @@ inits_HBAM_NF <- function(chain_id = 1, dat) {
     nu = 3 + rinvchisq(1, 100, 7),
     tau = rinvchisq(1, 500, (dat$B / 3)),
     eta = rinvchisq(dat$N, 100, dat$J^2 * (dat$B / 3)^2),
-    rho = rdirichlet(1, rep(50, dat$J)),
+    rho = rdirichlet(1, rep(75, dat$J)),
     # For HBAM_MULTI:
     mu_alpha_raw = rdirichlet(1, rep(500, dat$G)),
     mu_beta_raw = rdirichlet(1, rep(500, dat$G))
@@ -55,7 +55,7 @@ inits_BAM <- function(chain_id = 1, dat) {
     nu = 3 + rinvchisq(1, 100, 7),
     tau = rinvchisq(1, 500, (dat$B / 3)),
     eta = rinvchisq(dat$N, 100, dat$J^2 * (dat$B / 3)^2),
-    rho = rdirichlet(1, rep(50, dat$J))
+    rho = rdirichlet(1, rep(75, dat$J))
   )
 }
 
