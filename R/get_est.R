@@ -29,7 +29,7 @@ get_est <- function (object, par = "theta", format_orig = FALSE, probs = c(0.025
     }
     if (nrow(out) == data$N) {
       out_long <- matrix(NA, ncol = ncol(out), nrow = length(data$keep))
-      out_long[data$keep, ] <- out[, ]
+      out_long[data$keep, ] <- unlist(out[, ])
       colnames(out_long) <- colnames(out)
       out <- out_long
     }
