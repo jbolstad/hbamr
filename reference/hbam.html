@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,7 @@
 <span>  sigma_alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sigma_beta <span class="op">=</span> <span class="fl">0.35</span>,</span>
 <span>  sigma_mu_alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  sigma_mu_beta <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>  sigma_mu_beta <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -159,11 +159,11 @@
 
 
 <dt>sigma_mu_alpha</dt>
-<dd><p>A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 5.</p></dd>
+<dd><p>A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 10.</p></dd>
 
 
 <dt>sigma_mu_beta</dt>
-<dd><p>A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .3.</p></dd>
+<dd><p>A positive numeric value specifying the standard deviation of the prior on the group-means of the logged stretch parameters in MULTI-type models. Defaults to .2.</p></dd>
 
 
 <dt>...</dt>
@@ -180,7 +180,7 @@
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This package provides several alternative models that can be selected using the names below. Users who are unsure which model to use are advised to use the default HBAM model. If speed or sampling diagnostics are an issue, HBAM_MINI may provide a useful alternative.</p>
 <p><strong>HBAM</strong> is the default model, which allows for scale flipping and employs hierarchical priors on the shift and stretch parameters. It also models heteroskedastic errors that vary by both individual and stimuli. Compared to the model in Bølstad (2024), this version has been slightly revised to provide faster sampling. A key difference from the original model is that the respondent positions are not treated as parameters, but rather calculated as a function of self-placements, individual-level parameters, and simulated errors. This makes the model considerably faster, while yielding very similar results. The model simulates errors in the self-placements of the same magnitude as that with which the respondent in question places the stimulus with the smallest errors. All models in the package use this approach.</p>
-<p><strong>HBAM_MULTI</strong> is a version that models differences between groups defined by the user. It requires a vector identifying the groups to be supplied as the argument <code>group_id</code>. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called <code>mu_alpha</code> and <code>mu_beta</code> and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments <code>sigma_mu_alpha</code> and <code>sigma_mu_beta</code>. The default values are B / 5 and .3, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements as <code>group_id</code>, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.</p>
+<p><strong>HBAM_MULTI</strong> is a version that models differences between groups defined by the user. It requires a vector identifying the groups to be supplied as the argument <code>group_id</code>. The model gives each group separate hyperparameters for the locations of the prior distributions for the shift and stretch parameters. Rather than shrinking the estimates toward the mode for the whole dataset, this model shrinks the estimates toward the mode for the group. The vectors of hyperparameters are called <code>mu_alpha</code> and <code>mu_beta</code> and are constructed to have means of 0. The scales of the priors on these hyperparameters can be set by the user via the arguments <code>sigma_mu_alpha</code> and <code>sigma_mu_beta</code>. The default values are B / 10 and .2, respectively. (Here, B measures the length of the survey scale as the number of possible placements on one side of the center.) One potential use for this model is to supply self-placements as <code>group_id</code>, and thus give each self-placement group its own prior distribution for the shift and stretch parameters.</p>
 <p><strong>HBAM_NF</strong> (formerly HBAM_0) is a version of the HBAM model that does not allow for scale flipping. This may be useful if there are truly zero cases of scale flipping in the data. Such scenarios can be created artificially, but may also arise in real data. For example, expert surveys appear unlikely to contain many instances of scale flipping. For data that contain zero cases of flipping, models that allow for flipping contain superfluous parameters that lead to inefficient sampling. Models that do not allow for flipping will sample faster and typically yield slightly more accurate estimates. Such models are therefore preferable when no flipping is present.</p>
 <p><strong>HBAM_MULTI_NF</strong> is a version of the HBAM_MULTI model that does not allow for scale flipping.</p>
 <p><strong>HBAM_MINI</strong> is a version of the HBAM model that assumes the prediction errors in the stimuli placements to be homoskedastic. This model tends to sample faster faster than the standard HBAM model while yielding very similar point estimates. For large datasets, this model may provide a reasonable compromise between model complexity and estimation speed.</p>
@@ -217,14 +217,20 @@
 <span class="r-in"><span><span class="co"># Fitting the HBAM_MINI model, obtaining 1000 draws:</span></span></span>
 <span class="r-in"><span><span class="va">fit_hbam_mini</span> <span class="op">&lt;-</span> <span class="fu">hbam</span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_MINI"</span>,</span></span>
 <span class="r-in"><span>                   warmup <span class="op">=</span> <span class="fl">500</span>, iter <span class="op">=</span> <span class="fl">1000</span>, chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Preparing the data before fitting, requiring complete responses:</span></span></span>
 <span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="prep_data.html">prep_data</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, allow_miss <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fit_hbam_mini</span> <span class="op">&lt;-</span> <span class="fu">hbam</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span>, model <span class="op">=</span> <span class="st">"HBAM_MINI"</span>,</span></span>
 <span class="r-in"><span>                   warmup <span class="op">=</span> <span class="fl">500</span>, iter <span class="op">=</span> <span class="fl">1000</span>, chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Obtaining posterior summaries for the latent stimulus positions:</span></span></span>
 <span class="r-in"><span><span class="va">theta_est</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_est.html">get_est</a></span><span class="op">(</span><span class="va">fit_hbam_mini</span>, par <span class="op">=</span> <span class="st">"theta"</span><span class="op">)</span></span></span>
@@ -232,6 +238,7 @@
 <span class="r-in"><span><span class="co"># Obtaining posterior summaries for the latent respondent positions</span></span></span>
 <span class="r-in"><span>  <span class="co"># in a format matching the rows in the original dataset:</span></span></span>
 <span class="r-in"><span><span class="va">chi_est</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_est.html">get_est</a></span><span class="op">(</span><span class="va">fit_hbam_mini</span>, par <span class="op">=</span> <span class="st">"chi"</span>, format_orig <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in `colnames&lt;-`(`*tmp*`, value = colnames(out)):</span> attempt to set 'colnames' on an object with less than two dimensions</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fitting the FBAM_MULTI_NF model with self-placements as group_id:</span></span></span>
 <span class="r-in"><span><span class="va">fit_fbam_multi_nf</span> <span class="op">&lt;-</span> <span class="fu">hbam</span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, group_id <span class="op">=</span> <span class="va">self</span>, model <span class="op">=</span> <span class="st">"FBAM_MULTI_NF"</span>,</span></span>

@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   vector&lt;lower = 0, upper = 1&gt;[N_obs] holdout; // holdout for cross-validation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> transformed data {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   real&lt;lower = 0&gt; sigma_alpha_prior_rate = (2 - 1) / (B / 5.0);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   real&lt;lower = 0&gt; sigma_alpha_prior_rate = (3 - 1) / (B / 10.0);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   real&lt;lower = 0&gt; tau_prior_rate = (2 - 1) / (B / 5.0);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   vector&lt;lower = 0, upper = 1&gt;[N_obs] not_holdout = 1 - holdout;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
@@ -134,14 +134,14 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   theta_lr ~ normal(0, B);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   alpha_raw[, 1] ~ normal(0, 1);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   alpha_raw[, 2] ~ normal(0, 1);</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sigma_alpha ~ gamma(2, sigma_alpha_prior_rate);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sigma_alpha ~ gamma(3, sigma_alpha_prior_rate);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   beta_raw[, 1] ~ normal(0, 1);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   beta_raw[, 2] ~ normal(0, 1);</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   sigma_beta ~ gamma(3, 10);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   sigma_beta ~ gamma(9, 40);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   eta ~ scaled_inv_chi_square(nu, eta_scale);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nu ~ gamma(25, 2.5);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   tau ~ gamma(2, tau_prior_rate);</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   rho ~ dirichlet(rep_vector(5, J));</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   rho ~ dirichlet(rep_vector(20, J));</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   logit_lambda ~ normal(0, 1);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   psi ~ lognormal(1.4, .5);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   if (CV == 0)</span>

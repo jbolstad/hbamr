@@ -34,7 +34,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -218,9 +218,9 @@ of hyperparameters are called <code>mu_alpha</code> and
 <code>mu_beta</code> and are constructed to have means of 0. The scales
 of the priors on these hyperparameters can be set by the user via the
 arguments <code>sigma_mu_alpha</code> and <code>sigma_mu_beta</code>.
-The default values are B / 5 and .3, respectively. (Here, B measures the
-length of the survey scale as the number of possible placements on one
-side of the center.) One potential use for this model is to supply
+The default values are B / 10 and .2, respectively. (Here, B measures
+the length of the survey scale as the number of possible placements on
+one side of the center.) One potential use for this model is to supply
 self-placements as <code>group_id</code>, and thus give each
 self-placement group its own prior distribution for the shift and
 stretch parameters.</p>
@@ -432,17 +432,15 @@ features)</caption>
 <h2 id="fitting">Fitting<a class="anchor" aria-label="anchor" href="#fitting"></a>
 </h2>
 <p>The <code><a href="../reference/hbam.html">hbam()</a></code> function can be used to fit all models in
-this package and it returns a <code>stanfit</code> object. The default
-model is HBAM, while other models can be specified via the argument
-<code>model</code>. For each model, <code><a href="../reference/hbam.html">hbam()</a></code> selects a
-suitable function to produce initial values for the sampling
-algorithm.</p>
+this package and obtain a <code>stanfit</code> object. The default model
+is HBAM, while other models can be specified via the argument
+<code>model</code>.</p>
 <p>Unless the user supplies pre-prepared data via the
 <code>data</code>-argument, <code><a href="../reference/hbam.html">hbam()</a></code> will implicitly run
 <code><a href="../reference/prep_data.html">prep_data()</a></code>. It therefore takes the same arguments as the
 <code><a href="../reference/prep_data.html">prep_data()</a></code> function (i.e. <code>self</code>,
-<code>stimuli</code>, <code>allow_miss</code>, <code>req_valid</code>,
-and <code>req_unique</code>).</p>
+<code>stimuli</code>, <code>group_id</code>, <code>allow_miss</code>,
+<code>req_valid</code>, and <code>req_unique</code>).</p>
 <p>To fit the HBAM model using the default settings, we would run:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span><span class="op">)</span></span></code></pre></div>
@@ -464,7 +462,7 @@ stretch parameters. If we decided to fit the FBAM_MULTI model, we could
 also specify our own scales for the priors on key parameters:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_fbam_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"FBAM_MULTI"</span>, group_id <span class="op">=</span> <span class="va">self</span>, </span>
-<span>                       sigma_alpha <span class="op">=</span> <span class="fl">.8</span>, sigma_mu_alpha <span class="op">=</span> <span class="fl">.5</span>, </span>
+<span>                       sigma_alpha <span class="op">=</span> <span class="fl">.8</span>, sigma_mu_alpha <span class="op">=</span> <span class="fl">.7</span>, </span>
 <span>                       sigma_beta <span class="op">=</span> <span class="fl">.4</span>, sigma_mu_beta <span class="op">=</span> <span class="fl">.25</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/hbam.html">hbam()</a></code> uses <code><a href="https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html" class="external-link">rstan::sampling()</a></code>, and any
 additional arguments to <code><a href="../reference/hbam.html">hbam()</a></code> will be passed on to the
