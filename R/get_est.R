@@ -13,7 +13,7 @@
 
 get_est <- function (object, par = "theta", format_orig = FALSE, probs = c(0.025, 0.50, 0.975), simplify = TRUE, ...) {
   if (inherits(object, "stanfit")) {
-    out <- rstan::summary(object, par, probs = probs, ...)[[1]]
+    out <- as.data.frame(rstan::summary(object, par, probs = probs, ...)[[1]])
     if (simplify == TRUE) { out <- out[, -c(2, 3)] }
     data <- object@.MISC$hbam_data
   } else {
