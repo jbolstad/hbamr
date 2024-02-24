@@ -185,12 +185,12 @@ fit_fbam <- fbam(self, stimuli)
 
 ### Execution Times
 
-Models of the kind included in the **hbamr** package face an inevitable trade-off between nuance (i.e. model complexity) and execution times. For small data sets (like ANES 1980), all models provide reasonable running times, but for large data sets (like ANES 2012), more complex models tend to get slow. In these cases, the HBAM_MINI model may be a useful alternative. For very large data sets, fitting the FBAM_MINI model via optimization may be the best alternative.
+Models of the kind included in the **hbamr** package face an inevitable trade-off between nuance (i.e. model complexity) and execution times. For small data sets (like ANES 1980), all models provide reasonable running times, but for large data sets, more complex models tend to get slow. In these cases, the HBAM_MINI model may be a useful alternative. For very large data sets, fitting the FBAM_MINI model via optimization may be the best alternative.
 
 |                                   | HBAM <br>iter=2000 | HBAM_NF <br>iter=2000 | HBAM_MINI <br>iter=2000 | FBAM_MINI<br>iter=2000 | FBAM_MINI <br>optimization |
 |--------------|:----------:|:----------:|:----------:|:----------:|:----------:|
 | **ANES 1980** <br>  (N=643, J=6)  |          5m          |         1m 20s          |          3m 30s           |          3m 45s          |             3s             |
-| **ANES 2012** <br>  (N=4949, J=4) |          1h          |           15m           |            35m            |           40m            |            21s             |
+| **ANES 2012** <br>  (N=4949, J=4) |          41m         |           15m           |            35m            |           39m            |            21s             |
 
 : Execution times on an Intel Core i5 2.0-3.8 GHz CPU
 
