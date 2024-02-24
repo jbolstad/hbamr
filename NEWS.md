@@ -3,7 +3,7 @@
 ### Revisions to existing models
 
 -   The prior on `rho` (which appears in all heteroskedastic models) has been made narrower to reduce the risk of divergent transitions when there are few observations per stimuli (which could be the case for e.g. expert surveys). 
--   The default priors on `sigma_mu_beta` and `sigma_mu_alpha` in MULTI-type models and the priors on `sigma_beta` and `sigma_alpha` in HBAM-type models have also been made narrower to reduce the risk of sampling issues.
+-   The default priors on `mu_beta` and `mu_alpha` in MULTI-type models and the priors on `sigma_beta` and `sigma_alpha` in HBAM-type models have also been made narrower to reduce the risk of sampling issues.
 
 # hbamr 2.2.0
 
