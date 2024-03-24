@@ -47,21 +47,6 @@ prep_data <- function(self = NULL, stimuli,
     V_supplied <- TRUE
   }
 
-  if (!is.null(group_id)) {
-    has_group_id <- !is.na(group_id) & is.finite(group_id)
-    self <- self[has_group_id]
-    stimuli <- stimuli[has_group_id, ]
-    if (!is.null(prefs)) { prefs <- prefs[has_group_id, ] }
-    group_id <- group_id[has_group_id]
-    group_id_fac <- as.factor(group_id)
-    group_id <- as.numeric(group_id_fac)
-    if (!complete_sequence_integers(group_id)) {
-      stop("Did not succeed in converting the supplied group_id to a suitable index format. You could try transforming it to integers covering all values from 1 to the total number of groups.")
-    }
-  } else {
-    group_id_fac <- NULL
-  }
-
   stimulicols <- apply(stimuli, 2, function(x) sum(!is.na(x))) > 0
   stimuli <- stimuli[, stimulicols]
 
@@ -88,6 +73,18 @@ prep_data <- function(self = NULL, stimuli,
     self <- (self - minval) - ((maxval - minval) / 2)
   }
 
+  if (!is.null(group_id)) {
+    has_group_id <- !is.na(group_id) & is.finite(group_id)
+    group_id_fac <- as.factor(group_id)
+    group_id <- as.numeric(group_id_fac)
+    if (!complete_sequence_integers(group_id[has_group_id])) {
+      stop("Did not succeed in converting the supplied group_id to a suitable index format. You could try transforming it to integers covering all values from 1 to the total number of groups.")
+    }
+  } else {
+    group_id_fac <- NULL
+    has_group_id <- rep(TRUE, N_orig)
+  }
+
   if (!is.null(prefs)) {
     prefs <- prefs / max(prefs, na.rm = T)
 
@@ -103,10 +100,10 @@ prep_data <- function(self = NULL, stimuli,
     # Which observations are missing either prefs or positions:
     is_any_na <- apply((is.na(prefs) | is.na(stimuli)), 2, as.numeric)
 
-    keep <- !is.na(self) & apply(is_any_na, 1, sum) <= allow_miss & n_unique >= req_unique & has_var
+    keep <- !is.na(self) & apply(is_any_na, 1, sum) <= allow_miss & n_unique >= req_unique & has_var & has_group_id
     prefs <- prefs[keep,]
   } else {
-    keep <- !is.na(self) & apply(is.na(stimuli), 1, sum) <= allow_miss & n_unique >= req_unique
+    keep <- !is.na(self) & apply(is.na(stimuli), 1, sum) <= allow_miss & n_unique >= req_unique & has_group_id
   }
 
   stimuli <- stimuli[keep, ]
