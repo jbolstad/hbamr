@@ -91,9 +91,9 @@ This package provides several alternative models that can be selected using the 
 
 **HBAM_MINI** is a version of the HBAM model that assumes the prediction errors in the stimuli placements to be homoskedastic. This model tends to sample faster faster than the standard HBAM model while yielding very similar point estimates. For large datasets, this model may provide a reasonable compromise between model complexity and estimation speed.
 
-**FBAM_MINI** is a version of the HBAM_MINI model with fixed hyperparameters to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. This model allows the user to specify the scales of the priors for the shift and (logged) stretch parameters via the arguments `sigma_alpha` and `sigma_beta`. The default values are B / 4 and .35, respectively. These defaults are intended to be realistic and weakly informative. Users who want to control the degree of shrinkage of the individual-level parameters may find it useful to fit this model -- or other FBAM models -- via either MCMC or optimization.
+**FBAM** is a version of the HBAM model with fixed hyperparameters to allow fitting via optimization rather than MCMC -- which can be useful for large data sets. This model allows the user to specify the scales of the priors for the shift and (logged) stretch parameters via the arguments `sigma_alpha` and `sigma_beta`. The default values are B / 4 and .35, respectively. These defaults are intended to be realistic and weakly informative. Users who want to control the degree of shrinkage of the individual-level parameters may find it useful to fit this model -- or other FBAM models -- via either MCMC or optimization.
 
-**FBAM_MULTI** is a version of the FBAM_MINI model that shares the group-modeling features of the HBAM_MULTI model. It allows the user to set the scales of the priors for the shift and stretch parameters via the arguments `sigma_alpha` and `sigma_beta`, and set the scales of the priors on `mu_alpha` and `mu_beta` via the arguments `sigma_mu_alpha` and `sigma_mu_beta`.
+**FBAM_MULTI** is a version of the FBAM model that shares the group-modeling features of the HBAM_MULTI model. It allows the user to set the scales of the priors for the shift and stretch parameters via the arguments `sigma_alpha` and `sigma_beta`, and set the scales of the priors on `mu_alpha` and `mu_beta` via the arguments `sigma_mu_alpha` and `sigma_mu_beta`.
 
 **FBAM_MULTI_NF** is a version of the FBAM_MULTI model that does not allow for scale flipping.
 
@@ -122,13 +122,13 @@ show_code("HBAM_MULTI")
 
 : Recommended models for fitting via MCMC
 
-|                            | FBAM<br>MINI | FBAM<br>MULTI | FBAM<br>MULTI_NF | HBAM<br>R_MINI | BAM<br>  |
+|                            | FBAM | FBAM<br>MULTI | FBAM<br>MULTI_NF | HBAM<br>R_MINI | BAM<br>  |
 |-----------------------------|:------------:|:------------:|:------------:|:------------:|:------------:|
 | Hierarchical priors        |              |               |                  |       X        |          |
 | User-defined priors\*      |      X       |       X       |        X         |                |          |
 | Scale flipping             |      X       |       X       |                  |       X        |    X     |
 | Group-differences          |              |       X       |        X         |                |          |
-| Heteroskedastic errors     |              |               |                  |                |    X     |
+| Heteroskedastic errors     |      X       |       X       |        X         |                |    X     |
 | Rationalization            |              |               |                  |       X        |          |
 | Fitting via optimization\* |      X       |       X       |        X         |                |          |
 
@@ -177,7 +177,7 @@ fit_fbam_multi <- hbam(self, stimuli, model = "FBAM_MULTI", group_id = self,
 
 For very large data sets, optimization can be a useful and much faster alternative to MCMC. However, the optimization feature provided in this package only provides maximum a posteriori (MAP) point estimates.
 
-The `fbam()` function fits FBAM models using `rstan::optimizing()`. The `fbam()` function works just like the `hbam()` function, except the arguments for `rstan::sampling()` do not apply. To fit the FBAM_MINI model using default settings, we would run:
+The `fbam()` function fits FBAM models using `rstan::optimizing()`. The `fbam()` function works just like the `hbam()` function, except the arguments for `rstan::sampling()` do not apply. To fit the FBAM model using default settings, we would run:
 
 ```{r fitfbam, eval = FALSE}
 fit_fbam <- fbam(self, stimuli)
@@ -187,9 +187,9 @@ fit_fbam <- fbam(self, stimuli)
 
 Models of the kind included in the **hbamr** package face an inevitable trade-off between nuance (i.e. model complexity) and execution times. For small data sets (like ANES 1980), all models provide reasonable running times, but for large data sets, more complex models tend to get slow. In these cases, the HBAM_MINI model may be a useful alternative. For very large data sets, fitting the FBAM_MINI model via optimization may be the best alternative.
 
-|                                   | HBAM <br>iter=2000 | HBAM_NF <br>iter=2000 | HBAM_MINI <br>iter=2000 | FBAM_MINI<br>iter=2000 | FBAM_MINI <br>optimization |
+|                                   | HBAM <br>iter=2000 | HBAM_NF <br>iter=2000 | HBAM_MINI <br>iter=2000 | FBAM<br>iter=2000 | FBAM <br>optimization |
 |--------------|:----------:|:----------:|:----------:|:----------:|:----------:|
-| **ANES 1980** <br>  (N=643, J=6)  |          5m          |         1m 20s          |          3m 30s           |          3m 45s          |             3s             |
+| **ANES 1980** <br>  (N=643, J=6)  |          5m          |         1m 20s          |          3m 30s           |          5m          |             3s             |
 | **ANES 2012** <br>  (N=4949, J=4) |          40m         |           15m           |            35m            |           40m            |            21s             |
 
 : Execution times on an Intel Core i5 2.0-3.8 GHz CPU
@@ -381,25 +381,21 @@ print(loo1, simplify = FALSE)
 
 We see that the unpooled BAM model is worse at predicting out-of-sample data than the other models, suggesting it overfits the data. The HBAM_NF model -- which does not allow for scale flipping -- also performs worse, suggesting it is too restrictive and underfits. The HBAM and HBAM_MULTI models outperform the other two models in this case. The HBAM_MULTI model -- with self-placements as `group_id` -- may have a slight edge, but the default HBAM model performs about equally well. 
 
-We could also perform cross-validation for a couple of models that do not account for heteroskedastic errors:
+We could also perform cross-validation for a model that does not account for heteroskedastic errors:
 
 ```{r, eval = FALSE}
 kfold_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI")
-kfold_fbam_mini <- hbam_cv(self, stimuli, model = "FBAM_MINI")
 ```
 
 ```{r, eval = FALSE}
-print(loo::loo_compare(list(HBAM_MINI = kfold_hbam_mini, 
-                            FBAM_MINI = kfold_fbam_mini)), simplify = FALSE)
+kfold_hbam_mini
 ```
 
 ```{r, echo = FALSE}
-print(loo2, simplify = FALSE)
+kfold_hbam_mini
 ```
 
-The ELPD for the FBAM_MINI model is lower than that of the HBAM_MINI model, which suggests that the default priors of the FBAM model are too wide to yield optimal results for these data. While the ELPD for the HBAM_MINI model is higher than that of the FBAM model, it is still notably lower than that of its heteroskedastic counterpart (HBAM). This suggest there is a considerable degree of heteroskedasticity in the data -- which is not surprising.
-
-Modeling the heteroskedasticity increases prediction accuracy, but it should be noted that this does not necessarily translate into much more accurate estimates of key model outputs. As shown in section on plotting, the results for the HBAM and HBAM_MINI models are very similar. In fact, their estimated respondent positions correlate at .97 and .99, depending on whether we use the posterior means or medians. Their estimated stimulus positions also correlate at .99, but this masks the fact that the HBAM_MINI model places the less well known candidate John B. Anderson further to the left than the HBAM model does. There are some subtle differences that users should be aware of, even if these models tend to produce very similar results.
+The ELPD for the HBAM_MINI model is notably lower than that of the HBAM model, which suggest there is a considerable degree of heteroskedasticity in the data. While modeling the heteroskedasticity increases prediction accuracy, it should be noted that this does not necessarily translate into much more accurate estimates of key model outputs. As shown in section on plotting, the results for the HBAM and HBAM_MINI models are very similar. In fact, their estimated respondent positions correlate at .97 and .99, depending on whether we use the posterior means or medians. Their estimated stimulus positions also correlate at .99, but this masks the fact that the HBAM_MINI model places the less well known candidate John B. Anderson further to the left than the HBAM model does. There are some subtle differences that users should be aware of, even if these models tend to produce very similar results.
 
 ## Diagnostics
 

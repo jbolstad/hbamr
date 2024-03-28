@@ -17,7 +17,9 @@ data {
 }
 
 transformed data {
-  real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
+  real nu = 6;                            // concentration of etas
+  real tau = B / 4.0;                     // scale of prior on errors
+  real eta_scale = tau * J;
   vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
 }
 
@@ -26,7 +28,8 @@ parameters {
   matrix[N, 2] beta_raw;                  // stretch parameter, split, raw
   ordered[2] theta_lr;                    // left and right pole
   array[J] real theta_raw;                // remaining stimuli
-  real<lower = 0> tau;                    // scale of errors
+  vector<lower = 0>[N] eta;               // mean ind. error variance x J^2
+  simplex[J] rho;                         // stimuli-shares of variance
   vector<lower = 0, upper = 1>[N] lambda; // mixing proportion, flipping
 }
 
@@ -45,8 +48,10 @@ transformed parameters {
 
   for (n in 1:N_obs) {
     log_lik[n] = log_mix( lambda[ii[n]],
-      normal_lpdf(Y[n] | alpha0[ii[n], 1] + beta0[ii[n], 1] * theta[jj[n]], tau),
-      normal_lpdf(Y[n] | alpha0[ii[n], 2] + beta0[ii[n], 2] * theta[jj[n]], tau) );
+      normal_lpdf(Y[n] | alpha0[ii[n], 1] + beta0[ii[n], 1] * theta[jj[n]],
+        sqrt(eta[ii[n]]) * rho[jj[n]]),
+      normal_lpdf(Y[n] | alpha0[ii[n], 2] + beta0[ii[n], 2] * theta[jj[n]],
+        sqrt(eta[ii[n]]) * rho[jj[n]]) );
   }
 }
 
@@ -57,7 +62,8 @@ model {
   alpha_raw[, 2] ~ normal(0, 1);
   beta_raw[, 1] ~ normal(0, 1);
   beta_raw[, 2] ~ normal(0, 1);
-  tau ~ gamma(2, tau_prior_rate);
+  eta ~ scaled_inv_chi_square(nu, eta_scale);
+  rho ~ dirichlet(rep_vector(20, J));
   lambda ~ beta(2, 1);
 
   if (CV == 0)
@@ -69,6 +75,7 @@ model {
 generated quantities {
   vector[N] kappa;
   vector[N] chi;
+  real<lower = 0> min_rho = min(rho);
   if (MCMC == 1)
     kappa = to_vector(bernoulli_rng(lambda));
   else
@@ -76,7 +83,7 @@ generated quantities {
   vector[N] alpha = (kappa .* alpha0[, 1]) + ((1 - kappa) .* alpha0[, 2]);
   vector[N] beta = (kappa .* beta0[, 1]) + ((1 - kappa) .* beta0[, 2]);
   if (MCMC == 1)
-    chi = (V - to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
+    chi = (V - to_vector(normal_rng(0, sqrt(eta) * min_rho)) - alpha) ./ beta;
   else
     chi = (V - alpha) ./ beta;
 }

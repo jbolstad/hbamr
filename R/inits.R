@@ -65,7 +65,7 @@ inits <- list(
   HBAM_MINI = inits_HBAM,
   HBAM_MULTI = inits_HBAM,
   HBAM_R_MINI = inits_HBAM,
-  FBAM_MINI = inits_HBAM,
+  FBAM = inits_HBAM,
   FBAM_MULTI = inits_HBAM,
   HBAM_NF = inits_HBAM_NF,
   HBAM_MULTI_NF = inits_HBAM_NF,

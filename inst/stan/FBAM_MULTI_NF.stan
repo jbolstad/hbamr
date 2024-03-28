@@ -21,7 +21,9 @@ data {
 }
 
 transformed data {
-  real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
+  real nu = 6;                            // concentration of etas
+  real tau = B / 4.0;                     // scale of prior on errors
+  real eta_scale = tau * J;
   vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
   real mean_mu_simplexes = 1.0 / G;       // for later scaling of simplexes
   real sd_mu_simplexes = sqrt(mean_mu_simplexes * (1 - mean_mu_simplexes) / (50 * G + 1));
@@ -34,7 +36,8 @@ parameters {
   array[J] real theta_raw;                // remaining stimuli
   simplex[G] mu_alpha_raw;                // group-level mean of alpha, raw
   simplex[G] mu_beta_raw;                 // group-level mean of log(beta), raw
-  real<lower = 0> tau;                    // scale of errors
+  vector<lower = 0>[N] eta;               // mean ind. error variance x J^2
+  simplex[J] rho;                         // stimuli-shares of variance
 }
 
 transformed parameters {
@@ -54,7 +57,8 @@ transformed parameters {
   }
 
   for (n in 1:N_obs) {
-    log_lik[n] = normal_lpdf(Y[n] | alpha[ii[n]] + beta[ii[n]] * theta[jj[n]], tau);
+    log_lik[n] = normal_lpdf(Y[n] | alpha[ii[n]] + beta[ii[n]] * theta[jj[n]],
+        sqrt(eta[ii[n]]) * rho[jj[n]]);
   }
 
 }
@@ -66,7 +70,8 @@ model {
   beta_raw ~ normal(0, 1);
   mu_alpha_raw ~ dirichlet(rep_vector(50, G));
   mu_beta_raw ~ dirichlet(rep_vector(50, G));
-  tau ~ gamma(2, tau_prior_rate);
+  eta ~ scaled_inv_chi_square(nu, eta_scale);
+  rho ~ dirichlet(rep_vector(20, J));
 
   if (CV == 0)
     target += sum(log_lik);
@@ -76,8 +81,9 @@ model {
 
 generated quantities {
   vector[N] chi;
+  real<lower = 0> min_rho = min(rho);
   if (MCMC == 1)
-    chi = (V - to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
+    chi = (V - to_vector(normal_rng(0, sqrt(eta) * min_rho)) - alpha) ./ beta;
   else
     chi = (V - alpha) ./ beta;
 }

@@ -1,3 +1,10 @@
+# hbamr 2.3.0
+
+### Revisions to existing models
+
+-   All FBAM-type models have been revised to allow for heteroskedastic errors. 
+    -   The **FBAM_MINI** model has been renamed **FBAM** to reflect this change.  
+
 # hbamr 2.2.1
 
 ### Revisions to existing models
