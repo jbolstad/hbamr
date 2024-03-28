@@ -7,7 +7,7 @@
 fbam(
   self = NULL,
   stimuli = NULL,
-  model = "FBAM_MINI",
+  model = "FBAM",
   allow_miss = 2,
   req_valid = NA,
   req_unique = 2,
@@ -26,7 +26,7 @@ fbam(
 
 \item{stimuli}{An N × J matrix of numerical stimulus placements, where J is the number of stimuli. Any missing data must be coded as NA. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function.}
 
-\item{model}{Character: Name of the model to be used. Defaults to FBAM_MINI. The available options are the three models with "FBAM" in their name. See the documentation for the \code{hbam()} function for descriptions of the models.}
+\item{model}{Character: Name of the model to be used. Defaults to FBAM. The available options are the three models with "FBAM" in their name. See the documentation for the \code{hbam()} function for descriptions of the models.}
 
 \item{allow_miss}{Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function. Defaults to 2.}
 
@@ -40,9 +40,9 @@ fbam(
 
 \item{seed}{A positive integer specifying an optional seed for reproducibility. If this argument is not supplied, a random seed will be generated and the function will produce slightly different results on each run.}
 
-\item{sigma_alpha}{A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM_MINI model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.}
+\item{sigma_alpha}{A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.}
 
-\item{sigma_beta}{A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM_MINI model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.}
+\item{sigma_beta}{A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.}
 
 \item{sigma_mu_alpha}{A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 10.}
 
@@ -64,10 +64,10 @@ data(LC2012)
 self <- LC2012[, 2]
 stimuli <- LC2012[, -c(1:2)]
 
-# Fitting the FBAM_MINI model:
-fit_fbam_mini <- fbam(self, stimuli)
+# Fitting the FBAM model:
+fit_fbam <- fbam(self, stimuli)
 
 # Obtaining point estimates for the latent stimulus positions:
-theta_est <- get_est(fit_fbam_mini, par = "theta")
+theta_est <- get_est(fit_fbam, par = "theta")
 }
 }

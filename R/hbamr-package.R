@@ -6,7 +6,7 @@
 #'
 #' @seealso \itemize{\item \url{https://jbolstad.github.io/hbamr/}}
 #'
-#' @docType package
+#' @docType _PACKAGE
 #' @name hbamr-package
 #' @aliases hbamr
 #' @useDynLib hbamr, .registration = TRUE
