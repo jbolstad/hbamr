@@ -45,6 +45,9 @@ prep_data <- function(self = NULL, stimuli,
     message("Note: No self-placement data were supplied and respondent positions will therefore not be estimated.")
   } else {
     V_supplied <- TRUE
+    if (length(self) != nrow(stimuli)) {
+      stop("The length of the self-placement vector does not match the number of rows in the stimuli data.")
+    }
   }
 
   stimulicols <- apply(stimuli, 2, function(x) sum(!is.na(x))) > 0
