@@ -20,6 +20,7 @@ transformed data {
   real nu = 6;                            // concentration of etas
   real tau = B / 4.0;                     // scale of prior on errors
   real eta_scale = tau * J;
+  real psi = 6;                           // implies 13% prior prob. of flipping
   vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
 }
 
@@ -30,7 +31,7 @@ parameters {
   array[J] real theta_raw;                // remaining stimuli
   vector<lower = 0>[N] eta;               // mean ind. error variance x J^2
   simplex[J] rho;                         // stimuli-shares of variance
-  vector<lower = 0, upper = 1>[N] lambda; // mixing proportion, flipping
+  vector[N] lambda_raw;                   // raw mixing proportion, flipping
 }
 
 transformed parameters {
@@ -38,6 +39,7 @@ transformed parameters {
   matrix[N, 2] alpha0;                    // shift parameter, split
   matrix[N, 2] beta0;                     // stretch parameter, split
   vector[N_obs] log_lik;                  // pointwise log-likelihood for Y
+  vector<lower = 0, upper = 1>[N] lambda = inv_logit(psi + lambda_raw * 5); // prob. of non-flipping
   theta = theta_raw;
   theta[L] = theta_lr[1];                 // safeguard to ensure identification
   theta[R] = theta_lr[2];
@@ -64,7 +66,7 @@ model {
   beta_raw[, 2] ~ normal(0, 1);
   eta ~ scaled_inv_chi_square(nu, eta_scale);
   rho ~ dirichlet(rep_vector(20, J));
-  lambda ~ beta(2, 1);
+  lambda_raw ~ normal(0, 1);
 
   if (CV == 0)
     target += sum(log_lik);

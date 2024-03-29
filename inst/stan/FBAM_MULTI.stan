@@ -24,6 +24,7 @@ transformed data {
   real nu = 6;                            // concentration of etas
   real tau = B / 4.0;                     // scale of prior on errors
   real eta_scale = tau * J;
+  real psi = 6;                           // implies 13% prior prob. of flipping
   vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
   real mean_mu_simplexes = 1.0 / G;       // for later scaling of simplexes
   real sd_mu_simplexes = sqrt(mean_mu_simplexes * (1 - mean_mu_simplexes) / (50 * G + 1));
@@ -38,7 +39,7 @@ parameters {
   simplex[G] mu_beta_raw;                 // group-level mean of log(beta), raw
   vector<lower = 0>[N] eta;               // mean ind. error variance x J^2
   simplex[J] rho;                         // stimuli-shares of variance
-  vector<lower = 0, upper = 1>[N] lambda; // mixing proportion, flipping
+  vector[N] lambda_raw;                   // raw mixing proportion, flipping
 }
 
 transformed parameters {
@@ -46,6 +47,7 @@ transformed parameters {
   matrix[N, 2] alpha0;                    // shift parameter, split
   matrix[N, 2] beta0;                     // stretch parameter, split
   vector[N_obs] log_lik;                  // pointwise log-likelihood for Y
+  vector<lower = 0, upper = 1>[N] lambda = inv_logit(psi + lambda_raw * 5); // prob. of non-flipping
   vector[G] mu_alpha = ((mu_alpha_raw - mean_mu_simplexes) / sd_mu_simplexes) * sigma_mu_alpha;
   vector[G] mu_beta = ((mu_beta_raw - mean_mu_simplexes) / sd_mu_simplexes) * sigma_mu_beta;
   theta = theta_raw;
@@ -79,7 +81,7 @@ model {
   mu_beta_raw ~ dirichlet(rep_vector(50, G));
   eta ~ scaled_inv_chi_square(nu, eta_scale);
   rho ~ dirichlet(rep_vector(20, J));
-  lambda ~ beta(2, 1);
+  lambda_raw ~ normal(0, 1);
 
   if (CV == 0)
     target += sum(log_lik);
