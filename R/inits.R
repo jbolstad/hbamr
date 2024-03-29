@@ -13,7 +13,7 @@ inits_HBAM <- function(chain_id = 1, dat) {
     tau = rinvchisq(1, 500, (dat$B / 3)),
     eta = rinvchisq(dat$N, 100, dat$J^2 * (dat$B / 3)^2),
     rho = rdirichlet(1, rep(75, dat$J)),
-    logit_lambda = rnorm(dat$N, 0, .2),
+    lambda_raw = rnorm(dat$N, -.75, .05),
     psi = exp(rnorm(1, 1.4, .1)),
     # For HBAM_MULTI:
     mu_alpha_raw = rdirichlet(1, rep(500, dat$G)),

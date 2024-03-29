@@ -27,7 +27,7 @@ parameters {
   real<lower = 0> sigma_alpha;            // sd of alpha
   real<lower = 0, upper = 2> sigma_beta;  // sd of log(beta)
   real<lower = 0> tau;                    // sd of errors
-  vector[N] logit_lambda;                 // raw mixing proportion, flipping
+  vector[N]lambda_raw;                    // raw mixing proportion, flipping
   real<lower = 0> psi;                    // mean of prior on logit of lambda
 }
 
@@ -36,7 +36,7 @@ transformed parameters {
   matrix[N, 2] alpha0;                    // shift parameter, split
   matrix[N, 2] beta0;                     // stretch parameter, split
   vector[N_obs] log_lik;                  // pointwise log-likelihood for Y
-  vector<lower = 0, upper = 1>[N] lambda = inv_logit(psi + logit_lambda * 3); // prob. of non-flipping
+  vector<lower = 0, upper = 1>[N] lambda = inv_logit(psi +lambda_raw * 3); // prob. of non-flipping
   theta = theta_raw;
   theta[L] = theta_lr[1];                 // safeguard to ensure identification
   theta[R] = theta_lr[2];
@@ -62,7 +62,7 @@ model {
   beta_raw[, 2] ~ normal(0, 1);
   sigma_beta ~ gamma(9, 40);
   tau ~ gamma(2, tau_prior_rate);
-  logit_lambda ~ normal(0, 1);
+ lambda_raw ~ normal(0, 1);
   psi ~ lognormal(1.4, .5);
 
   if (CV == 0)
