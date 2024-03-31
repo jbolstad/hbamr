@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.2.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,7 +104,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   real&lt;lower = 0&gt; tau;                    // scale of errors</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   vector&lt;lower = 0&gt;[N] eta;               // mean ind. error variance x J^2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   simplex[J] rho;                         // stimuli-shares of variance</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   vector[N] logit_lambda;                 // raw mixing proportion, flipping</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   vector[N] lambda_raw;                   // raw mixing proportion, flipping</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   real&lt;lower = 0&gt; psi;                    // mean of prior on logit of lambda</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> transformed parameters {</span>
@@ -112,7 +112,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   matrix[N, 2] alpha0;                    // shift parameter, split</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   matrix[N, 2] beta0;                     // stretch parameter, split</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   vector[N_obs] log_lik;                  // pointwise log-likelihood for Y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   vector&lt;lower = 0, upper = 1&gt;[N] lambda = inv_logit(psi + logit_lambda * 3); // prob. of non-flipping</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   vector&lt;lower = 0, upper = 1&gt;[N] lambda = inv_logit(psi + lambda_raw * 3); // prob. of non-flipping</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   real&lt;lower = 0&gt; eta_scale = tau * J;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   theta = theta_raw;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   theta[L] = theta_lr[1];                 // safeguard to ensure identification</span>
@@ -142,7 +142,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nu ~ gamma(25, 2.5);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   tau ~ gamma(2, tau_prior_rate);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   rho ~ dirichlet(rep_vector(20, J));</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   logit_lambda ~ normal(0, 1);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   lambda_raw ~ normal(0, 1);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   psi ~ lognormal(1.4, .5);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   if (CV == 0)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     target += sum(log_lik);</span>
