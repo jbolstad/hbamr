@@ -58,9 +58,9 @@ hbam_cv(
 
 \item{seed}{An integer passed on to \code{set.seed} before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument \code{prep_data} is \code{TRUE}. The supplied \code{seed} argument is also used to generate seeds for the sampling algorithm.}
 
-\item{sigma_alpha}{A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM_MINI model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.}
+\item{sigma_alpha}{A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.}
 
-\item{sigma_beta}{A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM_MINI model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.}
+\item{sigma_beta}{A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.}
 
 \item{sigma_mu_alpha}{A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 5.}
 
@@ -97,13 +97,13 @@ future::plan(future::multisession, workers = 2)
 cv_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI",
                         chains = 1, warmup = 500, iter = 1000)
 
-# Performing 10-fold cross-validation for the FBAM_MINI model:
-cv_fbam_mini <- hbam_cv(self, stimuli, model = "FBAM_MINI",
+# Performing 10-fold cross-validation for the FBAM model:
+cv_FBAM <- hbam_cv(self, stimuli, model = "FBAM",
                         chains = 1, warmup = 500, iter = 1000)
 
 # Comparing the results using the loo package:
 loo::loo_compare(list(HBAM_MINI = cv_hbam_mini,
-                 FBAM_MINI = cv_fbam_mini))
+                 FBAM = cv_FBAM))
 
 # Stop the cluster of parallel sessions:
 future::plan(future::sequential)
