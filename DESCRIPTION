@@ -19,6 +19,7 @@ BugReports: https://github.com/jbolstad/hbamr/issues
 Depends: 
     R (>= 3.4.0)
 Imports: 
+    colorspace,
     dplyr,
     future,
     future.apply,

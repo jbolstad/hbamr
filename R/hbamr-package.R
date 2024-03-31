@@ -19,6 +19,7 @@
 #' @importFrom plyr llply
 #' @importFrom dplyr bind_cols
 #' @importFrom rlang .data
+#' @importFrom colorspace darken
 #' @importFrom RcppParallel RcppParallelLibs
 #' @importFrom rstantools rstan_config
 #'
