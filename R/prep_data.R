@@ -11,6 +11,7 @@
 #' @param req_unique Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is `req_unique = 2`.
 #' @param B Integer specifying the upper bound of the survey scale after centering. If not supplied, this information will be inferred from the data.
 #' @param group_id Vector of length N identifying which group each respondent belongs to. The format can be factor, character, integer, or numeric. Respondents with NAs on `group_id` will be dropped when `group_id` is supplied. These data are only required by models with `"MULTI"` in their name and will be ignored when fitting other models.
+#' @param quiet Logical: Should information about the data be printed to the console? Defaults to `TRUE`.
 #' @return A list of data to be used by `hbam()` or `fbam()`. The returned list includes the logical vector `keep`, which identifies the rows in the original data that have been kept for further analysis. The stimuli data are stored in a vector as a long-form sparse matrix. If the stimuli data include column-names, these will be preserved for later use.
 #' @examples
 #' # Loading and re-coding ANES 1980 data:
@@ -32,12 +33,13 @@
 prep_data <- function(self = NULL, stimuli,
                       prefs = NULL,
                       allow_miss = 2,
-                      req_valid = NA, req_unique = 2, B = NULL, group_id = NULL) {
+                      req_valid = NA, req_unique = 2, B = NULL, group_id = NULL, quiet = FALSE) {
 
   #dimnames(stimuli) <- NULL
   #self <- as_numeric(self)
 
   N_orig <- nrow(stimuli)
+  N_obs_orig <- sum(!is.na(as.numeric(as.matrix(stimuli))))
 
   if (is.null(self)) {
     V_supplied <- FALSE
@@ -64,17 +66,18 @@ prep_data <- function(self = NULL, stimuli,
   if (!is.na(req_valid)) { allow_miss <- ncol(stimuli) - req_valid }
 
   all_dat <- cbind(stimuli, self)
+  range_orig <- range(all_dat, na.rm = TRUE)
 
   # Counting number of unique stimuli positions reported per respondent:
   n_unique <- apply(stimuli, 1, function(x) {length(unique(x[!is.na(x)]))} )
 
   # Center position-data if necessary:
-  minval <- min(all_dat, na.rm = T)
-  if (minval >= 0) {
-    maxval <- max(all_dat, na.rm = T)
-    stimuli <- (stimuli - minval) - ((maxval - minval) / 2)
-    self <- (self - minval) - ((maxval - minval) / 2)
+  if (range_orig[1] >= 0) {
+    stimuli <- (stimuli - range_orig[1]) - ((range_orig[2] - range_orig[1]) / 2)
+    self <- (self - range_orig[1]) - ((range_orig[2] - range_orig[1]) / 2)
   }
+
+  range_new <- range(cbind(stimuli, self), na.rm = TRUE)
 
   if (!is.null(group_id)) {
     has_group_id <- !is.na(group_id) & is.finite(group_id)
@@ -166,6 +169,16 @@ prep_data <- function(self = NULL, stimuli,
        ii = ii, jj = jj, gg = group_id, G = length(unique(group_id)), ggfac = group_id_fac, mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
        CV = 0, holdout = rep(0, length(stimuli_vec)), V_supplied = V_supplied, N_orig = N_orig)
   class(datlist) <- c("list", "hbam_data")
+
+  if (!quiet) {
+    writeLines(paste0(
+"Summary of prepared data (values for supplied data in paretheses)
+- Number of respondents: ", nrow(stimuli), " (", N_orig, ")
+- Number of stimuli: ", sum(stimulicols), " (", length(stimulicols), ")
+- Number of stimuli obs.: ", length(stimuli_vec), " (", N_obs_orig, ")
+- Range of observations: [", range_new[1], ", ", range_new[2], "] ([", range_orig[1], ", ", range_orig[2], "])"
+    ))
+  }
 
   return(datlist)
 }
