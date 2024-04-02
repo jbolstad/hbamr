@@ -109,6 +109,10 @@ prep_data <- function(self = NULL, stimuli,
     keep <- !is.na(self) & apply(is.na(stimuli), 1, sum) <= allow_miss & n_unique >= req_unique & has_group_id
   }
 
+  if (sum(keep) == 0) {
+    stop('The current selection criteria will drop all respondents from the analysis. You may want to consider increasing the argument "allow_miss" or instead specify a reasonably low value of "req_valid".')
+  }
+
   stimuli <- stimuli[keep, ]
   self <- self[keep]
   if(!is.null(group_id)) {
