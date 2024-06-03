@@ -43,7 +43,7 @@ prep_data <- function(self = NULL, stimuli,
 
   if (is.null(self)) {
     V_supplied <- FALSE
-    self <- rep(0, nrow(stimuli))
+    self <- round(rep(mean(range(unlist(stimuli), na.rm = TRUE)), nrow(stimuli)))
     message("Note: No self-placement data were supplied and respondent positions will therefore not be estimated.")
   } else {
     V_supplied <- TRUE
