@@ -105,7 +105,10 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
   if (!model %in% names(stanmodels)) { stop(paste(model, "is not a valid model choice.")) }
   if (!is.null(data) & (!is.null(self) | !is.null(stimuli))) { message("Note: When pre-prepared data are supplied, other data arguments will be ignored.") }
   if (is.null(data) & (is.null(self) | is.null(stimuli))) { stop("Required data not supplied.") }
-  if (is.null(data)) { dat <- hbamr::prep_data(self, stimuli, prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id) } else {
+  if (is.null(data)) {
+    dat <- hbamr::prep_data(self, stimuli, prefs, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id)
+    writeLines("")
+  } else {
     if (inherits(data, "hbam_data")) {
       dat <- data
     } else {
