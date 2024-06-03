@@ -174,7 +174,7 @@ prep_data <- function(self = NULL, stimuli,
     writeLines(paste0(
 "Summary of prepared data (values for supplied data in paretheses)
 - Number of respondents: ", nrow(stimuli), " (", N_orig, ")
-- Number of stimuli: ", sum(stimulicols), " (", length(stimulicols), ")
+- Number of stimuli: ", ncol(stimuli), " (", length(stimulicols), ")
 - Number of stimuli obs.: ", length(stimuli_vec), " (", N_obs_orig, ")
 - Range of observations: [", range_new[1], ", ", range_new[2], "] ([", range_orig[1], ", ", range_orig[2], "])"
     ))
