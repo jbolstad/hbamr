@@ -1,9 +1,13 @@
 # hbamr 2.3.1
 
-### Minor improvements of existing functions
+### Improvements of existing functions
 
 -   The `prep_data()` function now prints a summary of the input and output data to the console. It also throws an error if the selection criteria for inclusion in the analysis are too strict to retain any respondents.
 -   The appearance of the plot from `plot_stimuli()` has been slightly improved.
+
+### Revisions to existing models
+
+-   The priors on `theta` and `rho` have been made narrower to make the models more robust to situations with extremely scarce data. 
 
 # hbamr 2.3.0
 

@@ -72,8 +72,8 @@ transformed parameters {
 }
 
 model {
-  theta_raw ~ normal(0, B);
-  theta_lr ~ normal(0, B);
+  theta_raw ~ normal(0, B / 2.0);
+  theta_lr ~ normal(0, B / 2.0);
   alpha_raw[, 1] ~ normal(0, 1);
   alpha_raw[, 2] ~ normal(0, 1);
   sigma_alpha ~ gamma(5, sigma_alpha_prior_rate);
@@ -85,7 +85,7 @@ model {
   eta ~ scaled_inv_chi_square(nu, eta_scale);
   nu ~ gamma(25, 2.5);
   tau ~ gamma(2, tau_prior_rate);
-  rho ~ dirichlet(rep_vector(20, J));
+  rho ~ dirichlet(rep_vector(50, J));
   lambda_raw ~ normal(0, 1);
   psi ~ lognormal(1.4, .5);
 

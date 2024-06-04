@@ -53,8 +53,8 @@ transformed parameters {
 }
 
 model {
-  theta_raw ~ normal(0, B);
-  theta_lr ~ normal(0, B);
+  theta_raw ~ normal(0, B / 2.0);
+  theta_lr ~ normal(0, B / 2.0);
   alpha_raw[, 1] ~ normal(0, 1);
   alpha_raw[, 2] ~ normal(0, 1);
   sigma_alpha ~ gamma(3, sigma_alpha_prior_rate);
@@ -62,7 +62,7 @@ model {
   beta_raw[, 2] ~ normal(0, 1);
   sigma_beta ~ gamma(9, 40);
   tau ~ gamma(2, tau_prior_rate);
- lambda_raw ~ normal(0, 1);
+  lambda_raw ~ normal(0, 1);
   psi ~ lognormal(1.4, .5);
 
   if (CV == 0)

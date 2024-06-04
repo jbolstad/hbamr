@@ -64,14 +64,14 @@ transformed parameters {
 }
 
 model {
-  theta_raw ~ normal(0, B);
-  theta_lr ~ normal(0, B);
+  theta_raw ~ normal(0, B / 2.0);
+  theta_lr ~ normal(0, B / 2.0);
   alpha_raw ~ normal(0, 1);
   beta_raw ~ normal(0, 1);
   mu_alpha_raw ~ dirichlet(rep_vector(50, G));
   mu_beta_raw ~ dirichlet(rep_vector(50, G));
   eta ~ scaled_inv_chi_square(nu, eta_scale);
-  rho ~ dirichlet(rep_vector(20, J));
+  rho ~ dirichlet(rep_vector(50, J));
 
   if (CV == 0)
     target += sum(log_lik);
