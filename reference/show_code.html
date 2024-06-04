@@ -130,8 +130,8 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> model {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   theta_raw ~ normal(0, B);</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   theta_lr ~ normal(0, B);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   theta_raw ~ normal(0, B / 2.0);</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   theta_lr ~ normal(0, B / 2.0);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   alpha_raw[, 1] ~ normal(0, 1);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   alpha_raw[, 2] ~ normal(0, 1);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   sigma_alpha ~ gamma(5, sigma_alpha_prior_rate);</span>
@@ -141,7 +141,7 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   eta ~ scaled_inv_chi_square(nu, eta_scale);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   nu ~ gamma(25, 2.5);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   tau ~ gamma(2, tau_prior_rate);</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   rho ~ dirichlet(rep_vector(20, J));</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   rho ~ dirichlet(rep_vector(50, J));</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   lambda_raw ~ normal(0, 1);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   psi ~ lognormal(1.4, .5);</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   if (CV == 0)</span>
