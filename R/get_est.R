@@ -18,7 +18,11 @@ get_est <- function (object, par = "theta", format_orig = FALSE, probs = c(0.025
     data <- object@.MISC$hbam_data
   } else {
     if (inherits(object, "list")) {
-      out <- matrix(object$par[startsWith( names(object$par), paste0(par, "[") )], ncol = 1)
+      if (par %in% names(object$par)) {
+        out <- matrix(object$par[which(names(object$par) == par)], ncol = 1)
+      } else {
+        out <- matrix(object$par[startsWith( names(object$par), paste0(par, "[") )], ncol = 1)
+      }
       colnames(out) <- par
       data <- object$hbam_data
     }
