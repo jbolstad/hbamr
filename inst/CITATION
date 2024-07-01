@@ -24,5 +24,6 @@ bibentry(
   author   = "Jørgen Bølstad",
   year     = year,
   note     = sprintf("R package version %s", meta$Version),
-  url      = "https://jbolstad.github.io/hbamr/"
+  url      = "https://jbolstad.github.io/hbamr/",
+  doi      = "10.32614/CRAN.package.hbamr"
 )
