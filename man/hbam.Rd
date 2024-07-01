@@ -50,7 +50,7 @@ hbam(
 
 \item{pars}{A vector of character strings specifying parameters of interest. If \code{include = TRUE}, only samples for parameters named in pars are stored in the fitted results. Conversely, if \code{include = FALSE}, samples for all parameters except those named in pars are stored in the fitted results. The default is to store results for "alpha", "beta", "chi", "lambda", and "theta".}
 
-\item{extra_pars}{A vector of character strings specifying parameters to be added to \code{pars}. This makes it easy to add one or several additional parameters of interest, without having to repeat the default \code{pars} vector. The default is \code{NULL}.}
+\item{extra_pars}{A vector of character strings specifying parameters or generated quantities to be added to \code{pars}. This makes it easy to add one or several additional parameters of interest, without having to repeat the default \code{pars} vector. The default is \code{NULL}.}
 
 \item{include}{Logical scalar defaulting to \code{TRUE} indicating whether to include or exclude the parameters given by the pars argument. If \code{FALSE}, only entire multidimensional parameters can be excluded, rather than particular elements of them.}
 

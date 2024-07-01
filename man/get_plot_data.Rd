@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_plot_data.R
 \name{get_plot_data}
 \alias{get_plot_data}
-\title{Extract data for plotting results from an HBAM model.}
+\title{Extract data for plotting results from an HBAM model}
 \usage{
 get_plot_data(object, n_draws = 15, seed = 1)
 }

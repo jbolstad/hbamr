@@ -1,3 +1,5 @@
+#' Extract data for plotting results from an HBAM model
+#'
 #' Extract data for plotting results from an HBAM model.
 #'
 #' @export
