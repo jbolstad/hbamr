@@ -101,4 +101,7 @@ generated quantities {
   vector[N] alpha = (kappa .* alpha0[, 1]) + ((1 - kappa) .* alpha0[, 2]);
   vector[N] beta = (kappa .* beta0[, 1]) + ((1 - kappa) .* beta0[, 2]);
   vector[N] chi = (V - to_vector(normal_rng(0, sqrt(eta) * min_rho)) - alpha) ./ beta;
+  real Y_pred[N_obs];                     // predicted stimuli positions
+  for (n in 1:N_obs)
+    Y_pred[n] = normal_rng(alpha[ii[n]] + beta[ii[n]] * theta[jj[n]], sqrt(eta[ii[n]]) * rho[jj[n]]);
 }
