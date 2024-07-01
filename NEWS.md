@@ -1,3 +1,9 @@
+# hbamr 2.3.2
+
+### Revisions to existing models
+
+-  The following models now generate posterior predictions if the user runs `hbam()` with the argument `extra_pars = "Y_pred"`: HBAM, HBAM_MULTI, HBAM_NF, HBAM_MULTI_NF, BAM.
+
 # hbamr 2.3.1
 
 ### Improvements of existing functions
