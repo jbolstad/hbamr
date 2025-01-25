@@ -15,23 +15,24 @@ data {
   vector[J] mean_spos;                    // average stimuli placements
   real<lower = 0> sigma_mu_alpha;         // sd of prior on mu_alpha, MULTI
   real<lower = 0> sigma_mu_beta;          // sd of prior on mu_beta, MULTI
-  real<lower = 0> fixed_sigma_alpha;      // sd of prior on alpha, FBAM
-  real<lower = 0> fixed_sigma_beta;       // sd of prior on log(beta), FBAM
+  real<lower = 0> sigma_alpha_fixed;      // sd of prior on alpha, FBAM
+  real<lower = 0> sigma_beta_fixed;       // sd of prior on log(beta), FBAM
   int<lower = 0, upper = 1> flip;         // allow flipping?
   int<lower = 0, upper = 1> het;          // model heteroskedasticity?
   int<lower = 0, upper = 1> rat;          // model rationalization?
   int<lower = 0, upper = 1> group;        // give groups different hyperpriors?
   int<lower = 0, upper = 1> bam;          // unpooled model with uniform priors?
+  int<lower = 0, upper = 1> fixed;        // use fixed priors, not hyperparams.
   int<lower = 0, upper = 1> CV;           // indicator of cross-validation
   int<lower = 0, upper = 1> MCMC;         // indicator of fitting method
   vector<lower = 0, upper = 1>[N_obs] holdout; // holdout for cross-validation
 }
 
 transformed data {
-  real fixed_nu = 6;                      // concentration of etas
-  real fixed_tau = B / 4.0;               // scale of prior on errors
-  real fixed_eta_scale = tau * J;
-  real fixed_psi = 6;                     // implies 13% prior prob. of flipping
+  real nu_fixed = 6;                      // concentration of etas
+  real tau_fixed = B / 4.0;               // scale of prior on errors
+  real eta_scale_fixed = tau_fixed * J;
+  real psi_fixed = 6;                     // implies 13% prior prob. of flipping
   real<lower = 0> sigma_alpha_prior_rate = (5 - 1) / (B / 8.0);
   real<lower = 0> tau_prior_rate = (2 - 1) / (B / 5.0);
   vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
@@ -51,14 +52,14 @@ parameters {
   array[J] real theta_raw;                // remaining stimuli
   simplex[group == 1 ? G : 1] mu_alpha_raw; // group-level mean of alpha, raw
   simplex[group == 1 ? G : 1] mu_beta_raw; // group-level mean of log(beta), raw
-  array[1 - bam] real<lower = 0> sigma_alpha; // sd of alpha
-  array[1 - bam] real<lower = 0, upper = 2> sigma_beta; // sd of log(beta)
-  array[het] real<lower = 3, upper = 30> nu; // concentration of etas
-  real<lower = 0> tau;                    // scale of errors
+  array[bam == 0 && fixed == 0 ? 1 : 0] real<lower = 0> sigma_alpha_par; // sd of alpha
+  array[bam == 0 && fixed == 0 ? 1 : 0] real<lower = 0, upper = 2> sigma_beta_par; // sd of log(beta)
+  array[het == 1 && fixed == 0 ? 1 : 0] real<lower = 3, upper = 30> nu_par; // concentration of etas
+  array[1 - fixed] real<lower = 0> tau_par; // scale of errors
   vector<lower = 0>[het == 1 ? N : 0] eta; // mean ind. error variance x J^2
   simplex[het == 1 ? J : 1] rho;          // stimuli-shares of variance
   vector[flip == 1 ? N : 0] lambda_raw;   // raw mixing proportion, flipping
-  array[flip] real<lower = 0> psi;        // mean of prior on logit of lambda
+  array[flip == 1 && fixed == 0 ? 1 : 0] real<lower = 0> psi_par; // mean of prior on logit of lambda
   array[rat == 1 ? N : 0] real<lower = 0, upper = 1> gamma; // rationalization per respondent
   array[rat] real<lower = 1> gam_a;       // hyperparameter for gamma
   array[rat] real<lower = 1> gam_b;       // hyperparameter for gamma
@@ -75,8 +76,38 @@ transformed parameters {
   vector[group == 1 ? G : 0] mu_alpha;
   vector[group == 1 ? G : 0] mu_beta;
   array[het] real<lower = 0> eta_scale;
-  if (het == 1) {
-    eta_scale[1] = tau * J;
+  array[1 - bam] real<lower = 0> sigma_alpha; // sd of alpha
+  array[1 - bam] real<lower = 0, upper = 2> sigma_beta; // sd of log(beta)
+  array[het] real<lower = 3, upper = 30> nu; // concentration of etas
+  real<lower = 0> tau;                    // scale of errors
+  array[flip] real<lower = 0> psi;        // mean of prior on logit of lambda
+
+  if (fixed == 0) {
+    tau = tau_par[1];
+    if (bam == 0) {
+      sigma_alpha = sigma_alpha_par;
+      sigma_beta = sigma_beta_par;
+    }
+    if (het == 1) {
+      nu = nu_par;
+      eta_scale[1] = tau * J;
+    }
+    if (flip == 1) {
+      psi = psi_par;
+    }
+  } else {
+    tau = tau_fixed;
+    if (bam == 0) {
+      sigma_alpha[1] = sigma_alpha_fixed;
+      sigma_beta[1] = sigma_beta_fixed;
+    }
+    if (het == 1) {
+      nu[1] = nu_fixed;
+      eta_scale[1] = tau * J;
+    }
+    if (flip == 1) {
+      psi[1] = psi_fixed;
+    }
   }
   if (group == 1) {
     mu_alpha = ((mu_alpha_raw - mean_mu_simplexes) / sd_mu_simplexes) * sigma_mu_alpha;
@@ -112,9 +143,9 @@ transformed parameters {
         alpha0[, 2] = alpha_raw[, 2] * sigma_alpha[1] + mu_alpha[gg];
       }
     }
-    if (rat == 1) {                    // HBAM_R_MINI
+    if (rat == 1) {                       // HBAM_R_MINI
       for (n in 1:N_obs) {
-        vector[2] mu0;                  // dif-adjusted mean
+        vector[2] mu0;                    // dif-adjusted mean
         mu0[1] = alpha0[ii[n], 1] + beta0[ii[n], 1] * theta[jj[n]];
         mu0[2] = alpha0[ii[n], 2] + beta0[ii[n], 2] * theta[jj[n]];
         log_probs[1] = log(lambda[ii[n]]) + log(zeta[V[ii[n]] + B + 1]) +
@@ -127,14 +158,14 @@ transformed parameters {
           normal_lpdf(Y[n] | (1 - gamma[ii[n]]) * mu0[2] + gamma[ii[n]] * p[2, n], tau);
         log_lik[n] = log_sum_exp(log_probs);
       }
-    } else if (het == 0) {              // HBAM_MINI
+    } else if (het == 0) {                // HBAM_MINI
       for (n in 1:N_obs) {
         log_lik[n] = log_mix( lambda[ii[n]],
           normal_lpdf(Y[n] | alpha0[ii[n], 1] + beta0[ii[n], 1] * theta[jj[n]], tau),
           normal_lpdf(Y[n] | alpha0[ii[n], 2] + beta0[ii[n], 2] * theta[jj[n]], tau) );
       }
     } else {
-      if (flip == 1) {                  // HBAM & HBAM_MULTI
+      if (flip == 1) {                    // HBAM & HBAM_MULTI
         for (n in 1:N_obs) {
           log_lik[n] = log_mix( lambda[ii[n]],
             normal_lpdf(Y[n] | alpha0[ii[n], 1] + beta0[ii[n], 1] * theta[jj[n]],
@@ -142,7 +173,7 @@ transformed parameters {
             normal_lpdf(Y[n] | alpha0[ii[n], 2] + beta0[ii[n], 2] * theta[jj[n]],
               sqrt(eta[ii[n]]) * rho[jj[n]]) );
         }
-      } else {                          // HBAM_NF & HBAM_MULTI_NF
+      } else {                            // HBAM_NF & HBAM_MULTI_NF
         for (n in 1:N_obs) {
           log_lik[n] = normal_lpdf(Y[n] | alpha0[ii[n], 1] + beta0[ii[n], 1] * theta[jj[n]],
             sqrt(eta[ii[n]]) * rho[jj[n]]);
@@ -204,9 +235,12 @@ generated quantities {
   vector[N] alpha;
   vector[N] beta;
   vector[N] chi;
-  vector[rat == 0 ? N_obs : 0] Y_pred;
+  vector[rat == 0 && MCMC == 1 ? N_obs : 0] Y_pred;
   if (flip == 1) {
-    kappa = to_vector(bernoulli_rng(lambda));
+    if (MCMC == 1)
+      kappa = to_vector(bernoulli_rng(lambda));
+    else
+      kappa = to_vector(round(lambda));   // Rounding to MAP instead of sampling
     alpha = (kappa .* alpha0[, 1]) + ((1 - kappa) .* alpha0[, 2]);
     beta = (kappa .* beta0[, 1]) + ((1 - kappa) .* beta0[, 2]);
   } else {
@@ -214,14 +248,23 @@ generated quantities {
     beta = beta0[, 1];
   }
   if (het == 1) {
-    chi = (to_vector(V) - to_vector(normal_rng(0, sqrt(eta) * min_rho)) - alpha) ./ beta;
-    for (n in 1:N_obs)
-      Y_pred[n] = normal_rng(alpha[ii[n]] + beta[ii[n]] * theta[jj[n]], sqrt(eta[ii[n]]) * rho[jj[n]]);
-  } else {
-    chi = (to_vector(V) - to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
-    if (rat == 0) {
+    if (MCMC == 1) {
+      chi = (to_vector(V) - to_vector(normal_rng(0, sqrt(eta) * min_rho)) - alpha) ./ beta;
       for (n in 1:N_obs)
-        Y_pred[n] = normal_rng(alpha[ii[n]] + beta[ii[n]] * theta[jj[n]], tau);
+        Y_pred[n] = normal_rng(alpha[ii[n]] + beta[ii[n]] * theta[jj[n]], sqrt(eta[ii[n]]) * rho[jj[n]]);
+    }
+    else {
+      chi = (to_vector(V) - alpha) ./ beta;
+    }
+  } else {
+    if (MCMC == 1) {
+      chi = (to_vector(V) - to_vector(normal_rng(0, rep_vector(tau, N))) - alpha) ./ beta;
+      if (rat == 0) {
+        for (n in 1:N_obs)
+          Y_pred[n] = normal_rng(alpha[ii[n]] + beta[ii[n]] * theta[jj[n]], tau);
+      }
+    } else {
+      chi = (to_vector(V) - alpha) ./ beta;
     }
   }
 }

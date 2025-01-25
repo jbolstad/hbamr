@@ -1,7 +1,13 @@
 inits_omni <- function(chain_id = 1, dat) {
   alpha_raw <- matrix(rnorm(2 * dat$N, 0, .3), ncol = 2)
   beta_raw <- matrix(rnorm(dat$N * 2, 0, .2), ncol = 2)
-  if (dat$bam == 0) {
+  if (dat$fixed == 0) {
+    tau <- rinvchisq(1, 500, (dat$B / 3))
+    dim(tau) <- 1
+  } else {
+    tau <- NULL
+  }
+  if (dat$bam == 0 & dat$fixed == 0) {
     theta_lr <- dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B / 10, 0), runif(1, 0, dat$B / 10))
     sigma_alpha <- rinvchisq(1, 200, .75)
     sigma_beta <- runif(1, .3, .35)
@@ -12,6 +18,9 @@ inits_omni <- function(chain_id = 1, dat) {
     sigma_alpha <- NULL
     sigma_beta <- NULL
   }
+  if (dat$fixed == 1) {
+    theta_lr <- dat$mean_spos[c(dat$L, dat$R)] + c(runif(1, -dat$B / 10, 0), runif(1, 0, dat$B / 10))
+  }
   if (dat$flip == 0) {
     alpha_raw <- alpha_raw[, 1]
     dim(alpha_raw) <- c(dat$N, 1)
@@ -21,8 +30,12 @@ inits_omni <- function(chain_id = 1, dat) {
     psi <- NULL
   } else {
     lambda_raw <- rnorm(dat$N, 0, .05)
-    psi <- exp(rnorm(1, 1.3, .1))
-    dim(psi) <- 1
+    if (dat$fixed == 0) {
+      psi <- exp(rnorm(1, 1.3, .1))
+      dim(psi) <- 1
+    } else {
+      psi <- NULL
+    }
   }
   if (dat$het == 1) {
     nu <- 3 + rinvchisq(1, 100, 7)
@@ -34,6 +47,9 @@ inits_omni <- function(chain_id = 1, dat) {
     eta <- NULL
     rho <- 1
     dim(rho) <- 1
+  }
+  if (dat$fixed == 1) {
+    nu <- NULL
   }
   if (dat$group == 1) {
     mu_alpha_raw <- rdirichlet(1, rep(500, dat$G))
@@ -60,16 +76,16 @@ inits_omni <- function(chain_id = 1, dat) {
   list (
     theta_raw = dat$mean_spos + rnorm(dat$J, 0, (dat$B / 5) * 0.25),
     theta_lr = theta_lr,
-    sigma_alpha = sigma_alpha,
+    sigma_alpha_par = sigma_alpha,
     alpha_raw = alpha_raw,
-    sigma_beta = sigma_beta,
+    sigma_beta_par = sigma_beta,
     beta_raw = beta_raw,
-    nu = nu,
-    tau = rinvchisq(1, 500, (dat$B / 3)),
+    nu_par = nu,
+    tau_par = tau,
     eta = eta,
     rho = rho,
     lambda_raw = lambda_raw,
-    psi = psi,
+    psi_par = psi,
     mu_alpha_raw = mu_alpha_raw,
     mu_beta_raw = mu_beta_raw,
     gammma = gammma,
