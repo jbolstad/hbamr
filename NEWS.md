@@ -1,3 +1,13 @@
+# hbamr 2.4.0
+
+### Refactored code
+
+-   All models have been collected in a single Stan file to reduce the footprint of the package. It now requires significantly less disk space. 
+
+### Discontinued function
+
+-   The `show_code()` function has been removed, as there is no longer easily readable code to show for any particular model. 
+
 # hbamr 2.3.2
 
 ### Revisions to existing models

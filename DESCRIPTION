@@ -1,6 +1,6 @@
 Package: hbamr
 Title: Hierarchical Bayesian Aldrich-McKelvey Scaling via 'Stan'
-Version: 2.3.2
+Version: 2.4.0
 Authors@R: 
     person("Jørgen", "Bølstad", , "jorgen.bolstad@stv.uio.no", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7623-5741"))
@@ -53,6 +53,6 @@ Biarch: true
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 SystemRequirements: GNU make
 VignetteBuilder: knitr
