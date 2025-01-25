@@ -102,7 +102,8 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
                  seed = sample.int(.Machine$integer.max, 1),
                  sigma_alpha = NULL, sigma_beta = .3,
                  sigma_mu_alpha = NULL, sigma_mu_beta = .2, ...) {
-  if (!model %in% names(stanmodels)) { stop(paste(model, "is not a valid model choice.")) }
+  if (!model %in% c("HBAM", "HBAM_NF", "HBAM_MINI", "HBAM_MULTI", "HBAM_MULTI_NF",
+                    "HBAM_R_MINI", "BAM", "FBAM", "FBAM_MULTI", "FBAM_MULTI_NF")) { stop(paste(model, "is not a valid model choice.")) }
   if (!is.null(data) & (!is.null(self) | !is.null(stimuli))) { message("Note: When pre-prepared data are supplied, other data arguments will be ignored.") }
   if (is.null(data) & (is.null(self) | is.null(stimuli))) { stop("Required data not supplied.") }
   if (is.null(data)) {
@@ -112,12 +113,12 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
     if (inherits(data, "hbam_data")) {
       dat <- data
     } else {
-      stop("Supplied data is not of hbam_data class. Please use the prep_data() function to prepare the data.")
+      stop("Supplied data is not of hbam_data class. Please use the prep_data() function from the hbamr package to prepare the data.")
     }
   }
   if (hasArg(prep_data)) { message("Note: The prep_data argument has been deprecated - please remove it. If a data argument is supplied, the data will not be further prepared before fitting (and vice versa).") }
-  if (grepl("MULTI", model) & is.null(dat$gg)) { stop("No group_id supplied for MULTI-type model.") }
-  if (!grepl("MULTI", model) & !is.null(dat$gg)) { message("Note: The supplied group_id will not be used as the chosen model is not a MULTI-type model.") }
+  if (grepl("MULTI", model) & dat$G <= 1) { stop("No group_id supplied for MULTI-type model.") }
+  if (!grepl("MULTI", model) & dat$G > 1) { message("Note: The supplied group_id will not be used as the chosen model is not a MULTI-type model.") }
   if (model == "BAM" | grepl("_NF", model)) { pars = c("alpha", "beta", "chi", "theta") }
   if (!is.null(extra_pars)) {pars = c(pars, extra_pars) }
   if (!dat$V_supplied) {
@@ -126,21 +127,28 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
       stop("The HBAM_R_MINI model requires self-placement data.")
     }
   }
+  if (model == "HBAM_R_MINI" & !dat$U_supplied) {
+    stop("The HBAM_R_MINI model requires preference data.")
+  }
 
   if (is.null(sigma_alpha)) { sigma_alpha <- dat$B / 5 }
   if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat$B / 10 }
-  dat$sigma_alpha <- sigma_alpha
+  dat$sigma_alpha_fixed <- sigma_alpha
   dat$sigma_mu_alpha <- sigma_mu_alpha
-  dat$sigma_beta <- sigma_beta
+  dat$sigma_beta_fixed <- sigma_beta
   dat$sigma_mu_beta <- sigma_mu_beta
   dat$MCMC <- 1
 
+  dat <- add_model_features(dat, model)
+
   set.seed(seed)
-  init_ll <- lapply(1:chains, function(id) inits[[model]](id, dat))
+  init_ll <- lapply(1:chains, function(id) inits_omni(id, dat))
+
+  stanmodels[[1]]@model_name <- model
 
   arglist <- list(...)
   arglist$prep_data <- NULL
-  arglist$object <- stanmodels[[model]]
+  arglist$object <- stanmodels[[1]]
   arglist$data = dat
   arglist$init = init_ll
   arglist$chains = chains
@@ -154,4 +162,39 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
   out <- do.call(rstan::sampling, arglist)
   out@.MISC$hbam_data <- dat
   return(out)
+}
+
+add_model_features <- function(data, model) {
+  if (grepl("_MINI", model)) {
+    data$het <- 0
+  } else {
+    data$het <- 1
+  }
+  if (grepl("_NF", model)) {
+    data$flip <- 0
+  } else {
+    data$flip <- 1
+  }
+  if (grepl("FBAM", model)) {
+    data$fixed <- 1
+  } else {
+    data$fixed <- 0
+  }
+  if (grepl("MULTI", model)) {
+    data$group <- 1
+  } else {
+    data$group <- 0
+  }
+  if (model == "BAM") {
+    data$bam <- 1
+    data$flip <- 0
+  } else {
+    data$bam <- 0
+  }
+  if (model == "HBAM_R_MINI") {
+    data$rat <- 1
+  } else {
+    data$rat <- 0
+  }
+  return(data)
 }

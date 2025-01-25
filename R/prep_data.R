@@ -88,6 +88,7 @@ prep_data <- function(self = NULL, stimuli,
     }
   } else {
     group_id_fac <- NULL
+    group_id <- rep(1, nrow(stimuli))
     has_group_id <- rep(TRUE, N_orig)
   }
 
@@ -108,8 +109,10 @@ prep_data <- function(self = NULL, stimuli,
 
     keep <- !is.na(self) & apply(is_any_na, 1, sum) <= allow_miss & n_unique >= req_unique & has_var & has_group_id
     prefs <- prefs[keep,]
+    U_supplied = TRUE
   } else {
     keep <- !is.na(self) & apply(is.na(stimuli), 1, sum) <= allow_miss & n_unique >= req_unique & has_group_id
+    U_supplied = FALSE
   }
 
   if (sum(keep) == 0) {
@@ -118,8 +121,8 @@ prep_data <- function(self = NULL, stimuli,
 
   stimuli <- stimuli[keep, ]
   self <- self[keep]
+  group_id <- group_id[keep]
   if(!is.null(group_id)) {
-    group_id <- group_id[keep]
     group_id_fac <- group_id_fac[keep]
   }
 
@@ -152,7 +155,7 @@ prep_data <- function(self = NULL, stimuli,
     prefs_vec <- prefs_vec[!drop]
   } else{
     drop <- is.na(stimuli_vec)
-    prefs_vec <- 0
+    prefs_vec <- rep(0, sum(!drop))
   }
   ii <- rep(1:nrow(stimuli), ncol(stimuli))[!drop]
   jj <- rep(1:ncol(stimuli), each = nrow(stimuli))[!drop]
@@ -167,7 +170,7 @@ prep_data <- function(self = NULL, stimuli,
   datlist <- list(J = ncol(stimuli), N = nrow(stimuli), B = B, N_obs = length(stimuli_vec),
        V = self, Y = stimuli_vec, U = prefs_vec, L = L, R = R,
        ii = ii, jj = jj, gg = group_id, G = length(unique(group_id)), ggfac = group_id_fac, mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
-       CV = 0, holdout = rep(0, length(stimuli_vec)), V_supplied = V_supplied, N_orig = N_orig)
+       CV = 0, holdout = rep(0, length(stimuli_vec)), V_supplied = V_supplied, U_supplied = U_supplied, N_orig = N_orig)
   class(datlist) <- c("list", "hbam_data")
 
   if (!quiet) {

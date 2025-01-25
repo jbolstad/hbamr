@@ -98,12 +98,12 @@ cv_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI",
                         chains = 1, warmup = 500, iter = 1000)
 
 # Performing 10-fold cross-validation for the FBAM model:
-cv_FBAM <- hbam_cv(self, stimuli, model = "FBAM",
+cv_fbam <- hbam_cv(self, stimuli, model = "FBAM",
                         chains = 1, warmup = 500, iter = 1000)
 
 # Comparing the results using the loo package:
 loo::loo_compare(list(HBAM_MINI = cv_hbam_mini,
-                 FBAM = cv_FBAM))
+                 FBAM = cv_fbam))
 
 # Stop the cluster of parallel sessions:
 future::plan(future::sequential)

@@ -43,19 +43,21 @@ fbam <- function(self = NULL, stimuli = NULL, model = "FBAM", allow_miss = 2, re
   if (!is.null(data) & (!is.null(self) | !is.null(stimuli))) { message("Note: When pre-prepared data are supplied, other data arguments will be ignored.") }
   if (is.null(data) & (is.null(self) | is.null(stimuli))) { message("Note: Required data not supplied.") }
   if (is.null(data)) { dat <- hbamr::prep_data(self, stimuli, allow_miss = allow_miss, req_valid = req_valid, req_unique = req_unique, group_id = group_id) } else { dat <- data }
-  if (grepl("MULTI", model) & is.null(dat$gg)) { stop("No group_id supplied for MULTI-type model.") }
-  if (!grepl("MULTI", model) & !is.null(dat$gg)) { message("Note: The supplied group_id will not be used as the chosen model is not a MULTI-type model.") }
+  if (grepl("MULTI", model) & dat$G <= 1) { stop("No group_id supplied for MULTI-type model.") }
+  if (!grepl("MULTI", model) & dat$G > 1) { message("Note: The supplied group_id will not be used as the chosen model is not a MULTI-type model.") }
 
   if (is.null(sigma_alpha)) { sigma_alpha <- dat$B / 5 }
   if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat$B / 10 }
-  dat$sigma_alpha <- sigma_alpha
+  dat$sigma_alpha_fixed <- sigma_alpha
   dat$sigma_mu_alpha <- sigma_mu_alpha
-  dat$sigma_beta <- sigma_beta
+  dat$sigma_beta_fixed <- sigma_beta
   dat$sigma_mu_beta <- sigma_mu_beta
   dat$MCMC <- 0
 
+  dat <- add_model_features(dat, model)
+
   set.seed(seed)
-  out <- rstan::optimizing(stanmodels[[model]], data = dat, init = inits[[model]](1, dat), seed = seed, ...)
+  out <- rstan::optimizing(stanmodels[[1]], data = dat, init = inits_omni(1, dat), seed = seed, ...)
   out$hbam_data <- dat
   return(out)
 }

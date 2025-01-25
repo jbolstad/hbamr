@@ -46,12 +46,12 @@
 #'                         chains = 1, warmup = 500, iter = 1000)
 #'
 #' # Performing 10-fold cross-validation for the FBAM model:
-#' cv_FBAM <- hbam_cv(self, stimuli, model = "FBAM",
+#' cv_fbam <- hbam_cv(self, stimuli, model = "FBAM",
 #'                         chains = 1, warmup = 500, iter = 1000)
 #'
 #' # Comparing the results using the loo package:
 #' loo::loo_compare(list(HBAM_MINI = cv_hbam_mini,
-#'                  FBAM = cv_FBAM))
+#'                  FBAM = cv_fbam))
 #'
 #' # Stop the cluster of parallel sessions:
 #' future::plan(future::sequential)
@@ -83,10 +83,11 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
   if (is.null(sigma_alpha)) { sigma_alpha <- dat_l[[1]]$B / 4.0 }
   if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat_l[[1]]$B / 5.0 }
   for (k in 1:n_fold) {
-    dat_l[[k]]$sigma_alpha <- sigma_alpha
+    dat_l[[k]]$sigma_alpha_fixed <- sigma_alpha
     dat_l[[k]]$sigma_mu_alpha <- sigma_mu_alpha
-    dat_l[[k]]$sigma_beta <- sigma_beta
+    dat_l[[k]]$sigma_beta_fixed <- sigma_beta
     dat_l[[k]]$sigma_mu_beta <- sigma_mu_beta
+    dat_l[[k]] <- add_model_features(dat_l[[k]], model)
   }
 
   RNGkind("L'Ecuyer-CMRG")
@@ -98,9 +99,9 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
     future.apply::future_lapply(1:(n_fold * chains),
                                 function(i){
                                   k <- ceiling(i / chains) # Fold number
-                                  init_l <- list(inits[[model]](chain_id = i, dat = dat_l[[k]]))
+                                  init_l <- list(inits_omni(chain_id = i, dat = dat_l[[k]]))
                                   # Obtain chain:
-                                  s <- rstan::sampling(stanmodels[[model]], data = dat_l[[k]], init = init_l, pars = "log_lik",
+                                  s <- rstan::sampling(stanmodels[[1]], data = dat_l[[k]], init = init_l, pars = "log_lik",
                                                        chains = 1, cores = 1, warmup = warmup, iter = iter, chain_id = i, seed = seed + i, refresh = 0, ...)
                                   # Calculate expected value of log-likelihood for each held-out observation:
                                   log_lik <- loo::extract_log_lik(s)
