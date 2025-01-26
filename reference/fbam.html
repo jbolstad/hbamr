@@ -128,15 +128,16 @@
 <span class="r-in"><span><span class="co"># Loading ANES 2012 data:</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">LC2012</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">self</span> <span class="op">&lt;-</span> <span class="va">LC2012</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="va">stimuli</span> <span class="op">&lt;-</span> <span class="va">LC2012</span><span class="op">[</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="co"># Making a small subset of the data for illustration:</span></span></span>
+<span class="r-in"><span><span class="va">self</span> <span class="op">&lt;-</span> <span class="va">LC2012</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">2</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">stimuli</span> <span class="op">&lt;-</span> <span class="va">LC2012</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fitting the FBAM model:</span></span></span>
 <span class="r-in"><span><span class="va">fit_fbam</span> <span class="op">&lt;-</span> <span class="fu">fbam</span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Summary of prepared data (values for supplied data in paretheses)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Number of respondents: 5047 (5914)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Number of respondents: 654 (1000)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Number of stimuli: 4 (4)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> - Number of stimuli obs.: 20052 (22607)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> - Number of stimuli obs.: 2559 (3564)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Range of observations: [-3, 3] ([1, 7])</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Obtaining point estimates for the latent stimulus positions:</span></span></span>
