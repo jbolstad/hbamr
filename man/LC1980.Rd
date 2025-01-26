@@ -8,7 +8,7 @@
 An object of class \code{matrix} (inherits from \code{array}) with 888 rows and 7 columns.
 }
 \source{
-American National Election Studies: \href{https://electionstudies.org/}{www.electionstudies.org/}.
+American National Election Studies.
 
 This dataset was originally part of the \code{basicspace} package under the same name ("LC1980").
 }
