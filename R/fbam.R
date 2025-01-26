@@ -24,8 +24,9 @@
 #' # Loading ANES 2012 data:
 #' data(LC2012)
 #'
-#' self <- LC2012[, 2]
-#' stimuli <- LC2012[, -c(1:2)]
+#' # Making a small subset of the data for illustration:
+#' self <- LC2012[1:1000, 2]
+#' stimuli <- LC2012[1:1000, -c(1:2)]
 #'
 #' # Fitting the FBAM model:
 #' fit_fbam <- fbam(self, stimuli)
