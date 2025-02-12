@@ -6,12 +6,14 @@ data {
   array[N_obs] int<lower = 1> ii;         // index i in matrix
   array[N_obs] int<lower = 1> jj;         // index j in matrix
   array[N] int<lower = 1> gg;             // group-index of i
-  int<lower = 1> B;                       // length of scale -1 / 2
+  real<lower = 0> B;                      // length of scale -1 / 2
+  int<lower = 1> B2;                      // ceiling of scale-length -1 / 2
   int<lower = 1, upper = J> L;            // left pole
   int<lower = 1, upper = J> R;            // right pole
-  array[N_obs] int<lower = -B, upper = B> Y; // reported stimuli positions
+  array[N_obs] real<lower = -B, upper = B> Y; // reported stimuli positions
   array[N_obs] real<lower = 0, upper = 1> U; // reported voter preferences
-  array[N] int<lower = -B, upper = B> V;  // reported voter positions
+  array[N] real<lower = -B, upper = B> V;  // reported voter positions
+  array[N] int V_int;                     // reported voter positions, as int
   vector[J] mean_spos;                    // average stimuli placements
   real<lower = 0> sigma_mu_alpha;         // sd of prior on mu_alpha, MULTI
   real<lower = 0> sigma_mu_beta;          // sd of prior on mu_beta, MULTI
@@ -63,7 +65,7 @@ parameters {
   array[rat == 1 ? N : 0] real<lower = 0, upper = 1> gamma; // rationalization per respondent
   array[rat] real<lower = 1> gam_a;       // hyperparameter for gamma
   array[rat] real<lower = 1> gam_b;       // hyperparameter for gamma
-  vector<lower = 0, upper = 1>[rat == 1 ? 2 * B + 1 : 0] zeta; // direction of rationalization
+  vector<lower = 0, upper = 1>[rat == 1 ? 2 * B2 + 1 : 0] zeta; // direction of rationalization
 }
 
 transformed parameters {
@@ -148,13 +150,13 @@ transformed parameters {
         vector[2] mu0;                    // dif-adjusted mean
         mu0[1] = alpha0[ii[n], 1] + beta0[ii[n], 1] * theta[jj[n]];
         mu0[2] = alpha0[ii[n], 2] + beta0[ii[n], 2] * theta[jj[n]];
-        log_probs[1] = log(lambda[ii[n]]) + log(zeta[V[ii[n]] + B + 1]) +
+        log_probs[1] = log(lambda[ii[n]]) + log(zeta[V_int[ii[n]] + B2 + 1]) +
           normal_lpdf(Y[n] | (1 - gamma[ii[n]]) * mu0[1] + gamma[ii[n]] * p[1, n], tau);
-        log_probs[2] = log(lambda[ii[n]]) + log((1 - zeta[V[ii[n]] + B + 1])) +
+        log_probs[2] = log(lambda[ii[n]]) + log((1 - zeta[V_int[ii[n]] + B2 + 1])) +
           normal_lpdf(Y[n] | (1 - gamma[ii[n]]) * mu0[1] + gamma[ii[n]] * p[2, n], tau);
-        log_probs[3] = log((1 - lambda[ii[n]])) + log(zeta[V[ii[n]] + B + 1]) +
+        log_probs[3] = log((1 - lambda[ii[n]])) + log(zeta[V_int[ii[n]] + B2 + 1]) +
           normal_lpdf(Y[n] | (1 - gamma[ii[n]]) * mu0[2] + gamma[ii[n]] * p[1, n], tau);
-        log_probs[4] = log((1 - lambda[ii[n]])) + log((1 - zeta[V[ii[n]] + B + 1])) +
+        log_probs[4] = log((1 - lambda[ii[n]])) + log((1 - zeta[V_int[ii[n]] + B2 + 1])) +
           normal_lpdf(Y[n] | (1 - gamma[ii[n]]) * mu0[2] + gamma[ii[n]] * p[2, n], tau);
         log_lik[n] = log_sum_exp(log_probs);
       }

@@ -1,3 +1,9 @@
+# hbamr 2.4.1
+
+### Revisions to existing models
+
+-   All models except HBAM_R_MINI now allow analyzing data with an even number of answering categories. 
+
 # hbamr 2.4.0
 
 ### Refactored code

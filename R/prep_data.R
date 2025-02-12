@@ -167,8 +167,8 @@ prep_data <- function(self = NULL, stimuli,
     warning("The supplied data appear to have an even number of possible placements, which means there is no center-category. All models except HBAM_R_MINI will still work, but you may want to check your data for errors.")
   }
 
-  datlist <- list(J = ncol(stimuli), N = nrow(stimuli), B = B, N_obs = length(stimuli_vec),
-       V = self, Y = stimuli_vec, U = prefs_vec, L = L, R = R,
+  datlist <- list(J = ncol(stimuli), N = nrow(stimuli), B = B, B2 = ceiling(B), N_obs = length(stimuli_vec),
+       V = self, V_int = round(self), Y = stimuli_vec, U = prefs_vec, L = L, R = R,
        ii = ii, jj = jj, gg = group_id, G = length(unique(group_id)), ggfac = group_id_fac, mean_spos = mean_spos, keep = keep, names = colnames(stimuli),
        CV = 0, holdout = rep(0, length(stimuli_vec)), V_supplied = V_supplied, U_supplied = U_supplied, N_orig = N_orig)
   class(datlist) <- c("list", "hbam_data")

@@ -130,6 +130,9 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
   if (model == "HBAM_R_MINI" & !dat$U_supplied) {
     stop("The HBAM_R_MINI model requires preference data.")
   }
+  if (model == "HBAM_R_MINI" & dat$B!=round(dat$B)) {
+    stop("The HBAM_R_MINI model requires an even number of response categories.")
+  }
 
   if (is.null(sigma_alpha)) { sigma_alpha <- dat$B / 5 }
   if (is.null(sigma_mu_alpha)) { sigma_mu_alpha <- dat$B / 10 }
