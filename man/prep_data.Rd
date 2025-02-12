@@ -29,7 +29,7 @@ prep_data(
 
 \item{req_unique}{Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is \code{req_unique = 2}.}
 
-\item{B}{Integer specifying the upper bound of the survey scale after centering. If not supplied, this information will be inferred from the data.}
+\item{B}{Scalar specifying the upper bound of the survey scale after centering. If not supplied, this information will be inferred from the data.}
 
 \item{group_id}{Vector of length N identifying which group each respondent belongs to. The format can be factor, character, integer, or numeric. Respondents with NAs on \code{group_id} will be dropped when \code{group_id} is supplied. These data are only required by models with \code{"MULTI"} in their name and will be ignored when fitting other models.}
 
