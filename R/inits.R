@@ -66,7 +66,7 @@ inits_omni <- function(chain_id = 1, dat) {
     gam_b <- runif(1, 1.1, 1.3)
     dim(gam_a) <- 1
     dim(gam_b) <- 1
-    zeta <- runif(dat$B * 2 + 1, .1, .9)
+    zeta <- runif(dat$K, .1, .9)
   } else {
     gammma <- NULL
     gam_a <- NULL
