@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -265,10 +265,6 @@ respondents’ shift and stretch parameters. While the latent respondent
 positions will not be estimated, all other parameters are unaffected if
 the argument <code>self</code> is dropped when calling
 <code><a href="../reference/prep_data.html">prep_data()</a></code> or <code><a href="../reference/hbam.html">hbam()</a></code>.</p>
-<p>To see the Stan code for any of the models, use the
-<code>show_code()</code> function:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">show_code</span><span class="op">(</span><span class="st">"HBAM_MULTI"</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="summary-of-model-features">Summary of Model Features<a class="anchor" aria-label="anchor" href="#summary-of-model-features"></a>
 </h3>
@@ -419,16 +415,16 @@ is HBAM, while other models can be specified via the argument
 <code>stimuli</code>, <code>group_id</code>, <code>allow_miss</code>,
 <code>req_valid</code>, and <code>req_unique</code>).</p>
 <p>To fit the HBAM model using the default settings, we would run:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span><span class="op">)</span></span></code></pre></div>
 <p>To fit the HBAM_MINI model while requiring complete data for all
 respondents, we would run:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_hbam_mini</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_MINI"</span>, allow_miss <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></code></pre></div>
 <p>If we wanted to run the <code><a href="../reference/prep_data.html">prep_data()</a></code> function separately
 before fitting the model, we would supply output from
 <code><a href="../reference/prep_data.html">prep_data()</a></code> as the argument <code>data</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prep_data.html">prep_data</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, allow_miss <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> </span>
 <span><span class="va">fit_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 <p>To fit the HBAM_MULTI or FBAM_MULTI model, we would need to supply a
@@ -437,7 +433,7 @@ respondents’ self-placements as <code>group_id</code> and thus give each
 self-placement group their own prior distributions for the shift and
 stretch parameters. If we decided to fit the FBAM_MULTI model, we could
 also specify our own scales for the priors on key parameters:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_fbam_multi</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"FBAM_MULTI"</span>, group_id <span class="op">=</span> <span class="va">self</span>, </span>
 <span>                       sigma_alpha <span class="op">=</span> <span class="fl">.8</span>, sigma_mu_alpha <span class="op">=</span> <span class="fl">.7</span>, </span>
 <span>                       sigma_beta <span class="op">=</span> <span class="fl">.4</span>, sigma_mu_beta <span class="op">=</span> <span class="fl">.25</span><span class="op">)</span></span></code></pre></div>
@@ -461,7 +457,7 @@ estimates.</p>
 just like the <code><a href="../reference/hbam.html">hbam()</a></code> function, except the arguments for
 <code><a href="https://mc-stan.org/rstan/reference/stanmodel-method-sampling.html" class="external-link">rstan::sampling()</a></code> do not apply. To fit the FBAM model using
 default settings, we would run:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_fbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fbam.html">fbam</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -530,7 +526,7 @@ distributions of all stimuli in the data. By default, it will fill the
 distributions with shades from blue to red depending on the position on
 the scale. The argument <code>rev_color = TRUE</code> will reverse the
 order of the colors.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_stimuli.html">plot_stimuli</a></span><span class="op">(</span><span class="va">fit_hbam</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p_stim.svg" width="100%" style="display: block; margin: auto;"></p>
 <p>In this example, we see that John B. Anderson – the former Republican
@@ -549,7 +545,7 @@ this can be altered by specifying the argument <code>n_draws</code>. The
 <code><a href="../reference/plot_respondents.html">plot_respondents()</a></code> function also plots the estimated
 stimulus positions by default, but this behavior can be turned off by
 adding the argument <code>inc_stimuli = FALSE</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_respondents.html">plot_respondents</a></span><span class="op">(</span><span class="va">fit_hbam</span>, n_draws <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p_resp.svg" width="100%" style="display: block; margin: auto;"></p>
 <p>Users who want to customize the plots further can obtain the
@@ -588,7 +584,7 @@ be changed by specifying <code>estimate = "mean"</code>.</p>
 </h4>
 <p>To compare the distributions of estimated shift parameters from the
 HBAM and HBAM_MINI models, we would run:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_over_self.html">plot_over_self</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="va">fit_hbam_mini</span><span class="op">)</span>, <span class="st">"alpha"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p_alpha.svg" width="100%" style="display: block; margin: auto;"></p>
 </div>
@@ -603,7 +599,7 @@ value of
 may therefore be better suited for examining the extent to which each
 individual stretches the ideological space. To inspect the distribution
 of these values across self-placements, we would run:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_over_self.html">plot_over_self</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="va">fit_hbam_mini</span><span class="op">)</span>, <span class="st">"abs_beta"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p_abs_beta.svg" width="100%" style="display: block; margin: auto;"></p>
 <p>The pattern above, where respondents with more extreme
@@ -624,7 +620,7 @@ expectations of the flipping parameters,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>.
 These parameters represent each respondent’s probability of <em>not</em>
 flipping the scale:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_over_self.html">plot_over_self</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="va">fit_hbam_mini</span><span class="op">)</span>, <span class="st">"lambda"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p_lambda.svg" width="100%" style="display: block; margin: auto;"></p>
 <p>In this example, flipping is uncommon, but respondents who place
@@ -641,7 +637,7 @@ extent to which the model has transformed the original data. In this
 example, the impact of the models is generally modest, although a few
 respondents have been detected as having flipped the scale, and thus
 have had their self-placement flipped back.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_over_self.html">plot_over_self</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="va">fit_hbam_mini</span><span class="op">)</span>, <span class="st">"chi"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p_chi.svg" width="100%" style="display: block; margin: auto;"></p>
 </div>
@@ -671,7 +667,7 @@ across
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>).
 The point estimates will still be calculated using the posterior median,
 unless the argument <code>estimate = "mean"</code> is added.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span>, extra_pars <span class="op">=</span> <span class="st">"eta"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_over_self.html">plot_over_self</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="st">"eta"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p_eta.svg" width="50%" style="display: block; margin: auto;"></p>
@@ -698,7 +694,7 @@ error and the posterior standard deviation, use the argument
 estimates.)</p>
 <p>The posterior draws for the stimulus positions can be summarized as
 follows:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_est.html">get_est</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="st">"theta"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 6</span></span></span>
 <span><span class="co">##     mean `2.5%`  `50%` `97.5%` n_eff  Rhat</span></span>
@@ -714,7 +710,7 @@ follows:</p>
 the original dataset by reporting rows of NAs for respondents who were
 not included in the analysis, we would add the argument
 <code>format_orig = TRUE</code>:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_est.html">get_est</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="st">"chi"</span>, format_orig <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 888 × 6</span></span></span>
 <span><span class="co">##       mean `2.5%`   `50%` `97.5%` n_eff   Rhat</span></span>
@@ -744,7 +740,7 @@ functions for estimating ELPDs by performing approximate leave-one-out
 These functions can be used on model fits from <code><a href="../reference/hbam.html">hbam()</a></code> if
 the argument <code>extra_pars = "log_lik"</code> is specified when
 fitting the model:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span>, extra_pars <span class="op">=</span> <span class="st">"log_lik"</span><span class="op">)</span></span>
 <span><span class="va">loo_hbam</span> <span class="op">&lt;-</span> <span class="fu">loo</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/loo/reference/loo.html" class="external-link">loo</a></span><span class="op">(</span><span class="va">fit_hbam</span><span class="op">)</span></span></code></pre></div>
 <p>However, PSIS-LOO only works when all Pareto <em>k</em> values are
@@ -776,12 +772,12 @@ strategies, of which “multisession” works on all operating systems. It
 most settings, it is advisable to use all physical CPU cores when
 performing cross-validation. To set up parallel computation using 4
 cores via the <code>future</code> package, we could run:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span>, workers <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 <p>To perform 10-fold cross-validation for a selection of models, we
 could run:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kfold_bam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"BAM"</span><span class="op">)</span></span>
 <span><span class="va">kfold_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM"</span><span class="op">)</span></span>
 <span><span class="va">kfold_hbam_nf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_NF"</span><span class="op">)</span></span>
@@ -791,7 +787,7 @@ could run:</p>
 <code>kfold</code> and <code>loo</code>, which can be further processed
 using the <code>loo</code> package. To compare the estimated ELPDs, we
 could run:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">loo</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/loo/reference/loo_compare.html" class="external-link">loo_compare</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>BAM <span class="op">=</span> <span class="va">kfold_bam</span>, </span>
 <span>                            HBAM <span class="op">=</span> <span class="va">kfold_hbam</span>, </span>
 <span>                            HBAM_NF <span class="op">=</span> <span class="va">kfold_hbam_nf</span>, </span>
@@ -811,9 +807,9 @@ have a slight edge, but the default HBAM model performs about equally
 well.</p>
 <p>We could also perform cross-validation for a model that does not
 account for heteroskedastic errors:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kfold_hbam_mini</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam_cv.html">hbam_cv</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_MINI"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kfold_hbam_mini</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
@@ -855,7 +851,7 @@ full range of diagnostic tools from the <strong>rstan</strong> package.
 Users should consult the <strong>rstan</strong> documentation for
 details on the various diagnostic tests and plots that are available.
 One example of the available tools is <code>traceplot()</code>:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">rstan</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstan/reference/stanfit-method-traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">fit_hbam</span>, pars <span class="op">=</span> <span class="st">"theta"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="p_trace_theta.svg" width="100%" style="display: block; margin: auto;"></p>
 <div class="section level3">

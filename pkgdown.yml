@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   hbamr: hbamr.html
-last_built: 2025-02-12T17:52Z
+last_built: 2025-02-13T12:34Z
 urls:
   reference: https://jbolstad.github.io/hbamr/reference
   article: https://jbolstad.github.io/hbamr/articles
