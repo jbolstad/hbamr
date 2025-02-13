@@ -105,12 +105,6 @@ This package provides several alternative models that can be selected using the 
 
 These models can also be used in situations where self-placements are not available and the only goal is to estimate stimulus positions or respondents' shift and stretch parameters. While the latent respondent positions will not be estimated, all other parameters are unaffected if the argument `self` is dropped when calling `prep_data()` or `hbam()`.
 
-To see the Stan code for any of the models, use the `show_code()` function:
-
-```{r, eval = FALSE}
-show_code("HBAM_MULTI")
-```
-
 ### Summary of Model Features
 
 |                        | HBAM<br>  | HBAM<br>MULTI | HBAM<br>NF | HBAM<br>MULTI_NF | HBAM<br>MINI |

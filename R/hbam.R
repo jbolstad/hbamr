@@ -53,8 +53,6 @@
 #'
 #' See the `hbamr` vignette for a table summarizing the key characteristics of the available models.
 #'
-#' To see the code for any of the models, use the `show_code()` function.
-#'
 #' @return An object of S4 class `stanfit`.
 
 #' @references

@@ -108,8 +108,6 @@ This package provides several alternative models that can be selected using the 
 These models can also be used in situations where self-placements are not available and the only goal is to estimate stimulus positions or respondents' shift and stretch parameters. While the latent respondent positions will not be estimated, all other parameters are unaffected if the argument \code{self} is dropped when calling \code{prep_data()} or \code{hbam()}.
 
 See the \code{hbamr} vignette for a table summarizing the key characteristics of the available models.
-
-To see the code for any of the models, use the \code{show_code()} function.
 }
 \examples{
 \donttest{
