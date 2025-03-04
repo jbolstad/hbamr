@@ -40,6 +40,7 @@ transformed data {
   vector<lower = 0, upper = 1>[N_obs] not_holdout = 1 - holdout;
   real mean_mu_simplexes = 1.0 / G;       // for later scaling of simplexes
   real sd_mu_simplexes = sqrt(mean_mu_simplexes * (1 - mean_mu_simplexes) / (50 * G + 1));
+  real tau_multip = 1 / sqrt(N_obs);
   array[2, N_obs] real<lower = -B, upper = B> p;
   for (n in 1:N_obs) {
     p[1, n] = U[n] * V[ii[n]] + B * U[n] - B;
@@ -57,7 +58,7 @@ parameters {
   array[bam == 0 && fixed == 0 ? 1 : 0] real<lower = 0> sigma_alpha_par; // sd of alpha
   array[bam == 0 && fixed == 0 ? 1 : 0] real<lower = 0, upper = 2> sigma_beta_par; // sd of log(beta)
   array[het == 1 && fixed == 0 ? 1 : 0] real<lower = 3, upper = 30> nu_par; // concentration of etas
-  array[1 - fixed] real<lower = 0> tau_par; // scale of errors
+  array[1 - fixed] real<multiplier = tau_multip> tau_par; // scale of errors
   vector<lower = 0>[het == 1 ? N : 0] eta; // mean ind. error variance x J^2
   simplex[het == 1 ? J : 1] rho;          // stimuli-shares of variance
   vector[flip == 1 ? N : 0] lambda_raw;   // raw mixing proportion, flipping
