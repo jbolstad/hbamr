@@ -20,6 +20,7 @@
 #' @param warmup A positive integer specifying the number of warmup (aka burn-in) iterations per chain. If step-size adaptation is on (which it is by default), this also controls the number of iterations for which adaptation is run (and hence these warmup samples should not be used for inference). The number of warmup iterations should be smaller than `iter`.
 #' @param iter A positive integer specifying the number of iterations for each chain (including warmup).
 #' @param seed A positive integer specifying an optional seed for reproducibility. If this argument is not supplied, a random seed will be generated and the function will produce slightly different results on each run.
+#' @param control A named list of parameters to control the sampler's behavior. See the documentation for `rstan::stan` for more details.
 #' @param sigma_alpha A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 5, where B measures the length of the survey scale as the number of possible placements on one side of the center.
 #' @param sigma_beta A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .3.
 #' @param sigma_mu_alpha A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 10.
@@ -98,6 +99,7 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
                  chains = 4, cores = parallel::detectCores(logical = FALSE),
                  warmup = 1000, iter = 2000,
                  seed = sample.int(.Machine$integer.max, 1),
+                 control = list(max_treedepth = 7),
                  sigma_alpha = NULL, sigma_beta = .3,
                  sigma_mu_alpha = NULL, sigma_mu_beta = .2, ...) {
   if (!model %in% c("HBAM", "HBAM_NF", "HBAM_MINI", "HBAM_MULTI", "HBAM_MULTI_NF",
@@ -154,6 +156,7 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
   arglist$warmup = warmup
   arglist$iter = iter
   arglist$seed = seed
+  arglist$control = control
   arglist$pars = pars
   arglist$include = include
 

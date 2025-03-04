@@ -22,6 +22,7 @@ hbam(
   warmup = 1000,
   iter = 2000,
   seed = sample.int(.Machine$integer.max, 1),
+  control = list(max_treedepth = 7),
   sigma_alpha = NULL,
   sigma_beta = 0.3,
   sigma_mu_alpha = NULL,
@@ -63,6 +64,8 @@ hbam(
 \item{iter}{A positive integer specifying the number of iterations for each chain (including warmup).}
 
 \item{seed}{A positive integer specifying an optional seed for reproducibility. If this argument is not supplied, a random seed will be generated and the function will produce slightly different results on each run.}
+
+\item{control}{A named list of parameters to control the sampler's behavior. See the documentation for \code{rstan::stan} for more details.}
 
 \item{sigma_alpha}{A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 5, where B measures the length of the survey scale as the number of possible placements on one side of the center.}
 

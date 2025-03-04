@@ -1,5 +1,9 @@
 # hbamr 2.4.2
 
+### Revisions to existing functions
+
+-   The `hbam()` function now has a default `max_treedepth` parameter of 7, which can speed up the adaptation phase of the sampling significantly.
+
 ### Revisions to existing models
 
 -   The HBAM_R_MINI model now allows analyzing data with an even number of answering categories. 
