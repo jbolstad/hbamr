@@ -193,9 +193,9 @@ model {
   } else {
     theta_lr ~ normal(0, B / 2.0);
     alpha_raw[, 1] ~ normal(0, 1);
-    sigma_alpha ~ gamma(5, sigma_alpha_prior_rate);
+    sigma_alpha_par ~ gamma(5, sigma_alpha_prior_rate);
     beta_raw[, 1] ~ normal(0, 1);
-    sigma_beta ~ gamma(9, 40);
+    sigma_beta_par ~ gamma(9, 40);
   }
   if (group == 1) {
     mu_alpha_raw ~ dirichlet(rep_vector(50, G));
@@ -208,7 +208,7 @@ model {
     alpha_raw[, 2] ~ normal(0, 1);
     beta_raw[, 2] ~ normal(0, 1);
     lambda_raw ~ normal(0, 1);
-    psi ~ lognormal(1.4, .5);
+    psi_par ~ lognormal(1.4, .5);
   }
   if (rat == 1) {
     gamma ~ beta(gam_a[1], gam_b[1]);
@@ -218,12 +218,12 @@ model {
   }
   if (het == 1) {
     eta ~ scaled_inv_chi_square(nu[1], eta_scale[1]);
-    nu ~ gamma(25, 2.5);
+    nu_par ~ gamma(25, 2.5);
     rho ~ dirichlet(rep_vector(50, J));
   } else {
     rho ~ dirichlet(rep_vector(50, 1));
   }
-  tau ~ gamma(2, tau_prior_rate);
+  tau_par ~ gamma(2, tau_prior_rate);
 
   if (CV == 0)
     target += sum(log_lik);
