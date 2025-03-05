@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.4.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +55,7 @@
 <span>  warmup <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  iter <span class="op">=</span> <span class="fl">3000</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>max_treedepth <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,</span>
 <span>  sigma_alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sigma_beta <span class="op">=</span> <span class="fl">0.35</span>,</span>
 <span>  sigma_mu_alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -127,6 +128,10 @@
 <dd><p>An integer passed on to <code>set.seed</code> before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument <code>prep_data</code> is <code>TRUE</code>. The supplied <code>seed</code> argument is also used to generate seeds for the sampling algorithm.</p></dd>
 
 
+<dt id="arg-control">control<a class="anchor" aria-label="anchor" href="#arg-control"></a></dt>
+<dd><p>A named list of parameters to control the sampler's behavior. See the documentation for <code><a href="https://mc-stan.org/rstan/reference/stan.html" class="external-link">rstan::stan</a></code> for more details.</p></dd>
+
+
 <dt id="arg-sigma-alpha">sigma_alpha<a class="anchor" aria-label="anchor" href="#arg-sigma-alpha"></a></dt>
 <dd><p>A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.</p></dd>
 
@@ -183,9 +188,9 @@
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Performing 4-fold cross-validation for the FBAM model:</span></span></span>
 <span class="r-in"><span><span class="va">cv_fbam</span> <span class="op">&lt;-</span> <span class="fu">hbam_cv</span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"FBAM"</span>, K <span class="op">=</span> <span class="fl">4</span>,</span></span>
@@ -195,22 +200,13 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Number of stimuli: 6 (6)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Number of stimuli obs.: 252 (289)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Range of observations: [-3, 3] ([1, 7])</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The largest R-hat is 1.05, indicating chains have not mixed.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#r-hat</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Comparing the results using the loo package:</span></span></span>
 <span class="r-in"><span><span class="fu">loo</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/loo/reference/loo_compare.html" class="external-link">loo_compare</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>HBAM_MINI <span class="op">=</span> <span class="va">cv_hbam_mini</span>,</span></span>
 <span class="r-in"><span>                 FBAM <span class="op">=</span> <span class="va">cv_fbam</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           elpd_diff se_diff</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> HBAM_MINI  0.0       0.0   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> FBAM      -7.4       7.9   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FBAM      -8.3       7.9   </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Stop the cluster of parallel sessions:</span></span></span>
 <span class="r-in"><span><span class="fu">future</span><span class="fu">::</span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="fu">future</span><span class="fu">::</span><span class="va"><a href="https://future.futureverse.org/reference/sequential.html" class="external-link">sequential</a></span><span class="op">)</span></span></span>
