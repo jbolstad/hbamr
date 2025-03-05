@@ -18,6 +18,7 @@
 #' @param warmup A positive integer specifying the number of warmup (aka burn-in) iterations per chain. It defaults to 1000. The number of warmup iterations should be smaller than `iter`.
 #' @param iter A positive integer specifying the number of iterations for each chain (including warmup). It defaults to 3000 as running fewer chains for longer is a more efficient way to obtain a certain number of draws (and cross-validation can be computationally expensive).
 #' @param seed An integer passed on to `set.seed` before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument `prep_data` is `TRUE`. The supplied `seed` argument is also used to generate seeds for the sampling algorithm.
+#' @param control A named list of parameters to control the sampler's behavior. See the documentation for `rstan::stan` for more details.
 #' @param sigma_alpha A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.
 #' @param sigma_beta A positive numeric value specifying the standard deviation of the prior on the logged stretch parameters in the FBAM model, or the standard deviation of the logged parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to .35.
 #' @param sigma_mu_alpha A positive numeric value specifying the standard deviation of the prior on the group-means of the shift parameters in MULTI-type models. Defaults to B / 5.
@@ -63,6 +64,7 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                     chains = 2,
                     warmup = 1000, iter = 3000,
                     seed = 1,
+                    control = list(max_treedepth = 7),
                     sigma_alpha = NULL, sigma_beta = .35,
                     sigma_mu_alpha = NULL, sigma_mu_beta = .3, ...){
 
@@ -102,7 +104,7 @@ hbam_cv <- function(self = NULL, stimuli = NULL, model = "HBAM",
                                   init_l <- list(inits_omni(chain_id = i, dat = dat_l[[k]]))
                                   # Obtain chain:
                                   s <- rstan::sampling(stanmodels[[1]], data = dat_l[[k]], init = init_l, pars = "log_lik",
-                                                       chains = 1, cores = 1, warmup = warmup, iter = iter, chain_id = i, seed = seed + i, refresh = 0, ...)
+                                                       chains = 1, cores = 1, warmup = warmup, iter = iter, chain_id = i, seed = seed + i, control = control, refresh = 0, ...)
                                   # Calculate expected value of log-likelihood for each held-out observation:
                                   log_lik <- loo::extract_log_lik(s)
                                   draws <- dim(log_lik)[1]

@@ -1,3 +1,9 @@
+# hbamr 2.4.3
+
+### Revisions to existing functions
+
+-   The `hbam_cv()` function now has a default `max_treedepth` parameter of 7, which can speed up the adaptation phase of the sampling significantly.
+
 # hbamr 2.4.2
 
 ### Revisions to existing functions

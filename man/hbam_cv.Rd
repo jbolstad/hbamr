@@ -20,6 +20,7 @@ hbam_cv(
   warmup = 1000,
   iter = 3000,
   seed = 1,
+  control = list(max_treedepth = 7),
   sigma_alpha = NULL,
   sigma_beta = 0.35,
   sigma_mu_alpha = NULL,
@@ -57,6 +58,8 @@ hbam_cv(
 \item{iter}{A positive integer specifying the number of iterations for each chain (including warmup). It defaults to 3000 as running fewer chains for longer is a more efficient way to obtain a certain number of draws (and cross-validation can be computationally expensive).}
 
 \item{seed}{An integer passed on to \code{set.seed} before creating the folds to increase reproducibility and comparability. Defaults to 1 and only applies to fold-creation when the argument \code{prep_data} is \code{TRUE}. The supplied \code{seed} argument is also used to generate seeds for the sampling algorithm.}
+
+\item{control}{A named list of parameters to control the sampler's behavior. See the documentation for \code{rstan::stan} for more details.}
 
 \item{sigma_alpha}{A positive numeric value specifying the standard deviation of the prior on the shift parameters in the FBAM model, or the standard deviation of the parameters' deviation from the group-means in FBAM_MULTI models. (This argument will be ignored by HBAM models.) Defaults to B / 4, where B measures the length of the survey scale as the number of possible placements on one side of the center.}
 
