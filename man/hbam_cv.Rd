@@ -35,7 +35,7 @@ hbam_cv(
 
 \item{model}{Character: Name of the model to be used. Defaults to HBAM.}
 
-\item{allow_miss}{Integer specifying how many missing stimulus positions to be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function. Defaults to 0.}
+\item{allow_miss}{Integer specifying how many missing stimulus positions should be accepted for an individual still to be included in the analysis. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function. Defaults to 0.}
 
 \item{req_valid}{Integer specifying how many valid observations to require for a respondent to be included in the analysis. The default is \code{req_valid = J - allow_miss}, but if specified, \code{req_valid} takes precedence. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function.}
 
