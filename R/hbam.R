@@ -120,7 +120,7 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
   if (grepl("MULTI", model) & dat$G <= 1) { stop("No group_id supplied for MULTI-type model.") }
   if (!grepl("MULTI", model) & dat$G > 1) { message("Note: The supplied group_id will not be used as the chosen model is not a MULTI-type model.") }
   if (model == "BAM" | grepl("_NF", model)) { pars = c("alpha", "beta", "chi", "theta") }
-  if (!is.null(extra_pars)) {pars = c(pars, extra_pars) }
+  if (!is.null(extra_pars)) { pars <- c(pars, extra_pars) }
   if (!dat$V_supplied) {
     # pars <- pars[pars != "chi"]
     if (model == "HBAM_R_MINI") {
@@ -129,6 +129,9 @@ hbam <- function(self = NULL, stimuli = NULL, model = "HBAM", allow_miss = 2, re
   }
   if (model == "HBAM_R_MINI" & !dat$U_supplied) {
     stop("The HBAM_R_MINI model requires preference data.")
+  }
+  if (model == "HBAM_R_MINI" & !("gamma" %in% pars)) {
+    pars <- c(pars, "gamma")
   }
 
   if (is.null(sigma_alpha)) { sigma_alpha <- dat$B / 5 }

@@ -2,6 +2,7 @@
 
 ### Revisions to existing functions
 
+-   The `hbam()` function now stores the rationalization parameter `gamma` by default if the model being fit is HBAM_R_MINI.
 -   The `hbam_cv()` function now has new default sampler settings to facilitate faster sampling.
 
 # hbamr 2.4.2
