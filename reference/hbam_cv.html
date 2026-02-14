@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.4.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.4.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,11 +89,11 @@
 
 
 <dt id="arg-req-unique">req_unique<a class="anchor" aria-label="anchor" href="#arg-req-unique"></a></dt>
-<dd><p>Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is <code>req_unique = 2</code>. This argument will not be used if the data have been prepared in advance via the <code><a href="prep_data.html">prep_data()</a></code> function.</p></dd>
+<dd><p>Integer specifying how many unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is <code>req_unique = 2</code>. This argument will not be used if the data have been prepared in advance via the <code><a href="prep_data.html">prep_data()</a></code> function.</p></dd>
 
 
 <dt id="arg-prefs">prefs<a class="anchor" aria-label="anchor" href="#arg-prefs"></a></dt>
-<dd><p>An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the HBAM_R and HBAM_R_MINI models and will be ignored when fitting other models.</p></dd>
+<dd><p>An N × J matrix of numerical stimulus ratings or preference scores. These data are only required by the HBAM_R_MINI model and will be ignored when fitting other models.</p></dd>
 
 
 <dt id="arg-group-id">group_id<a class="anchor" aria-label="anchor" href="#arg-group-id"></a></dt>
@@ -177,7 +177,7 @@
 <span class="r-in"><span>  <span class="co"># Note: You would typically want to run the chains for more iterations.</span></span></span>
 <span class="r-in"><span><span class="va">cv_hbam_mini</span> <span class="op">&lt;-</span> <span class="fu">hbam_cv</span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_MINI"</span>, K <span class="op">=</span> <span class="fl">4</span>,</span></span>
 <span class="r-in"><span>                        chains <span class="op">=</span> <span class="fl">1</span>, warmup <span class="op">=</span> <span class="fl">500</span>, iter <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Summary of prepared data (values for supplied data in paretheses)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary of prepared data (values for supplied data in parentheses)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Number of respondents: 42 (50)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Number of stimuli: 6 (6)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Number of stimuli obs.: 252 (289)</span>
@@ -195,7 +195,7 @@
 <span class="r-in"><span><span class="co"># Performing 4-fold cross-validation for the FBAM model:</span></span></span>
 <span class="r-in"><span><span class="va">cv_fbam</span> <span class="op">&lt;-</span> <span class="fu">hbam_cv</span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"FBAM"</span>, K <span class="op">=</span> <span class="fl">4</span>,</span></span>
 <span class="r-in"><span>                        chains <span class="op">=</span> <span class="fl">1</span>, warmup <span class="op">=</span> <span class="fl">500</span>, iter <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Summary of prepared data (values for supplied data in paretheses)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Summary of prepared data (values for supplied data in parentheses)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Number of respondents: 42 (50)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Number of stimuli: 6 (6)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> - Number of stimuli obs.: 252 (289)</span>
@@ -222,7 +222,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

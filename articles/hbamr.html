@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hbamr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.4.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">2.4.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -215,10 +215,10 @@ are therefore usually preferable when no flipping is present.</p>
 that does not allow for scale flipping.</p>
 <p><strong>HBAM_MINI</strong> is a version of the HBAM model that
 assumes the prediction errors in the stimuli placements to be
-homoskedastic. This model tends to sample faster faster than the
-standard HBAM model while yielding very similar point estimates. For
-large datasets, this model may provide a reasonable compromise between
-model complexity and estimation speed.</p>
+homoskedastic. This model tends to sample faster than the standard HBAM
+model while yielding very similar point estimates. For large datasets,
+this model may provide a reasonable compromise between model complexity
+and estimation speed.</p>
 <p><strong>FBAM</strong> is a version of the HBAM model with fixed
 hyperparameters to allow fitting via optimization rather than MCMC –
 which can be useful for large data sets. This model allows the user to
@@ -528,7 +528,7 @@ the scale. The argument <code>rev_color = TRUE</code> will reverse the
 order of the colors.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_stimuli.html">plot_stimuli</a></span><span class="op">(</span><span class="va">fit_hbam</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p_stim.svg" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="p_stim.svg" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <p>In this example, we see that John B. Anderson – the former Republican
 who ran as an independent candidate – gets a wider posterior
 distribution, suggesting that voters were more uncertain about where to
@@ -547,7 +547,7 @@ stimulus positions by default, but this behavior can be turned off by
 adding the argument <code>inc_stimuli = FALSE</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_respondents.html">plot_respondents</a></span><span class="op">(</span><span class="va">fit_hbam</span>, n_draws <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p_resp.svg" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="p_resp.svg" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <p>Users who want to customize the plots further can obtain the
 underlying data by using the function <code><a href="../reference/get_plot_data.html">get_plot_data()</a></code>. This
 function accepts the same <code>n_draws</code>-argument as
@@ -586,7 +586,7 @@ be changed by specifying <code>estimate = "mean"</code>.</p>
 HBAM and HBAM_MINI models, we would run:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_over_self.html">plot_over_self</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="va">fit_hbam_mini</span><span class="op">)</span>, <span class="st">"alpha"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p_alpha.svg" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="p_alpha.svg" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="stretching">Stretching<a class="anchor" aria-label="anchor" href="#stretching"></a>
@@ -601,7 +601,7 @@ individual stretches the ideological space. To inspect the distribution
 of these values across self-placements, we would run:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_over_self.html">plot_over_self</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="va">fit_hbam_mini</span><span class="op">)</span>, <span class="st">"abs_beta"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p_abs_beta.svg" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="p_abs_beta.svg" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <p>The pattern above, where respondents with more extreme
 self-placements have more extreme
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
@@ -622,7 +622,7 @@ These parameters represent each respondent’s probability of <em>not</em>
 flipping the scale:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_over_self.html">plot_over_self</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="va">fit_hbam_mini</span><span class="op">)</span>, <span class="st">"lambda"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p_lambda.svg" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="p_lambda.svg" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <p>In this example, flipping is uncommon, but respondents who place
 themselves in the middle have a somewhat higher flipping-probability.
 This may suggest that some of these respondents are less informed about
@@ -639,7 +639,7 @@ respondents have been detected as having flipped the scale, and thus
 have had their self-placement flipped back.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_over_self.html">plot_over_self</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="va">fit_hbam_mini</span><span class="op">)</span>, <span class="st">"chi"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p_chi.svg" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="p_chi.svg" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="additional-parameters">Additional Parameters<a class="anchor" aria-label="anchor" href="#additional-parameters"></a>
@@ -670,7 +670,7 @@ unless the argument <code>estimate = "mean"</code> is added.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_hbam</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hbam.html">hbam</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span>, extra_pars <span class="op">=</span> <span class="st">"eta"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/plot_over_self.html">plot_over_self</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="st">"eta"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p_eta.svg" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="p_eta.svg" class="r-plt" alt="" width="50%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>
@@ -853,7 +853,7 @@ details on the various diagnostic tests and plots that are available.
 One example of the available tools is <code>traceplot()</code>:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">rstan</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstan/reference/stanfit-method-traceplot.html" class="external-link">traceplot</a></span><span class="op">(</span><span class="va">fit_hbam</span>, pars <span class="op">=</span> <span class="st">"theta"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="p_trace_theta.svg" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="p_trace_theta.svg" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
 <div class="section level3">
 <h3 id="limits-to-exact-replication">Limits to Exact Replication<a class="anchor" aria-label="anchor" href="#limits-to-exact-replication"></a>
 </h3>
@@ -920,7 +920,7 @@ Science</em> 59(3): 759–774.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
