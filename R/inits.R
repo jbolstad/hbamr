@@ -61,14 +61,14 @@ inits_omni <- function(chain_id = 1, dat) {
     dim(mu_beta_raw) <- 1
   }
   if (dat$rat == 1) {
-    gammma <- runif(dat$N, 0, .3)
+    gamma <- runif(dat$N, 0, .3)
     gam_a <- runif(1, 2, 3)
     gam_b <- runif(1, 1.1, 1.3)
     dim(gam_a) <- 1
     dim(gam_b) <- 1
     zeta <- runif(dat$K, .1, .9)
   } else {
-    gammma <- NULL
+    gamma <- NULL
     gam_a <- NULL
     gam_b <- NULL
     zeta <- NULL
@@ -88,7 +88,7 @@ inits_omni <- function(chain_id = 1, dat) {
     psi_par = psi,
     mu_alpha_raw = mu_alpha_raw,
     mu_beta_raw = mu_beta_raw,
-    gammma = gammma,
+    gamma = gamma,
     gam_a = gam_a,
     gam_b = gam_b,
     zeta = zeta

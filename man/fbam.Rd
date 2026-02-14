@@ -32,7 +32,7 @@ fbam(
 
 \item{req_valid}{Integer specifying how many valid observations to require for a respondent to be included in the analysis. The default is \code{req_valid = J - allow_miss}, but if specified, \code{req_valid} takes precedence. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function.}
 
-\item{req_unique}{Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is \code{req_unique = 2}. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function.}
+\item{req_unique}{Integer specifying how many unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is \code{req_unique = 2}. This argument will not be used if the data have been prepared in advance via the \code{prep_data()} function.}
 
 \item{group_id}{Vector of length N identifying which group each respondent belongs to. The format can be factor, character, integer, or numeric. Respondents with NAs on \code{group_id} will be dropped when \code{group_id} is supplied. These data are only required by models with \code{"MULTI"} in their name and will be ignored when fitting other models.}
 

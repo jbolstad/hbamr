@@ -11,7 +11,7 @@
 #' @param ... Other arguments are passed on to `rstan::summary()` when summarizing `stanfit` objects.
 #' @return A tibble containing summaries of marginal posterior distributions. For objects produced by `fbam()`, only maximum a posteriori estimates are returned.
 
-get_est <- function (object, par = "theta", format_orig = FALSE, probs = c(0.025, 0.50, 0.975), simplify = TRUE, ...) {
+get_est <- function (object, par = "theta", format_orig = FALSE, probs = c(0.025, 0.5, 0.975), simplify = TRUE, ...) {
   if (inherits(object, "stanfit")) {
     out <- as.data.frame(rstan::summary(object, par, probs = probs, ...)[[1]])
     if (simplify == TRUE) { out <- out[, -c(2, 3)] }

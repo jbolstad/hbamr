@@ -27,13 +27,13 @@ prep_data(
 
 \item{req_valid}{Integer specifying how many valid observations to require for a respondent to be included in the analysis. The default is \code{req_valid = J - allow_miss}, but if specified, \code{req_valid} takes precedence.}
 
-\item{req_unique}{Integer specifying how may unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is \code{req_unique = 2}.}
+\item{req_unique}{Integer specifying how many unique positions on the ideological scale each respondent is required to have used when placing the stimuli in order to be included in the analysis. The default is \code{req_unique = 2}.}
 
 \item{B}{Scalar specifying the upper bound of the survey scale after centering. If not supplied, this information will be inferred from the data.}
 
 \item{group_id}{Vector of length N identifying which group each respondent belongs to. The format can be factor, character, integer, or numeric. Respondents with NAs on \code{group_id} will be dropped when \code{group_id} is supplied. These data are only required by models with \code{"MULTI"} in their name and will be ignored when fitting other models.}
 
-\item{quiet}{Logical: Should information about the data be printed to the console? Defaults to \code{TRUE}.}
+\item{quiet}{Logical: Should information about the data be printed to the console? Defaults to \code{FALSE}.}
 }
 \value{
 A list of data to be used by \code{hbam()} or \code{fbam()}. The returned list includes the logical vector \code{keep}, which identifies the rows in the original data that have been kept for further analysis. The stimuli data are stored in a vector as a long-form sparse matrix. If the stimuli data include column-names, these will be preserved for later use.

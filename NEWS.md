@@ -1,3 +1,9 @@
+# hbamr 2.4.5
+
+### Minor revisions
+
+-   Fixing typos and minor bugs
+
 # hbamr 2.4.4
 
 ### Revisions to existing functions
