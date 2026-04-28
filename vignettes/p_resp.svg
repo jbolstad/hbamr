@@ -77,7 +77,7 @@
 <circle cx='223.16' cy='189.88' r='1.95' style='stroke-width: 0.71; stroke: #053061; fill: #053061;' />
 <circle cx='381.69' cy='189.88' r='1.95' style='stroke-width: 0.71; stroke: #053061; fill: #053061;' />
 <circle cx='372.42' cy='189.88' r='1.95' style='stroke-width: 0.71; stroke: #053061; fill: #053061;' />
-<rect x='35.71' y='5.48' width='534.81' height='193.19' style='stroke-width: 1.07; stroke: #CCCCCC;' />
+<rect x='35.71' y='5.48' width='534.81' height='193.19' style='stroke-width: 1.07; stroke: #CCCCCC; fill: none;' />
 </g>
 <g clip-path='url(#cpMC4wMHw1NzYuMDB8MC4wMHwyMzAuNDA=)'>
 <text x='30.78' y='193.04' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='12.23px' lengthAdjust='spacingAndGlyphs'>0.0</text>
