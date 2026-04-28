@@ -1,8 +1,14 @@
+# hbamr 2.4.6
+
+### Minor revisions
+
+-   Updating svg files in the vignette for wider compatibility.
+
 # hbamr 2.4.5
 
 ### Minor revisions
 
--   Fixing typos and minor bugs
+-   Fixing typos and minor bugs.
 
 # hbamr 2.4.4
 
