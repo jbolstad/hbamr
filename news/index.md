@@ -1,12 +1,18 @@
 # Changelog
 
+## hbamr 2.4.6
+
+#### Minor revisions
+
+- Updating svg files in the vignette for wider compatibility.
+
 ## hbamr 2.4.5
 
 CRAN release: 2026-02-14
 
 #### Minor revisions
 
-- Fixing typos and minor bugs
+- Fixing typos and minor bugs.
 
 ## hbamr 2.4.4
 
