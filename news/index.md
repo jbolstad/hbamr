@@ -2,6 +2,8 @@
 
 ## hbamr 2.4.5
 
+CRAN release: 2026-02-14
+
 #### Minor revisions
 
 - Fixing typos and minor bugs

@@ -62,7 +62,7 @@
 <text transform='translate(83.95,185.41) rotate(-90)' style='font-size: 11.04px; font-family: "Arial";' textLength='43.55px' lengthAdjust='spacingAndGlyphs'>Kennedy</text>
 <text transform='translate(534.15,185.41) rotate(-90)' style='font-size: 11.04px; font-family: "Arial";' textLength='38.64px' lengthAdjust='spacingAndGlyphs'>Reagan</text>
 <text transform='translate(507.82,185.41) rotate(-90)' style='font-size: 11.04px; font-family: "Arial";' textLength='60.70px' lengthAdjust='spacingAndGlyphs'>Republicans</text>
-<rect x='33.27' y='5.48' width='537.25' height='193.19' style='stroke-width: 1.07; stroke: #CCCCCC;' />
+<rect x='33.27' y='5.48' width='537.25' height='193.19' style='stroke-width: 1.07; stroke: #CCCCCC; fill: none;' />
 </g>
 <g clip-path='url(#cpMC4wMHw1NzYuMDB8MC4wMHwyMzAuNDA=)'>
 <text x='28.34' y='193.04' text-anchor='end' style='font-size: 8.80px;fill: #4D4D4D; font-family: "Arial";' textLength='4.90px' lengthAdjust='spacingAndGlyphs'>0</text>

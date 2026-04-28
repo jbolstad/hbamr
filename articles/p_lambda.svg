@@ -182,7 +182,7 @@
 <line x1='199.50' y1='30.63' x2='225.67' y2='30.63' style='stroke-width: 1.49; stroke-linecap: butt;' />
 <line x1='236.89' y1='30.56' x2='263.06' y2='30.56' style='stroke-width: 1.49; stroke-linecap: butt;' />
 <line x1='274.27' y1='30.57' x2='300.45' y2='30.57' style='stroke-width: 1.49; stroke-linecap: butt;' />
-<rect x='40.60' y='22.50' width='269.19' height='172.20' style='stroke-width: 1.07; stroke: #CCCCCC;' />
+<rect x='40.60' y='22.50' width='269.19' height='172.20' style='stroke-width: 1.07; stroke: #CCCCCC; fill: none;' />
 </g>
 <g clip-path='url(#cpMC4wMHw2MTIuMDB8MC4wMHwyMjYuNDQ=)'>
 </g>
@@ -333,7 +333,7 @@
 <line x1='496.23' y1='30.76' x2='522.40' y2='30.76' style='stroke-width: 1.49; stroke-linecap: butt;' />
 <line x1='533.62' y1='30.67' x2='559.79' y2='30.67' style='stroke-width: 1.49; stroke-linecap: butt;' />
 <line x1='571.00' y1='30.54' x2='597.17' y2='30.54' style='stroke-width: 1.49; stroke-linecap: butt;' />
-<rect x='337.33' y='22.50' width='269.19' height='172.20' style='stroke-width: 1.07; stroke: #CCCCCC;' />
+<rect x='337.33' y='22.50' width='269.19' height='172.20' style='stroke-width: 1.07; stroke: #CCCCCC; fill: none;' />
 </g>
 <g clip-path='url(#cpMC4wMHw2MTIuMDB8MC4wMHwyMjYuNDQ=)'>
 </g>

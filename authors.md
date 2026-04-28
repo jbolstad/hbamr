@@ -27,7 +27,7 @@ Bølstad J (2024). “Hierarchical Bayesian Aldrich–McKelvey Scaling.”
 
 Bølstad J (2026). “hbamr: Hierarchical Bayesian Aldrich-McKelvey Scaling
 via Stan.”
-[doi:10.32614/CRAN.package.hbamr](https://doi.org/10.32614/CRAN.package.hbamr),
+[doi:10.32614/CRAN.package.hbamr](https://doi.org/10.32614/CRAN.package.hbamr).
 R package version 2.4.5, <https://jbolstad.github.io/hbamr/>.
 
     @Misc{,
