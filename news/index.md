@@ -2,6 +2,8 @@
 
 ## hbamr 2.4.6
 
+CRAN release: 2026-04-28
+
 #### Minor revisions
 
 - Updating svg files in the vignette for wider compatibility.

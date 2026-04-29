@@ -139,7 +139,7 @@ argument <code>allow_miss</code>. (The default is
 <code>req_valid</code> specifies how many valid observations to require
 per respondent. The default is <code>req_valid = J - allow_miss</code>,
 but, if specified, <code>req_valid</code> takes precedence.) Similarly,
-the user may specify how may unique positions on the ideological scale
+the user may specify how many unique positions on the ideological scale
 each respondent is required to have used when placing the stimuli in
 order to be included in the analysis. The default is
 <code>req_unique = 2</code>, which means that respondents who place all
@@ -152,7 +152,7 @@ lowest observed values in the data mark the extremes of the scale.</p>
 using the default settings, we would run:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/prep_data.html">prep_data</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span><span class="op">)</span></span></code></pre></div>
-<p>Users who want to keep other covariates for subsequent analysis, may
+<p>Users who want to keep other covariates for subsequent analysis may
 find it useful to run <code><a href="../reference/prep_data.html">prep_data()</a></code> separately from the call
 to fit the models. The list returned by this function includes the
 logical vector <code>keep</code>, which identifies the rows in the
@@ -181,15 +181,15 @@ model is that the respondent positions are not treated as parameters,
 but rather calculated as a function of self-placements, individual-level
 parameters, and simulated errors. This makes the model considerably
 faster, while yielding very similar results. The model simulates errors
-in the self-placements of the same magnitude as that with which the
-respondent in question places the stimulus with the smallest errors. All
-models in the package use this approach.</p>
+in the self-placements with the same magnitude as each respondent’s
+smallest stimulus-placement errors. All models in the package use this
+approach.</p>
 <p><strong>HBAM_MULTI</strong> is a version that models differences
 between groups defined by the user. It requires a vector identifying the
 groups to be supplied as the argument <code>group_id</code>. The model
 gives each group separate hyperparameters for the locations of the prior
 distributions for the shift and stretch parameters. Rather than
-shrinking the estimates toward the mode for the whole dataset, this
+shrinking the estimates toward the mode for the whole data set, this
 model shrinks the estimates toward the mode for the group. The vectors
 of hyperparameters are called <code>mu_alpha</code> and
 <code>mu_beta</code> and are constructed to have means of 0. The scales
@@ -216,7 +216,7 @@ that does not allow for scale flipping.</p>
 <p><strong>HBAM_MINI</strong> is a version of the HBAM model that
 assumes the prediction errors in the stimuli placements to be
 homoskedastic. This model tends to sample faster than the standard HBAM
-model while yielding very similar point estimates. For large datasets,
+model while yielding very similar point estimates. For large data sets,
 this model may provide a reasonable compromise between model complexity
 and estimation speed.</p>
 <p><strong>FBAM</strong> is a version of the HBAM model with fixed
@@ -408,8 +408,8 @@ features)</caption>
 this package and obtain a <code>stanfit</code> object. The default model
 is HBAM, while other models can be specified via the argument
 <code>model</code>.</p>
-<p>Unless the user supplies pre-prepared data via the
-<code>data</code>-argument, <code><a href="../reference/hbam.html">hbam()</a></code> will implicitly run
+<p>Unless the user supplies pre-prepared data via the <code>data</code>
+argument, <code><a href="../reference/hbam.html">hbam()</a></code> will implicitly run
 <code><a href="../reference/prep_data.html">prep_data()</a></code>. It therefore takes the same arguments as the
 <code><a href="../reference/prep_data.html">prep_data()</a></code> function (i.e. <code>self</code>,
 <code>stimuli</code>, <code>group_id</code>, <code>allow_miss</code>,
@@ -516,7 +516,7 @@ optimization may be the best alternative.</p>
 </h2>
 <p>The <strong>hbamr</strong> package contains several functions for
 creating presentable plots of the results. The package uses
-<strong>ggplot2</strong>, which means ggplot-themes can be added to the
+<strong>ggplot2</strong>, which means ggplot themes can be added to the
 plots.</p>
 <div class="section level3">
 <h3 id="stimuli-positions">Stimuli Positions<a class="anchor" aria-label="anchor" href="#stimuli-positions"></a>
@@ -707,7 +707,7 @@ follows:</p>
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> -<span style="color: #BB0000;">1.18</span>  -<span style="color: #BB0000;">1.24</span>  -<span style="color: #BB0000;">1.18</span>   -<span style="color: #BB0000;">1.11</span>  <span style="text-decoration: underline;">1</span>804. 1.00</span></span></code></pre>
 <p>To get summaries of the respondent positions, we would specify
 <code>par = "chi"</code>. If we want the results to match the rows in
-the original dataset by reporting rows of NAs for respondents who were
+the original data set by reporting rows of NAs for respondents who were
 not included in the analysis, we would add the argument
 <code>format_orig = TRUE</code>:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
@@ -760,7 +760,7 @@ run.</p>
 (the number of folds to use), and the default in this package is 10. To
 preserve memory, the function extracts the summaries of the
 log-likelihoods for the held-out data and drops the stanfit objects once
-this is done. The memory requirements of the function is therefore
+this is done. The memory requirements of the function are therefore
 similar to running a single analysis with one chain per core. The
 function that splits the data into <em>K</em> folds uses a default seed
 to produce the same folds each time, unless a different seed is
@@ -768,7 +768,7 @@ specified.</p>
 <p>The <code><a href="../reference/hbam_cv.html">hbam_cv()</a></code> function is written to allow parallel
 computation via the <code>future</code> package to minimize execution
 time. The <code>future</code> package offers several computational
-strategies, of which “multisession” works on all operating systems. It
+strategies, of which “multisession” works on all operating systems. In
 most settings, it is advisable to use all physical CPU cores when
 performing cross-validation. To set up parallel computation using 4
 cores via the <code>future</code> package, we could run:</p>
@@ -816,16 +816,16 @@ account for heteroskedastic errors:</p>
 <span><span class="co">##            Estimate   SE</span></span>
 <span><span class="co">## elpd_kfold  -5882.0 48.6</span></span></code></pre>
 <p>The ELPD for the HBAM_MINI model is notably lower than that of the
-HBAM model, which suggest there is a considerable degree of
+HBAM model, which suggests there is a considerable degree of
 heteroskedasticity in the data. While modeling the heteroskedasticity
 increases prediction accuracy, it should be noted that this does not
 necessarily translate into much more accurate estimates of key model
-outputs. As shown in section on plotting, the results for the HBAM and
-HBAM_MINI models are very similar. In fact, their estimated respondent
-positions correlate at .97 and .99, depending on whether we use the
-posterior means or medians. Their estimated stimulus positions also
-correlate at .99, but this masks the fact that the HBAM_MINI model
-places the less well known candidate John B. Anderson further to the
+outputs. As shown in the section on plotting, the results for the HBAM
+and HBAM_MINI models are very similar. In fact, their estimated
+respondent positions correlate at .97 and .99, depending on whether we
+use the posterior means or medians. Their estimated stimulus positions
+also correlate at .99, but this masks the fact that the HBAM_MINI model
+places the less well-known candidate John B. Anderson further to the
 left than the HBAM model does. There are some subtle differences that
 users should be aware of, even if these models tend to produce very
 similar results.</p>
