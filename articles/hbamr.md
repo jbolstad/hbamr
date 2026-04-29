@@ -139,8 +139,8 @@ but rather calculated as a function of self-placements, individual-level
 parameters, and simulated errors. This makes the model considerably
 faster, while yielding very similar results. The model simulates errors
 in the self-placements with the same magnitude as each respondent’s
-smallest stimulus-placement errors. All models in the package use this
-approach.
+smallest expected stimulus-placement errors. All models in the package
+use this approach.
 
 **HBAM_MULTI** is a version that models differences between groups
 defined by the user. It requires a vector identifying the groups to be

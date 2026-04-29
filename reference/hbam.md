@@ -355,18 +355,18 @@ fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI",
 #> - Range of observations: [-3, 3] ([1, 7])
 #> 
 #> 
+#> SAMPLING FOR MODEL 'HBAM_MINI' NOW (CHAIN 1).
 #> 
-#> SAMPLINGSAMPLING FOR MODEL ' FOR MODEL 'HBAM_MINIHBAM_MINI' NOW (CHAIN ' NOW (CHAIN 21).
-#> ).
+#> SAMPLING FOR MODEL 'HBAM_MINI' NOW (CHAIN 2).
 #> Chain 1: 
-#> Chain Chain 1: Gradient evaluation took 0.000597 seconds
-#> Chain 1: 2: 
-#> Chain 2: Gradient evaluation took 0.00062 seconds
-#> Chain 1000 transitions using 10 leapfrog steps per transition would take 5.97 seconds.2
-#> : Chain 1: Adjust your expectations accordingly!
+#> Chain 1: Gradient evaluation took 0.000572 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 5.72 seconds.
+#> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
-#> 1000 transitions using 10 leapfrog steps per transition would take 6.2 seconds.
+#> Chain 2: 
+#> Chain 2: Gradient evaluation took 0.00055 seconds
+#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 5.5 seconds.
 #> Chain 2: Adjust your expectations accordingly!
 #> Chain 2: 
 #> Chain 2: 
@@ -394,15 +394,15 @@ fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI",
 #> Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 #> Chain 2: Iteration: 1000 / 1000 [100%]  (Sampling)
 #> Chain 2: 
-#> Chain 2:  Elapsed Time: 5.958 seconds (Warm-up)
-#> Chain 2:                2.418 seconds (Sampling)
-#> Chain 2:                8.376 seconds (Total)
+#> Chain 2:  Elapsed Time: 5.991 seconds (Warm-up)
+#> Chain 2:                2.406 seconds (Sampling)
+#> Chain 2:                8.397 seconds (Total)
 #> Chain 2: 
 #> Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 6.24 seconds (Warm-up)
-#> Chain 1:                2.446 seconds (Sampling)
-#> Chain 1:                8.686 seconds (Total)
+#> Chain 1:  Elapsed Time: 6.211 seconds (Warm-up)
+#> Chain 1:                2.432 seconds (Sampling)
+#> Chain 1:                8.643 seconds (Total)
 #> Chain 1: 
 #> Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
 #> Running the chains for more iterations may help. See
@@ -443,8 +443,8 @@ fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF
 #> 
 #> SAMPLING FOR MODEL 'FBAM_MULTI_NF' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.00037 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 3.7 seconds.
+#> Chain 1: Gradient evaluation took 0.000339 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 3.39 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -452,8 +452,8 @@ fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF
 #> SAMPLING FOR MODEL 'FBAM_MULTI_NF' NOW (CHAIN 2).
 #> Chain 1: Iteration:   1 / 1000 [  0%]  (Warmup)
 #> Chain 2: 
-#> Chain 2: Gradient evaluation took 0.00035 seconds
-#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 3.5 seconds.
+#> Chain 2: Gradient evaluation took 0.00033 seconds
+#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 3.3 seconds.
 #> Chain 2: Adjust your expectations accordingly!
 #> Chain 2: 
 #> Chain 2: 
@@ -464,8 +464,8 @@ fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF
 #> Chain 1: Iteration: 200 / 1000 [ 20%]  (Warmup)
 #> Chain 2: Iteration: 300 / 1000 [ 30%]  (Warmup)
 #> Chain 1: Iteration: 300 / 1000 [ 30%]  (Warmup)
-#> Chain 1: Iteration: 400 / 1000 [ 40%]  (Warmup)
 #> Chain 2: Iteration: 400 / 1000 [ 40%]  (Warmup)
+#> Chain 1: Iteration: 400 / 1000 [ 40%]  (Warmup)
 #> Chain 2: Iteration: 500 / 1000 [ 50%]  (Warmup)
 #> Chain 2: Iteration: 501 / 1000 [ 50%]  (Sampling)
 #> Chain 1: Iteration: 500 / 1000 [ 50%]  (Warmup)
@@ -475,20 +475,20 @@ fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF
 #> Chain 1: Iteration: 700 / 1000 [ 70%]  (Sampling)
 #> Chain 2: Iteration: 700 / 1000 [ 70%]  (Sampling)
 #> Chain 1: Iteration: 800 / 1000 [ 80%]  (Sampling)
-#> Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 #> Chain 2: Iteration: 800 / 1000 [ 80%]  (Sampling)
+#> Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 3.538 seconds (Warm-up)
-#> Chain 1:                1.622 seconds (Sampling)
-#> Chain 1:                5.16 seconds (Total)
+#> Chain 1:  Elapsed Time: 3.495 seconds (Warm-up)
+#> Chain 1:                1.597 seconds (Sampling)
+#> Chain 1:                5.092 seconds (Total)
 #> Chain 1: 
 #> Chain 2: Iteration: 900 / 1000 [ 90%]  (Sampling)
 #> Chain 2: Iteration: 1000 / 1000 [100%]  (Sampling)
 #> Chain 2: 
-#> Chain 2:  Elapsed Time: 3.51 seconds (Warm-up)
-#> Chain 2:                2.285 seconds (Sampling)
-#> Chain 2:                5.795 seconds (Total)
+#> Chain 2:  Elapsed Time: 3.411 seconds (Warm-up)
+#> Chain 2:                2.221 seconds (Sampling)
+#> Chain 2:                5.632 seconds (Total)
 #> Chain 2: 
 # }
 ```
