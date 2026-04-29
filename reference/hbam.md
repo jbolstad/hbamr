@@ -359,14 +359,14 @@ fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI",
 #> 
 #> SAMPLING FOR MODEL 'HBAM_MINI' NOW (CHAIN 2).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000572 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 5.72 seconds.
+#> Chain 1: Gradient evaluation took 0.000475 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 4.75 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
 #> Chain 2: 
-#> Chain 2: Gradient evaluation took 0.00055 seconds
-#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 5.5 seconds.
+#> Chain 2: Gradient evaluation took 0.000442 seconds
+#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 4.42 seconds.
 #> Chain 2: Adjust your expectations accordingly!
 #> Chain 2: 
 #> Chain 2: 
@@ -394,15 +394,15 @@ fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI",
 #> Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 #> Chain 2: Iteration: 1000 / 1000 [100%]  (Sampling)
 #> Chain 2: 
-#> Chain 2:  Elapsed Time: 5.991 seconds (Warm-up)
-#> Chain 2:                2.406 seconds (Sampling)
-#> Chain 2:                8.397 seconds (Total)
+#> Chain 2:  Elapsed Time: 4.141 seconds (Warm-up)
+#> Chain 2:                1.703 seconds (Sampling)
+#> Chain 2:                5.844 seconds (Total)
 #> Chain 2: 
 #> Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 6.211 seconds (Warm-up)
-#> Chain 1:                2.432 seconds (Sampling)
-#> Chain 1:                8.643 seconds (Total)
+#> Chain 1:  Elapsed Time: 4.341 seconds (Warm-up)
+#> Chain 1:                1.73 seconds (Sampling)
+#> Chain 1:                6.071 seconds (Total)
 #> Chain 1: 
 #> Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
 #> Running the chains for more iterations may help. See
@@ -443,8 +443,8 @@ fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF
 #> 
 #> SAMPLING FOR MODEL 'FBAM_MULTI_NF' NOW (CHAIN 1).
 #> Chain 1: 
-#> Chain 1: Gradient evaluation took 0.000339 seconds
-#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 3.39 seconds.
+#> Chain 1: Gradient evaluation took 0.000258 seconds
+#> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 2.58 seconds.
 #> Chain 1: Adjust your expectations accordingly!
 #> Chain 1: 
 #> Chain 1: 
@@ -452,8 +452,8 @@ fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF
 #> SAMPLING FOR MODEL 'FBAM_MULTI_NF' NOW (CHAIN 2).
 #> Chain 1: Iteration:   1 / 1000 [  0%]  (Warmup)
 #> Chain 2: 
-#> Chain 2: Gradient evaluation took 0.00033 seconds
-#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 3.3 seconds.
+#> Chain 2: Gradient evaluation took 0.000246 seconds
+#> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 2.46 seconds.
 #> Chain 2: Adjust your expectations accordingly!
 #> Chain 2: 
 #> Chain 2: 
@@ -479,16 +479,16 @@ fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF
 #> Chain 1: Iteration: 900 / 1000 [ 90%]  (Sampling)
 #> Chain 1: Iteration: 1000 / 1000 [100%]  (Sampling)
 #> Chain 1: 
-#> Chain 1:  Elapsed Time: 3.495 seconds (Warm-up)
-#> Chain 1:                1.597 seconds (Sampling)
-#> Chain 1:                5.092 seconds (Total)
+#> Chain 1:  Elapsed Time: 2.093 seconds (Warm-up)
+#> Chain 1:                0.958 seconds (Sampling)
+#> Chain 1:                3.051 seconds (Total)
 #> Chain 1: 
 #> Chain 2: Iteration: 900 / 1000 [ 90%]  (Sampling)
 #> Chain 2: Iteration: 1000 / 1000 [100%]  (Sampling)
 #> Chain 2: 
-#> Chain 2:  Elapsed Time: 3.411 seconds (Warm-up)
-#> Chain 2:                2.221 seconds (Sampling)
-#> Chain 2:                5.632 seconds (Total)
+#> Chain 2:  Elapsed Time: 2.048 seconds (Warm-up)
+#> Chain 2:                1.343 seconds (Sampling)
+#> Chain 2:                3.391 seconds (Total)
 #> Chain 2: 
 # }
 ```
