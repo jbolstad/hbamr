@@ -3,7 +3,7 @@
 This function turns data prepared for
 [`hbam()`](https://jbolstad.github.io/hbamr/reference/hbam.md) into a
 list of K versions, where each version includes a different vector
-identifying holdout-data.
+identifying holdout data.
 
 ## Usage
 
@@ -31,7 +31,7 @@ prep_data_cv(data, K = 10, seed = 1)
 ## Value
 
 A list of K data objects where each version includes a different vector
-identifying holdout-data.
+identifying holdout data.
 
 ## Examples
 

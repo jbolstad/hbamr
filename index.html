@@ -72,8 +72,8 @@
 </ul>
 <p><strong>Version 2.0.1</strong>:</p>
 <ul>
-<li>New MULTI-type models explicitly model group-differences.</li>
-<li>Models of FBAM-type now allow users to specify key priors.</li>
+<li>New MULTI-type models explicitly model group differences.</li>
+<li>FBAM-type models now allow users to specify key priors.</li>
 <li>Most models have been revised to offer faster and better sampling.</li>
 </ul>
 <p>See the <a href="https://jbolstad.github.io/hbamr/news/index.html">changelog</a> for a more comprehensive discussion of the updates.</p>
@@ -99,7 +99,7 @@
 <p>Load the package:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://jbolstad.github.io/hbamr/">"hbamr"</a></span><span class="op">)</span></span></code></pre></div>
-<p>Load and re-code example data:</p>
+<p>Load and recode example data:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">LC1980</span><span class="op">)</span></span>
 <span><span class="va">LC1980</span><span class="op">[</span><span class="va">LC1980</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">|</span> <span class="va">LC1980</span> <span class="op">==</span> <span class="fl">8</span> <span class="op">|</span> <span class="va">LC1980</span> <span class="op">==</span> <span class="fl">9</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span> </span>

@@ -6,7 +6,7 @@ CRAN release: 2026-04-28
 
 #### Minor revisions
 
-- Updating svg files in the vignette for wider compatibility.
+- Updated SVG files in the vignette for wider compatibility.
 
 ## hbamr 2.4.5
 
@@ -119,7 +119,7 @@ CRAN release: 2024-02-23
 
 - The prior on `rho` (which appears in all heteroskedastic models) has
   been made narrower to reduce the risk of divergent transitions when
-  there are few observations per stimuli (which could be the case for
+  there are few observations per stimulus (which could be the case for
   e.g. expert surveys).
 - The default priors on `mu_beta` and `mu_alpha` in MULTI-type models
   and the priors on `sigma_beta` and `sigma_alpha` in HBAM-type models
@@ -226,7 +226,7 @@ CRAN release: 2024-01-17
   combinations of individual-level parameter values that would lead to
   implausible values for the respondent positions were weighted down.
   However, the model’s log-normal prior on the stretch parameters is by
-  itself sufficient to yield meaningful respondent positions estimates,
+  itself sufficient to yield meaningful respondent position estimates,
   so there is no significant cost to not treating the latent respondent
   positions as parameters. The current versions of the model instead
   simulate errors in the self-placements to yield the same level of

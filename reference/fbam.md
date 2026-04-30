@@ -56,9 +56,10 @@ fbam(
 
 - allow_miss:
 
-  Integer specifying how many missing stimulus positions to be accepted
-  for an individual still to be included in the analysis. This argument
-  will not be used if the data have been prepared in advance via the
+  Integer specifying how many missing stimulus positions should be
+  accepted for an individual still to be included in the analysis. This
+  argument will not be used if the data have been prepared in advance
+  via the
   [`prep_data()`](https://jbolstad.github.io/hbamr/reference/prep_data.md)
   function. Defaults to 2.
 

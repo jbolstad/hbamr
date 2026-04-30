@@ -9,7 +9,7 @@ fit the models using
 applies a set of inclusion criteria, performs any necessary data
 transformation, and returns a list of data suited for sampling in
 `rstan`. The data provided to `prep_data()` can be centered, but they do
-not have to be: The function will detect un-centered data and attempt to
+not have to be: The function will detect uncentered data and attempt to
 center these automatically, assuming that the highest and lowest
 observed values in the data mark the extremes of the scale.
 
@@ -113,7 +113,7 @@ dat <- prep_data(self, stimuli)
 #> - Number of stimuli obs.: 4937 (4973)
 #> - Range of observations: [-3, 3] ([1, 7])
 
-# Prepare data for model fitting, using using alternative settings:
+# Prepare data for model fitting, using alternative settings:
 dat2 <- prep_data(self, stimuli, allow_miss = 0, req_unique = 3)
 #> Summary of prepared data (values for supplied data in parentheses)
 #> - Number of respondents: 603 (888)

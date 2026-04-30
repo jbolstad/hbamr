@@ -41,6 +41,7 @@ nomination).
 We load the data and re-code missing values as follows:
 
 ``` r
+
 library("hbamr")
 data(LC1980)
 LC1980[LC1980 == 0 | LC1980 == 8 | LC1980 == 9] <- NA 
@@ -49,6 +50,7 @@ stimuli <- LC1980[, -1]
 ```
 
 ``` r
+
 head(stimuli) 
 ```
 
@@ -67,10 +69,10 @@ The function
 serves to prepare the data. This function can be run ahead of fitting
 the models, or it can be run implicitly as part of a single function
 call to fit the models (as shown below). The function takes a vector of
-$N$ ideological self-placements and an $N \times J$ matrix of stimulus
-placements. The self-placement vector is required to estimate respondent
-positions, but can be dropped if such data are not available or if the
-respondent positions are not of interest.
+$`N`$ ideological self-placements and an $`N \times J`$ matrix of
+stimulus placements. The self-placement vector is required to estimate
+respondent positions, but can be dropped if such data are not available
+or if the respondent positions are not of interest.
 
 [`prep_data()`](https://jbolstad.github.io/hbamr/reference/prep_data.md)
 applies a set of inclusion criteria, performs any necessary data
@@ -104,6 +106,7 @@ To use the
 function on the example data using the default settings, we would run:
 
 ``` r
+
 dat <- prep_data(self, stimuli)
 ```
 
@@ -234,12 +237,12 @@ or [`hbam()`](https://jbolstad.github.io/hbamr/reference/hbam.md).
 
 [TABLE]
 
-Recommended models for fitting via MCMC
+Recommended models for fitting via MCMC {.table}
 
 [TABLE]
 
 Non-hierarchical and special purpose models (“\*” marks optional
-features)
+features) {.table}
 
 ## Fitting
 
@@ -260,6 +263,7 @@ and `req_unique`).
 To fit the HBAM model using the default settings, we would run:
 
 ``` r
+
 fit_hbam <- hbam(self, stimuli)
 ```
 
@@ -267,6 +271,7 @@ To fit the HBAM_MINI model while requiring complete data for all
 respondents, we would run:
 
 ``` r
+
 fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI", allow_miss = 0)
 ```
 
@@ -278,6 +283,7 @@ from
 as the argument `data`:
 
 ``` r
+
 dat <- prep_data(self, stimuli, allow_miss = 0) 
 fit_hbam <- hbam(data = dat)
 ```
@@ -290,6 +296,7 @@ stretch parameters. If we decided to fit the FBAM_MULTI model, we could
 also specify our own scales for the priors on key parameters:
 
 ``` r
+
 fit_fbam_multi <- hbam(self, stimuli, model = "FBAM_MULTI", group_id = self, 
                        sigma_alpha = .8, sigma_mu_alpha = .7, 
                        sigma_beta = .4, sigma_mu_beta = .25)
@@ -326,6 +333,7 @@ do not apply. To fit the FBAM model using default settings, we would
 run:
 
 ``` r
+
 fit_fbam <- fbam(self, stimuli)
 ```
 
@@ -341,7 +349,7 @@ the best alternative.
 
 [TABLE]
 
-Execution times on an Apple M4 Pro CPU
+Execution times on an Apple M4 Pro CPU {.table}
 
 ## Plotting
 
@@ -359,6 +367,7 @@ depending on the position on the scale. The argument `rev_color = TRUE`
 will reverse the order of the colors.
 
 ``` r
+
 plot_stimuli(fit_hbam)
 ```
 
@@ -384,6 +393,7 @@ this behavior can be turned off by adding the argument
 `inc_stimuli = FALSE`.
 
 ``` r
+
 plot_respondents(fit_hbam, n_draws = 10)
 ```
 
@@ -395,12 +405,13 @@ data by using the function
 This function accepts the same `n_draws`-argument as
 [`plot_respondents()`](https://jbolstad.github.io/hbamr/reference/plot_respondents.md).
 The output is a list of three tibbles: The first element contains the
-posterior mean stimulus positions, as well as the $x$- and $y$-values of
-the posterior modes (which can be useful for labeling the
-distributions). The second element contains the posterior draws for the
-stimulus positions (which can be used to calculate marginal posterior
-densities). The third element contains the selected number of posterior
-draws for each respondent (which form the key ingredient for the
+posterior mean stimulus positions, as well as the $`x`$- and
+$`y`$-values of the posterior modes (which can be useful for labeling
+the distributions). The second element contains the posterior draws for
+the stimulus positions (which can be used to calculate marginal
+posterior densities). The third element contains the selected number of
+posterior draws for each respondent (which form the key ingredient for
+the
 [`plot_respondents()`](https://jbolstad.github.io/hbamr/reference/plot_respondents.md)
 function).
 
@@ -427,6 +438,7 @@ To compare the distributions of estimated shift parameters from the HBAM
 and HBAM_MINI models, we would run:
 
 ``` r
+
 plot_over_self(list(fit_hbam, fit_hbam_mini), "alpha")
 ```
 
@@ -434,20 +446,22 @@ plot_over_self(list(fit_hbam, fit_hbam_mini), "alpha")
 
 #### Stretching
 
-For models that allow for scale flipping, the draws for $\beta$ combine
-the separate parameters for each flipping-state. The absolute value of
-$\beta$ may therefore be better suited for examining the extent to which
-each individual stretches the ideological space. To inspect the
-distribution of these values across self-placements, we would run:
+For models that allow for scale flipping, the draws for $`\beta`$
+combine the separate parameters for each flipping-state. The absolute
+value of $`\beta`$ may therefore be better suited for examining the
+extent to which each individual stretches the ideological space. To
+inspect the distribution of these values across self-placements, we
+would run:
 
 ``` r
+
 plot_over_self(list(fit_hbam, fit_hbam_mini), "abs_beta")
 ```
 
 ![](p_abs_beta.svg)
 
 The pattern above, where respondents with more extreme self-placements
-have more extreme $\beta$ parameters, is exactly the kind of
+have more extreme $`\beta`$ parameters, is exactly the kind of
 differential item functioning that the models in this package are
 intended to correct for: These respondents tend to place both stimuli
 and themselves further out on the scale than others do, thus appearing
@@ -455,12 +469,13 @@ more extreme in comparison.
 
 #### Flipping
 
-To see whether the $\beta$ parameters are likely to be positive or
+To see whether the $`\beta`$ parameters are likely to be positive or
 negative, we can look at the expectations of the flipping parameters,
-$\lambda$. These parameters represent each respondent’s probability of
+$`\lambda`$. These parameters represent each respondent’s probability of
 *not* flipping the scale:
 
 ``` r
+
 plot_over_self(list(fit_hbam, fit_hbam_mini), "lambda")
 ```
 
@@ -481,6 +496,7 @@ respondents have been detected as having flipped the scale, and thus
 have had their self-placement flipped back.
 
 ``` r
+
 plot_over_self(list(fit_hbam, fit_hbam_mini), "chi")
 ```
 
@@ -491,22 +507,24 @@ plot_over_self(list(fit_hbam, fit_hbam_mini), "chi")
 Other individual-level parameters like `"eta"` can also be plotted if
 these have been passed to
 [`hbam()`](https://jbolstad.github.io/hbamr/reference/hbam.md) via the
-argument `extra_pars` when fitting the model. Parameters like $\eta$ are
-not stored in the
+argument `extra_pars` when fitting the model. Parameters like $`\eta`$
+are not stored in the
 [`hbam()`](https://jbolstad.github.io/hbamr/reference/hbam.md) results
 by default, as this would increase the post-processing time as well as
 the size of the model fits. (Note also that homoskedastic models have no
 `"eta"` parameters and “NF”-type models have no `"lambda"` or `"kappa"`
 parameters.)
 
-The estimated $\eta$ parameters yield information about the accuracy of
-respondents’ answers. When the argument `par = "eta"` is specified, the
-plotting function will display $\sqrt{\eta_{i}}/J$, which equals the
-average error for each individual (the mean of $\sigma_{ij}$ for each
-$i$ across $j$). The point estimates will still be calculated using the
-posterior median, unless the argument `estimate = "mean"` is added.
+The estimated $`\eta`$ parameters yield information about the accuracy
+of respondents’ answers. When the argument `par = "eta"` is specified,
+the plotting function will display $`\sqrt{\eta_i} / J`$, which equals
+the average error for each individual (the mean of $`\sigma_{ij}`$ for
+each $`i`$ across $`j`$). The point estimates will still be calculated
+using the posterior median, unless the argument `estimate = "mean"` is
+added.
 
 ``` r
+
 fit_hbam <- hbam(data = dat, extra_pars = "eta")
 plot_over_self(fit_hbam, "eta")
 ```
@@ -537,6 +555,7 @@ The posterior draws for the stimulus positions can be summarized as
 follows:
 
 ``` r
+
 get_est(fit_hbam, "theta")
 ```
 
@@ -556,6 +575,7 @@ data set by reporting rows of NAs for respondents who were not included
 in the analysis, we would add the argument `format_orig = TRUE`:
 
 ``` r
+
 get_est(fit_hbam, "chi", format_orig = TRUE)
 ```
 
@@ -589,6 +609,7 @@ used on model fits from
 argument `extra_pars = "log_lik"` is specified when fitting the model:
 
 ``` r
+
 fit_hbam <- hbam(data = dat, extra_pars = "log_lik")
 loo_hbam <- loo::loo(fit_hbam)
 ```
@@ -630,6 +651,7 @@ when performing cross-validation. To set up parallel computation using 4
 cores via the `future` package, we could run:
 
 ``` r
+
 library(future)
 plan(multisession, workers = 4)
 ```
@@ -638,6 +660,7 @@ To perform 10-fold cross-validation for a selection of models, we could
 run:
 
 ``` r
+
 kfold_bam <- hbam_cv(self, stimuli, model = "BAM")
 kfold_hbam <- hbam_cv(self, stimuli, model = "HBAM")
 kfold_hbam_nf <- hbam_cv(self, stimuli, model = "HBAM_NF")
@@ -651,6 +674,7 @@ further processed using the `loo` package. To compare the estimated
 ELPDs, we could run:
 
 ``` r
+
 print(loo::loo_compare(list(BAM = kfold_bam, 
                             HBAM = kfold_hbam, 
                             HBAM_NF = kfold_hbam_nf, 
@@ -675,10 +699,12 @@ We could also perform cross-validation for a model that does not account
 for heteroskedastic errors:
 
 ``` r
+
 kfold_hbam_mini <- hbam_cv(self, stimuli, model = "HBAM_MINI")
 ```
 
 ``` r
+
 kfold_hbam_mini
 ```
 
@@ -729,6 +755,7 @@ diagnostic tests and plots that are available. One example of the
 available tools is `traceplot()`:
 
 ``` r
+
 rstan::traceplot(fit_hbam, pars = "theta")
 ```
 

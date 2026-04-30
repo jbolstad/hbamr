@@ -25,8 +25,8 @@ plotting key results, and comparing models using cross-validation.
 
 **Version 2.0.1**:
 
-- New MULTI-type models explicitly model group-differences.
-- Models of FBAM-type now allow users to specify key priors.
+- New MULTI-type models explicitly model group differences.
+- FBAM-type models now allow users to specify key priors.
 - Most models have been revised to offer faster and better sampling.
 
 See the [changelog](https://jbolstad.github.io/hbamr/news/index.html)
@@ -39,6 +39,7 @@ The package is available from
 using the standard method:
 
 ``` r
+
 install.packages("hbamr")
 ```
 
@@ -52,6 +53,7 @@ available [here](https://jbolstad.github.io/hbamr/articles/hbamr.html).
 It can also be viewed locally, after installing the package:
 
 ``` r
+
 vignette("hbamr")
 ```
 
@@ -60,12 +62,14 @@ vignette("hbamr")
 Load the package:
 
 ``` r
+
 library("hbamr")
 ```
 
-Load and re-code example data:
+Load and recode example data:
 
 ``` r
+
 data(LC1980)
 LC1980[LC1980 == 0 | LC1980 == 8 | LC1980 == 9] <- NA 
 self <- LC1980[, 1]
@@ -75,18 +79,21 @@ stimuli <- LC1980[, -1]
 Fit the standard HBAM model:
 
 ``` r
+
 fit_hbam <- hbam(self, stimuli)
 ```
 
 Fit the HBAM_MINI model:
 
 ``` r
+
 fit_hbam_mini <- hbam(self, stimuli, model = "HBAM_MINI")
 ```
 
 Plot the estimated stimuli positions:
 
 ``` r
+
 plot_stimuli(fit_hbam)
 ```
 
@@ -95,6 +102,7 @@ plot_stimuli(fit_hbam)
 Plot the distribution of estimated respondent positions:
 
 ``` r
+
 plot_respondents(fit_hbam)
 ```
 
@@ -104,6 +112,7 @@ Plot the estimated scale-stretching parameters over respondents’
 self-placements:
 
 ``` r
+
 plot_over_self(list(fit_hbam, fit_hbam_mini), "abs_beta")
 ```
 

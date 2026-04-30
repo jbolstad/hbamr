@@ -101,13 +101,12 @@ hbam_cv(
 
 - prep_data:
 
-  Logical: Should the data be prepared before fitting the model? (Or
-  have the data been prepared in advance by first running the
+  Logical: Should the data be prepared before fitting the model? If the
+  data have already been prepared in advance by first running
   [`prep_data()`](https://jbolstad.github.io/hbamr/reference/prep_data.md)
   and
-  [`prep_data_cv()`](https://jbolstad.github.io/hbamr/reference/prep_data_cv.md)
-  functions)? If so, set `prep_data = FALSE`.) Defaults to
-  `prep_data = TRUE`.
+  [`prep_data_cv()`](https://jbolstad.github.io/hbamr/reference/prep_data_cv.md),
+  set `prep_data = FALSE`. Defaults to `prep_data = TRUE`.
 
 - data:
 
