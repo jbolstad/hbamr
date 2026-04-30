@@ -2,7 +2,7 @@
 
 ### Minor revisions
 
--   Updating svg files in the vignette for wider compatibility.
+-   Updated SVG files in the vignette for wider compatibility.
 
 # hbamr 2.4.5
 
@@ -47,7 +47,7 @@
 
 ### Revisions to existing models
 
--  The following models now generate posterior predictions if the user runs `hbam()` with the argument `extra_pars = "Y_pred"`: HBAM, HBAM_MULTI, HBAM_NF, HBAM_MULTI_NF, BAM.
+-   The following models now generate posterior predictions if the user runs `hbam()` with the argument `extra_pars = "Y_pred"`: HBAM, HBAM_MULTI, HBAM_NF, HBAM_MULTI_NF, BAM.
 
 # hbamr 2.3.1
 
@@ -71,7 +71,7 @@
 
 ### Revisions to existing models
 
--   The prior on `rho` (which appears in all heteroskedastic models) has been made narrower to reduce the risk of divergent transitions when there are few observations per stimuli (which could be the case for e.g. expert surveys). 
+-   The prior on `rho` (which appears in all heteroskedastic models) has been made narrower to reduce the risk of divergent transitions when there are few observations per stimulus (which could be the case for e.g. expert surveys). 
 -   The default priors on `mu_beta` and `mu_alpha` in MULTI-type models and the priors on `sigma_beta` and `sigma_alpha` in HBAM-type models have also been made narrower to reduce the risk of sampling issues.
 
 # hbamr 2.2.0
@@ -102,7 +102,7 @@
 
 ### Revisions to existing models
 
--   All models in the package now simulate errors in respondents' self-placements. In the original HBAM model, respondents' latent positions were treated as parameters, which had several consequences: It yielded a realistic level of uncertainty in the estimated positions, but also led to slower sampling. Furthermore, the hierarchical prior on the latent respondent positions shrunk them toward zero, which was undesirable in most applications as it affected the distances between respondents and stimuli. Finally, the original approach led to a more nuanced posterior distribution where combinations of individual-level parameter values that would lead to implausible values for the respondent positions were weighted down. However, the model's log-normal prior on the stretch parameters is by itself sufficient to yield meaningful respondent positions estimates, so there is no significant cost to not treating the latent respondent positions as parameters. The current versions of the model instead simulate errors in the self-placements to yield the same level of uncertainty as the original model, while sampling considerably faster.
+-   All models in the package now simulate errors in respondents' self-placements. In the original HBAM model, respondents' latent positions were treated as parameters, which had several consequences: It yielded a realistic level of uncertainty in the estimated positions, but also led to slower sampling. Furthermore, the hierarchical prior on the latent respondent positions shrunk them toward zero, which was undesirable in most applications as it affected the distances between respondents and stimuli. Finally, the original approach led to a more nuanced posterior distribution where combinations of individual-level parameter values that would lead to implausible values for the respondent positions were weighted down. However, the model's log-normal prior on the stretch parameters is by itself sufficient to yield meaningful respondent position estimates, so there is no significant cost to not treating the latent respondent positions as parameters. The current versions of the model instead simulate errors in the self-placements to yield the same level of uncertainty as the original model, while sampling considerably faster.
 
 ### Discontinued model
 

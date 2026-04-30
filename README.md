@@ -18,8 +18,8 @@ This is an R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM
 
 **Version 2.0.1**:
 
--   New MULTI-type models explicitly model group-differences.
--   Models of FBAM-type now allow users to specify key priors.
+-   New MULTI-type models explicitly model group differences.
+-   FBAM-type models now allow users to specify key priors.
 -   Most models have been revised to offer faster and better sampling.
 
 See the [changelog](https://jbolstad.github.io/hbamr/news/index.html) for a more comprehensive discussion of the updates.
@@ -50,7 +50,7 @@ Load the package:
 library("hbamr")
 ```
 
-Load and re-code example data:
+Load and recode example data:
 
 ``` r
 data(LC1980)
