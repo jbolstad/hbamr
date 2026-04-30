@@ -39,7 +39,7 @@ prep_data(
 A list of data to be used by \code{hbam()} or \code{fbam()}. The returned list includes the logical vector \code{keep}, which identifies the rows in the original data that have been kept for further analysis. The stimuli data are stored in a vector as a long-form sparse matrix. If the stimuli data include column-names, these will be preserved for later use.
 }
 \description{
-This function prepares data to fit a hierarchical Bayesian Aldrich-McKelvey (HBAM) model. It can be run ahead of fitting the models, or it can be run implicitly as part of a single function call to fit the models using \code{hbam()} or \code{fbam()}. It applies a set of inclusion criteria, performs any necessary data transformation, and returns a list of data suited for sampling in \code{rstan}. The data provided to \code{prep_data()} can be centered, but they do not have to be: The function will detect un-centered data and attempt to center these automatically, assuming that the highest and lowest observed values in the data mark the extremes of the scale.
+This function prepares data to fit a hierarchical Bayesian Aldrich-McKelvey (HBAM) model. It can be run ahead of fitting the models, or it can be run implicitly as part of a single function call to fit the models using \code{hbam()} or \code{fbam()}. It applies a set of inclusion criteria, performs any necessary data transformation, and returns a list of data suited for sampling in \code{rstan}. The data provided to \code{prep_data()} can be centered, but they do not have to be: The function will detect uncentered data and attempt to center these automatically, assuming that the highest and lowest observed values in the data mark the extremes of the scale.
 }
 \examples{
 # Loading and re-coding ANES 1980 data:
@@ -51,7 +51,7 @@ stimuli <- LC1980[, -1]
 # Prepare data for model fitting, using defaults:
 dat <- prep_data(self, stimuli)
 
-# Prepare data for model fitting, using using alternative settings:
+# Prepare data for model fitting, using alternative settings:
 dat2 <- prep_data(self, stimuli, allow_miss = 0, req_unique = 3)
 
 # Obtain the data that are included in the analysis:

@@ -1,6 +1,6 @@
 #' Prepare data to fit an HBAM or FBAM model
 #'
-#' This function prepares data to fit a hierarchical Bayesian Aldrich-McKelvey (HBAM) model. It can be run ahead of fitting the models, or it can be run implicitly as part of a single function call to fit the models using `hbam()` or `fbam()`. It applies a set of inclusion criteria, performs any necessary data transformation, and returns a list of data suited for sampling in `rstan`. The data provided to `prep_data()` can be centered, but they do not have to be: The function will detect un-centered data and attempt to center these automatically, assuming that the highest and lowest observed values in the data mark the extremes of the scale.
+#' This function prepares data to fit a hierarchical Bayesian Aldrich-McKelvey (HBAM) model. It can be run ahead of fitting the models, or it can be run implicitly as part of a single function call to fit the models using `hbam()` or `fbam()`. It applies a set of inclusion criteria, performs any necessary data transformation, and returns a list of data suited for sampling in `rstan`. The data provided to `prep_data()` can be centered, but they do not have to be: The function will detect uncentered data and attempt to center these automatically, assuming that the highest and lowest observed values in the data mark the extremes of the scale.
 #'
 #' @export
 #' @param self An optional numerical vector of N ideological self-placements. Any missing data must be coded as NA. If this argument is not supplied, respondent positions will not be estimated.
@@ -23,7 +23,7 @@
 #' # Prepare data for model fitting, using defaults:
 #' dat <- prep_data(self, stimuli)
 #'
-#' # Prepare data for model fitting, using using alternative settings:
+#' # Prepare data for model fitting, using alternative settings:
 #' dat2 <- prep_data(self, stimuli, allow_miss = 0, req_unique = 3)
 #'
 #' # Obtain the data that are included in the analysis:

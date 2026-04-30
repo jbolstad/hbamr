@@ -45,7 +45,7 @@ hbam_cv(
 
 \item{group_id}{Integer vector of length N identifying which group each respondent belongs to. The supplied vector should range from 1 to the total number of groups in the data, and all integers between these numbers should be represented in the supplied data. These data are only required by models with "MULTI" in their name and will be ignored when fitting other models.}
 
-\item{prep_data}{Logical: Should the data be prepared before fitting the model? (Or have the data been prepared in advance by first running the \code{prep_data()} and \code{prep_data_cv()} functions)? If so, set \code{prep_data = FALSE}.) Defaults to \code{prep_data = TRUE}.}
+\item{prep_data}{Logical: Should the data be prepared before fitting the model? If the data have already been prepared in advance by first running \code{prep_data()} and \code{prep_data_cv()}, set \code{prep_data = FALSE}. Defaults to \code{prep_data = TRUE}.}
 
 \item{data}{A list of data produced by \code{prep_data()} followed by \code{prep_data_cv()}.}
 

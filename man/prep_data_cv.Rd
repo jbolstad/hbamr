@@ -14,10 +14,10 @@ prep_data_cv(data, K = 10, seed = 1)
 \item{seed}{An integer passed on to \code{set.seed} before creating the folds to increase reproducibility. Defaults to 1.}
 }
 \value{
-A list of K data objects where each version includes a different vector identifying holdout-data.
+A list of K data objects where each version includes a different vector identifying holdout data.
 }
 \description{
-This function turns data prepared for \code{hbam()} into a list of K versions, where each version includes a different vector identifying holdout-data.
+This function turns data prepared for \code{hbam()} into a list of K versions, where each version includes a different vector identifying holdout data.
 }
 \examples{
 # Loading and re-coding ANES 1980 data:
