@@ -35,9 +35,6 @@ prep_data <- function(self = NULL, stimuli,
                       allow_miss = 2,
                       req_valid = NA, req_unique = 2, B = NULL, group_id = NULL, quiet = FALSE) {
 
-  #dimnames(stimuli) <- NULL
-  #self <- as_numeric(self)
-
   N_orig <- nrow(stimuli)
   N_obs_orig <- sum(!is.na(as.numeric(as.matrix(stimuli))))
 
