@@ -15,23 +15,6 @@ of recovering true respondent positions in simulations ([Bølstad
 functions for preparing data, fitting models, extracting estimates,
 plotting key results, and comparing models using cross-validation.
 
-### Important Updates
-
-**Version 2.1.0**:
-
-- All models now simulate errors in respondents’ self-placements to
-  yield realistic levels of uncertainty in estimated respondent
-  positions while offering faster sampling.
-
-**Version 2.0.1**:
-
-- New MULTI-type models explicitly model group differences.
-- FBAM-type models now allow users to specify key priors.
-- Most models have been revised to offer faster and better sampling.
-
-See the [changelog](https://jbolstad.github.io/hbamr/news/index.html)
-for a more comprehensive discussion of the updates.
-
 ### Installation
 
 The package is available from
@@ -45,17 +28,6 @@ install.packages("hbamr")
 
 This is the easiest and fastest way to install the package, as the
 binaries on CRAN include pre-compiled models that are ready for use.
-
-### Vignette
-
-A vignette showing how to use all key functions in the package is
-available [here](https://jbolstad.github.io/hbamr/articles/hbamr.html).
-It can also be viewed locally, after installing the package:
-
-``` r
-
-vignette("hbamr")
-```
 
 ### Usage
 

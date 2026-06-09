@@ -1,5 +1,11 @@
 # Changelog
 
+## hbamr 2.4.7
+
+#### Minor revisions
+
+- Edits to documentation.
+
 ## hbamr 2.4.6
 
 CRAN release: 2026-04-28
