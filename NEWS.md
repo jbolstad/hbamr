@@ -2,7 +2,7 @@
 
 ### Minor revisions
 
--   Edits to documentation.
+-   Allow aliases in `get_est()`: `"stimuli"` for `"theta"`, `"respondents"` for `"chi"`, `"shift"` for `"alpha"`, and `"stretch"` for `"beta"`.
 
 # hbamr 2.4.6
 
