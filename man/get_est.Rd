@@ -16,7 +16,7 @@ get_est(
 \arguments{
 \item{object}{An instance of class \code{stanfit} produced by \code{hbam()}, or a list produced by \code{fbam()}.}
 
-\item{par}{Character: Name of the parameter type to be extracted. Typically \code{"theta"} (stimuli positions) or \code{"chi"} (respondent positions).}
+\item{par}{Character: Name of the parameter type to be extracted. Typically \code{"theta"} (stimulus positions) or \code{"chi"} (respondent positions). Descriptive aliases are also accepted: \code{"stimuli"} for \code{"theta"}, \code{"respondents"} for \code{"chi"}, \code{"shift"} for \code{"alpha"}, and \code{"stretch"} for \code{"beta"}.}
 
 \item{format_orig}{Logical: Should individual-level parameters be mapped to the original dataset by returning rows of NAs for respondents who were not included in the analysis? Defaults to \code{FALSE}.}
 

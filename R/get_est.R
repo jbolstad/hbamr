@@ -4,7 +4,7 @@
 #'
 #' @export
 #' @param object An instance of class `stanfit` produced by `hbam()`, or a list produced by `fbam()`.
-#' @param par Character: Name of the parameter type to be extracted. Typically `"theta"` (stimuli positions) or `"chi"` (respondent positions).
+#' @param par Character: Name of the parameter type to be extracted. Typically `"theta"` (stimulus positions) or `"chi"` (respondent positions). Descriptive aliases are also accepted: `"stimuli"` for `"theta"`, `"respondents"` for `"chi"`, `"shift"` for `"alpha"`, and `"stretch"` for `"beta"`.
 #' @param format_orig Logical: Should individual-level parameters be mapped to the original dataset by returning rows of NAs for respondents who were not included in the analysis? Defaults to `FALSE`.
 #' @param probs A numeric vector of quantiles of interest for summarizing `stanfit` objects.
 #' @param simplify Logical: Should the returned object be simplified by dropping the Monte Carlo standard error and the posterior standard deviation? Defaults to `TRUE`.
@@ -12,6 +12,8 @@
 #' @return A tibble containing summaries of marginal posterior distributions. For objects produced by `fbam()`, only maximum a posteriori estimates are returned.
 
 get_est <- function (object, par = "theta", format_orig = FALSE, probs = c(0.025, 0.5, 0.975), simplify = TRUE, ...) {
+  par_aliases <- c(respondents = "chi", stimuli = "theta", shift = "alpha", stretch = "beta")
+  if (par %in% names(par_aliases)) { par <- par_aliases[[par]] }
   if (inherits(object, "stanfit")) {
     out <- as.data.frame(rstan::summary(object, par, probs = probs, ...)[[1]])
     if (simplify == TRUE) { out <- out[, -c(2, 3)] }
