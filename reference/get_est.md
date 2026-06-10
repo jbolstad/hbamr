@@ -31,7 +31,10 @@ get_est(
 - par:
 
   Character: Name of the parameter type to be extracted. Typically
-  `"theta"` (stimuli positions) or `"chi"` (respondent positions).
+  `"theta"` (stimulus positions) or `"chi"` (respondent positions).
+  Descriptive aliases are also accepted: `"stimuli"` for `"theta"`,
+  `"respondents"` for `"chi"`, `"shift"` for `"alpha"`, and `"stretch"`
+  for `"beta"`.
 
 - format_orig:
 
