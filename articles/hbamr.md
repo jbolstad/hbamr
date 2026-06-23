@@ -2,9 +2,9 @@
 
 The goal of the **hbamr** package is to enable users to efficiently
 perform Hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling in R.
-Aldrich-McKelvey (AM) scaling is a method for estimating the ideological
-positions of survey respondents and political actors on a common scale
-using ideological survey data (Aldrich and McKelvey 1977). The
+Aldrich-McKelvey (AM) scaling is a method for estimating the latent
+positions of survey respondents and external objects on a common scale
+using positional survey data (Aldrich and McKelvey 1977). The
 hierarchical versions of the AM model included in this package
 outperform other versions both in terms of yielding meaningful posterior
 distributions for all respondent positions and in terms of recovering
@@ -556,7 +556,7 @@ follows:
 
 ``` r
 
-get_est(fit_hbam, "theta")
+get_est(fit_hbam, "stimuli")
 ```
 
     ## # A tibble: 6 × 6
@@ -570,13 +570,14 @@ get_est(fit_hbam, "theta")
     ## 6 -1.18  -1.24  -1.18   -1.11  1804. 1.00
 
 To get summaries of the respondent positions, we would specify
-`par = "chi"`. If we want the results to match the rows in the original
-data set by reporting rows of NAs for respondents who were not included
-in the analysis, we would add the argument `format_orig = TRUE`:
+`par = "respondents"` (or `"chi"`). If we want the results to match the
+rows in the original data set by reporting rows of NAs for respondents
+who were not included in the analysis, we would add the argument
+`format_orig = TRUE`:
 
 ``` r
 
-get_est(fit_hbam, "chi", format_orig = TRUE)
+get_est(fit_hbam, "respondents", format_orig = TRUE)
 ```
 
     ## # A tibble: 888 × 6

@@ -65,8 +65,8 @@
 <p>The goal of the <strong>hbamr</strong> package is to enable users to
 efficiently perform Hierarchical Bayesian Aldrich-McKelvey (HBAM)
 scaling in R. Aldrich-McKelvey (AM) scaling is a method for estimating
-the ideological positions of survey respondents and political actors on
-a common scale using ideological survey data <span class="citation">(Aldrich and McKelvey 1977)</span>. The hierarchical
+the latent positions of survey respondents and external objects on a
+common scale using positional survey data <span class="citation">(Aldrich and McKelvey 1977)</span>. The hierarchical
 versions of the AM model included in this package outperform other
 versions both in terms of yielding meaningful posterior distributions
 for all respondent positions and in terms of recovering true respondent
@@ -695,7 +695,7 @@ estimates.)</p>
 <p>The posterior draws for the stimulus positions can be summarized as
 follows:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_est.html">get_est</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="st">"theta"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_est.html">get_est</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="st">"stimuli"</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 6</span></span></span>
 <span><span class="co">##     mean `2.5%`  `50%` `97.5%` n_eff  Rhat</span></span>
 <span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -706,12 +706,12 @@ follows:</p>
 <span><span class="co">## <span style="color: #BCBCBC;">5</span>  1.44   1.39   1.44    1.50  <span style="text-decoration: underline;">1</span>820. 1.00 </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> -<span style="color: #BB0000;">1.18</span>  -<span style="color: #BB0000;">1.24</span>  -<span style="color: #BB0000;">1.18</span>   -<span style="color: #BB0000;">1.11</span>  <span style="text-decoration: underline;">1</span>804. 1.00</span></span></code></pre>
 <p>To get summaries of the respondent positions, we would specify
-<code>par = "chi"</code>. If we want the results to match the rows in
-the original data set by reporting rows of NAs for respondents who were
-not included in the analysis, we would add the argument
-<code>format_orig = TRUE</code>:</p>
+<code>par = "respondents"</code> (or <code>"chi"</code>). If we want the
+results to match the rows in the original data set by reporting rows of
+NAs for respondents who were not included in the analysis, we would add
+the argument <code>format_orig = TRUE</code>:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_est.html">get_est</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="st">"chi"</span>, format_orig <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_est.html">get_est</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="st">"respondents"</span>, format_orig <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 888 × 6</span></span></span>
 <span><span class="co">##       mean `2.5%`   `50%` `97.5%` n_eff   Rhat</span></span>
 <span><span class="co">##      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>

@@ -61,7 +61,7 @@
 <div class="section level3">
 <h3 id="hierarchical-bayesian-aldrich-mckelvey-scaling">Hierarchical Bayesian Aldrich-McKelvey Scaling<a class="anchor" aria-label="anchor" href="#hierarchical-bayesian-aldrich-mckelvey-scaling"></a>
 </h3>
-<p>This is an R package for performing hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling using Hamiltonian Monte Carlo simulations via Stan. Aldrich-McKelvey (AM) scaling is a method for estimating the ideological positions of survey respondents and political actors on a common scale using positional survey data (Aldrich &amp; McKelvey 1977). The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for respondent positions and in terms of recovering true respondent positions in simulations (<a href="https://doi.org/10.1017/pan.2023.18" class="external-link">Bølstad 2024</a>). The package contains functions for preparing data, fitting models, extracting estimates, plotting key results, and comparing models using cross-validation.</p>
+<p>This R package implements hierarchical Bayesian Aldrich-McKelvey (HBAM) scaling using Hamiltonian Monte Carlo via Stan. Aldrich-McKelvey (AM) scaling is a method for estimating the latent positions of survey respondents and external objects on a common scale using positional survey data (Aldrich &amp; McKelvey 1977). The hierarchical versions of the AM model included in this package outperform other versions both in terms of yielding meaningful posterior distributions for respondent positions and in terms of recovering true respondent positions in simulations (<a href="https://doi.org/10.1017/pan.2023.18" class="external-link">Bølstad 2024</a>). The package provides functions for preparing data, fitting models, extracting estimates, plotting key results, and comparing models using cross-validation.</p>
 </div>
 <div class="section level3">
 <h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -69,7 +69,7 @@
 <p>The package is available from <a href="https://CRAN.R-project.org/package=hbamr" class="external-link">CRAN</a> and can be installed using the standard method:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"hbamr"</span><span class="op">)</span></span></code></pre></div>
-<p>This is the easiest and fastest way to install the package, as the binaries on CRAN include pre-compiled models that are ready for use.</p>
+<p>This is the easiest way to install the package, as the binaries on CRAN include pre-compiled models that are ready for use.</p>
 </div>
 <div class="section level3">
 <h3 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -89,7 +89,7 @@
 <p>Fit the HBAM_MINI model:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_hbam_mini</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/hbam.html">hbam</a></span><span class="op">(</span><span class="va">self</span>, <span class="va">stimuli</span>, model <span class="op">=</span> <span class="st">"HBAM_MINI"</span><span class="op">)</span></span></code></pre></div>
-<p>Plot the estimated stimuli positions:</p>
+<p>Plot estimated stimuli positions:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/plot_stimuli.html">plot_stimuli</a></span><span class="op">(</span><span class="va">fit_hbam</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/jbolstad/hbamr/main/vignettes/p_stim.svg" width="850px"></p>
@@ -97,7 +97,7 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/plot_respondents.html">plot_respondents</a></span><span class="op">(</span><span class="va">fit_hbam</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/jbolstad/hbamr/main/vignettes/p_resp.svg" width="850px"></p>
-<p>Plot the estimated scale-stretching parameters over respondents’ self-placements:</p>
+<p>Plot estimated scale-stretching over respondents’ self-placements:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/plot_over_self.html">plot_over_self</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">fit_hbam</span>, <span class="va">fit_hbam_mini</span><span class="op">)</span>, <span class="st">"abs_beta"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="https://raw.githubusercontent.com/jbolstad/hbamr/main/vignettes/p_abs_beta.svg" width="850px"></p>
