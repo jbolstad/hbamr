@@ -2,8 +2,8 @@
 
 Fit hierarchical Bayesian Aldrich-McKelvey (HBAM) models using a form of
 Hamiltonian Monte Carlo via Stan. Aldrich-McKelvey (AM) scaling is a
-method for estimating the ideological positions of survey respondents
-and political actors on a common scale using positional survey data. The
+method for estimating the latent positions of survey respondents and
+external objects on a common scale using positional survey data. The
 hierarchical versions of the Bayesian AM model included in this package
 outperform other versions both in terms of yielding meaningful posterior
 distributions for respondent positions and in terms of recovering true
