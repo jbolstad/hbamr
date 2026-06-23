@@ -81,11 +81,11 @@
 #'                    warmup = 500, iter = 1000, chains = 2)
 #'
 #' # Obtaining posterior summaries for the latent stimulus positions:
-#' theta_est <- get_est(fit_hbam_mini, par = "theta")
+#' stim_est <- get_est(fit_hbam_mini, "stimuli")
 #'
 #' # Obtaining posterior summaries for the latent respondent positions
 #'   # in a format matching the rows in the original dataset:
-#' chi_est <- get_est(fit_hbam_mini, par = "chi", format_orig = TRUE)
+#' resp_est <- get_est(fit_hbam_mini, "respondents", format_orig = TRUE)
 #'
 #' # Fitting the FBAM_MULTI_NF model with self-placements as group_id:
 #' fit_fbam_multi_nf <- hbam(self, stimuli, group_id = self, model = "FBAM_MULTI_NF",
